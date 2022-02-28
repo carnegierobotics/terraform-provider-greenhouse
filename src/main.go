@@ -2,11 +2,11 @@ package main
 
 import (
   "github.com/hashicorp/terraform-plugin-sdk/plugin"
-  "github.com/carnegierobotics/greenhouse-client-go/internal/greenhouse"
+  "github.com/carnegierobotics/terraform-provider-greenhouse/internal/provider"
 )
 
 func main() {
   plugin.Serve(&plugin.ServeOpts{
-    ProviderFunc: greenhouse.Provider
+    ProviderFunc: provider.Provider
   })
 }

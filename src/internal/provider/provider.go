@@ -8,18 +8,30 @@ import (
 func Provider() terraform.ResourceProvider {
   p := &schema.Provider {
     Schema: map[string]*schema.Schema{
+      "on_behalf_of": {
+        Type:        schema.TypeString,
+        Optional:    false,
+        DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_ON_BEHALF_OF", nil),
+        Description: "This is the user on whose behalf all actions will be audited.",
+      },
       "token": {
         Type:        schema.TypeString,
         Optional:    false,
         DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_TOKEN", nil),
         Description: "This is an API token for Greenhouse.",
       },
-      "url": {
+      "jobs_url": {
         Type:        schema.TypeString,
-        Optional:    false,
-        DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_TOKEN", nil),
-        Description: "The URL for Greenhouse.",
+        Optional:    true,
+        DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_JOBS_URL", "https://boards-api.greenhouse.io"),
+        Description: "The URL for Greenhouse Job Boards API.",
       },
+      "harvest_url": {
+        Type:        schema.TypeString,
+        Optional:    true,
+        DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_HARVEST_URL", "https://harvest.greenhouse.io"),
+        Description: "The URL for Greenhouse's Harvest API."
+      }
     },
     ResourcesMap: map[string]*schema.Resource {
       "greenhouse_job" : resourceGreenhouseJob(),

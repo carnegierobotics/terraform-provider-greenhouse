@@ -2,6 +2,8 @@ module github.com/carnegierobotics/greenhouse-client-go
 
 go 1.17
 
+replace github.com/carnegierobotics/greenhouse-client-go => ~/github/greenhouse-client-go/src
+
 require (
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
