@@ -1,12 +1,12 @@
-module github.com/carnegierobotics/greenhouse-client-go
+module github.com/carnegierobotics/terraform-provider-greenhouse
 
 go 1.17
 
-replace github.com/carnegierobotics/greenhouse-client-go => ~/github/greenhouse-client-go/src
+replace github.com/carnegierobotics/greenhouse-client-go => ../../greenhouse-client-go/src
 
 require (
+	github.com/carnegierobotics/greenhouse-client-go v0.0.0-00010101000000-000000000000
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
-	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
 )
 
 require (
@@ -24,6 +24,7 @@ require (
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
 	github.com/fatih/color v1.7.0 // indirect
+	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/google/go-cmp v0.5.5 // indirect
@@ -67,9 +68,10 @@ require (
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/mod v0.3.0 // indirect
-	golang.org/x/net v0.0.0-20210326060303-6b1517762897 // indirect
-	golang.org/x/sys v0.0.0-20210324051608-47abb6519492 // indirect
-	golang.org/x/text v0.3.5 // indirect
+	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
+	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43 // indirect
+	golang.org/x/sys v0.0.0-20210423082822-04245dca01da // indirect
+	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/tools v0.0.0-20201028111035-eafbe7b904eb // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/api v0.34.0 // indirect
