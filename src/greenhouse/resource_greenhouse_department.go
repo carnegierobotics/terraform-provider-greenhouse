@@ -12,7 +12,7 @@ func resourceGreenhouseDepartment() *schema.Resource {
     Create: resourceGreenhouseDepartmentCreate,
     Read: resourceGreenhouseDepartmentRead,
     Update: resourceGreenhouseDepartmentUpdate,
-    Delete: resourceGreenhouseDepartmentDelete,
+    Exists: resourceGreenhouseDepartmentExists,
     Importer: &schema.ResourceImporter{
       State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
         return []*schema.ResourceData{d}, nil
@@ -70,6 +70,11 @@ func resourceGreenhouseDepartmentObject(d *schema.ResourceData) *greenhouse.Depa
   }
 }
 
+func resourceGreenhouseDepartmentExists(d *schema.ResourceData, meta interface{}) (bool, error) {
+  id := d.Get("id").(int)
+  return greenhouse.Exists(meta.(*greenhouse.Client), "departments", id)
+}
+
 func resourceGreenhouseDepartmentCreate(d *schema.ResourceData, meta interface{}) error {
   createObject := greenhouse.DepartmentCreateInfo{
     Name: d.Get("name").(string),
@@ -80,23 +85,29 @@ func resourceGreenhouseDepartmentCreate(d *schema.ResourceData, meta interface{}
     return err
   }
   d.SetId(createObject.Name)
-  err = resourceGreenhouseDepartmentRead(d, meta)
-  return err
+  return resourceGreenhouseDepartmentRead(d, meta)
 }
 
 func resourceGreenhouseDepartmentRead(d *schema.ResourceData, meta interface{}) error {
   id := d.Get("id").(int)
-  _, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), id)
+  obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), id)
   if err != nil {
     return err
   }
+  d.Set("name", obj.Name)
+  d.Set("parent_id", obj.ParentId)
+  d.Set("child_ids", obj.ChildIds)
   return nil
 }
 
 func resourceGreenhouseDepartmentUpdate(d *schema.ResourceData, meta interface{}) error {
-  return nil
-}
-
-func resourceGreenhouseDepartmentDelete(d *schema.ResourceData, meta interface{}) error {
-  return nil
+  id := d.Get("id").(int)
+  updateObject := greenhouse.DepartmentUpdateInfo{
+    Name: d.Get("name").(string),
+  }
+  err := greenhouse.UpdateDepartment(meta.(*greenhouse.Client), id, &updateObject)
+  if err != nil {
+    return err
+  }
+  return resourceGreenhouseDepartmentRead(d, meta)
 }
