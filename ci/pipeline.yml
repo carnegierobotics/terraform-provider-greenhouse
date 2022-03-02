@@ -40,7 +40,7 @@ resources:
       repository: devops-generic-local
       is_deb: false
       path_pattern: "terraform-provider-greenhouse"
-      version_pattern: "-v[0-9]+[.][0-9]+[.][0-9]+"
+      recursive: true
     <<: *step-config
 resource_types:
   - name: rt-package
