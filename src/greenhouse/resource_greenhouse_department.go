@@ -30,6 +30,13 @@ func resourceGreenhouseDepartment() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
+      "child_ids": {
+        Type:     schema.TypeSet,
+        Computed: true,
+        Elem: &schema.Schema{
+          Type: schema.TypeInt,
+        },
+      },
 			/* Not in our product tier
 			   "parent_department_external_id": {
 			     Type: schema.TypeString,

@@ -2,10 +2,8 @@ module github.com/carnegierobotics/terraform-provider-greenhouse
 
 go 1.17
 
-replace github.com/carnegierobotics/greenhouse-client-go => ../../greenhouse-client-go/src
-
 require (
-	github.com/carnegierobotics/greenhouse-client-go v0.0.0-00010101000000-000000000000
+	github.com/carnegierobotics/greenhouse-client-go v0.0.1 
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 )
 
