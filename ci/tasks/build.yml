@@ -14,6 +14,8 @@ run:
   args:
     - -c
     - |
+      go mod vendor
+      go mod download -x
       go build -o terraform-provider-greenhouse
       export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
       export VERSION="$(cat VERSION)"
