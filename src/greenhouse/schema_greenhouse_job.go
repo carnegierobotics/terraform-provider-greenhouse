@@ -1,10 +1,7 @@
 package greenhouse
 
 import (
-	"fmt"
-	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"strconv"
 )
 
 func schemaGreenhouseJob() map[string]*schema.Schema {

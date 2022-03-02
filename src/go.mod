@@ -3,7 +3,7 @@ module github.com/carnegierobotics/terraform-provider-greenhouse
 go 1.17
 
 require (
-	github.com/carnegierobotics/greenhouse-client-go v0.0.5
+	github.com/carnegierobotics/greenhouse-client-go v0.0.6
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 )
 

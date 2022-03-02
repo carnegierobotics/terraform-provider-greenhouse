@@ -35,11 +35,11 @@ func resourceGreenhouseJobCreate(d *schema.ResourceData, meta interface{}) error
 	createObject := greenhouse.JobCreateInfo{
 		TemplateJobId:  d.Get("template_job_id").(int),
 		NumberOpenings: d.Get("number_of_openings").(int),
-		JobPostName:    d.Get("job_post_name").(int),
+		JobPostName:    d.Get("job_post_name").(string),
 		JobName:        d.Get("job_name").(string),
 		DepartmentId:   d.Get("department_id").(int),
 		OfficeIds:      d.Get("office_ids").([]int),
-		RequisitionId:  d.Get("requisition_id").(int),
+		RequisitionId:  d.Get("requisition_id").(string),
 		OpeningIds:     d.Get("opening_ids").([]string),
 	}
 	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), &createObject)
@@ -60,11 +60,11 @@ func resourceGreenhouseJobRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
-	d.Set("name", obj.Name)
-	d.Set("location", obj.Location)
-	d.Set("primary_contact_user_id", obj.PrimaryContactUserId)
-	d.Set("parent_id", obj.ParentId)
-	d.Set("child_ids", obj.ChildIds)
+	d.Set("job_name", obj.Name)
+	d.Set("departments", obj.Departments)
+	d.Set("offices", obj.Offices)
+	d.Set("requisition_id", obj.RequisitionId)
+	d.Set("openings", obj.Openings)
 	return nil
 }
 
@@ -74,8 +74,14 @@ func resourceGreenhouseJobUpdate(d *schema.ResourceData, meta interface{}) error
 		return err
 	}
 	updateObject := greenhouse.JobUpdateInfo{
-		Name:     d.Get("name").(string),
-		Location: d.Get("location").(string),
+		Name:                     d.Get("name").(string),
+		Notes:                    d.Get("notes").(string),
+		Anywhere:                 d.Get("anywhere").(bool),
+		RequisitionId:            d.Get("requisition_id").(string),
+		TeamsandResponsibilities: d.Get("teams_and_responsibilities").(string),
+		HowToSellThisJob:         d.Get("how_to_sell_this_job").(string),
+		OfficeIds:                d.Get("office_ids").([]int),
+		DepartmentId:             d.Get("department_id").(int),
 	}
 	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), id, &updateObject)
 	if err != nil {
