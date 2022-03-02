@@ -82,6 +82,7 @@ jobs:
           build: build 
         <<: *step-config
       - put: built-provider
+        <<: *step-config
         params:
           path: build/
           glob: "terraform-provider-greenhouse-*"
