@@ -1,10 +1,10 @@
 package greenhouse
 
 import (
-  "strconv"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"strconv"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -42,11 +42,11 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-      "greenhouse_close_reason": resourceGreenhouseCloseReason(),
-			"greenhouse_department": resourceGreenhouseDepartment(),
-      "greenhouse_office": resourceGreenhouseOffice(),
-      "greenhouse_user": resourceGreenhouseUser(), 
-			// "greenhouse_job"       : resourceGreenhouseJob(),
+			"greenhouse_close_reason": resourceGreenhouseCloseReason(),
+			"greenhouse_department":   resourceGreenhouseDepartment(),
+			"greenhouse_office":       resourceGreenhouseOffice(),
+			"greenhouse_user":         resourceGreenhouseUser(),
+			"greenhouse_job":          resourceGreenhouseJob(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			// "greenhouse_departments": dataSourceGreenhouseDepartment(),
@@ -63,9 +63,9 @@ func providerConfigure(p *schema.Provider) schema.ConfigureFunc {
 		harvest_url := d.Get("harvest_url").(string)
 		harvest_token := d.Get("harvest_token").(string)
 		on_behalf_of, err := strconv.Atoi(d.Get("on_behalf_of").(string))
-    if err != nil {
-      return nil, err
-    }
+		if err != nil {
+			return nil, err
+		}
 		client := greenhouse.Client{BaseUrl: harvest_url, Token: harvest_token, OnBehalfOf: on_behalf_of}
 		err = client.BuildResty()
 		if err != nil {

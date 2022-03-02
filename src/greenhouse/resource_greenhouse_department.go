@@ -1,10 +1,10 @@
 package greenhouse
 
 import (
-  "fmt"
-  "strconv"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"strconv"
 )
 
 type ReadFunc func(d *schema.ResourceData, m interface{}) error
@@ -14,57 +14,22 @@ func resourceGreenhouseDepartment() *schema.Resource {
 		Create: resourceGreenhouseDepartmentCreate,
 		Read:   resourceGreenhouseDepartmentRead,
 		Update: resourceGreenhouseDepartmentUpdate,
-    Delete: resourceGreenhouseDepartmentDelete,
+		Delete: resourceGreenhouseDepartmentDelete,
 		Exists: resourceGreenhouseDepartmentExists,
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
 				return []*schema.ResourceData{d}, nil
 			},
 		},
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"parent_id": {
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-      "child_ids": {
-        Type:     schema.TypeSet,
-        Computed: true,
-        Elem: &schema.Schema{
-          Type: schema.TypeInt,
-        },
-      },
-			/* Not in our product tier
-			   "parent_department_external_id": {
-			     Type: schema.TypeString,
-			     Optional: true,
-			     Computed: true,
-			   },
-			   "child_department_external_ids": {
-			     Type: schema.TypeSet,
-			     Optional: true,
-			     Computed: true,
-			     Elem: &schema.Schema {
-			       Type: schema.TypeString,
-			     }
-			   },
-			   "external_id": {
-			     Type: schema.TypeString,
-			     Optional: true,
-			   }
-			*/
-		},
+		Schema: schemaGreenhouseDepartment(),
 	}
 }
 
 func resourceGreenhouseDepartmentExists(d *schema.ResourceData, meta interface{}) (bool, error) {
 	id, err := strconv.Atoi(d.Id())
-  if err != nil {
-    return false, err
-  }
+	if err != nil {
+		return false, err
+	}
 	return greenhouse.Exists(meta.(*greenhouse.Client), "departments", id)
 }
 
@@ -77,16 +42,16 @@ func resourceGreenhouseDepartmentCreate(d *schema.ResourceData, meta interface{}
 	if err != nil {
 		return err
 	}
-  strId := strconv.Itoa(id)
+	strId := strconv.Itoa(id)
 	d.SetId(strId)
 	return resourceGreenhouseDepartmentRead(d, meta)
 }
 
 func resourceGreenhouseDepartmentRead(d *schema.ResourceData, meta interface{}) error {
 	id, err := strconv.Atoi(d.Id())
-  if err != nil {
-    return err
-  }
+	if err != nil {
+		return err
+	}
 	obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), id)
 	if err != nil {
 		return err
@@ -99,9 +64,9 @@ func resourceGreenhouseDepartmentRead(d *schema.ResourceData, meta interface{}) 
 
 func resourceGreenhouseDepartmentUpdate(d *schema.ResourceData, meta interface{}) error {
 	id, err := strconv.Atoi(d.Id())
-  if err != nil {
-    return err
-  }
+	if err != nil {
+		return err
+	}
 	updateObject := greenhouse.DepartmentUpdateInfo{
 		Name: d.Get("name").(string),
 	}
@@ -113,5 +78,5 @@ func resourceGreenhouseDepartmentUpdate(d *schema.ResourceData, meta interface{}
 }
 
 func resourceGreenhouseDepartmentDelete(d *schema.ResourceData, meta interface{}) error {
-  return fmt.Errorf("Error: delete is not supported for departments.")
+	return fmt.Errorf("Error: delete is not supported for departments.")
 }
