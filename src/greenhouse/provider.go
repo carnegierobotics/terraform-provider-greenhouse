@@ -42,9 +42,11 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
+      "greenhouse_close_reason": resourceGreenhouseCloseReason(),
 			"greenhouse_department": resourceGreenhouseDepartment(),
+      "greenhouse_office": resourceGreenhouseOffice(),
+      "greenhouse_user": resourceGreenhouseUser(), 
 			// "greenhouse_job"       : resourceGreenhouseJob(),
-			// "greenhouse_user"      : resourceGreenhouseUser(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			// "greenhouse_departments": dataSourceGreenhouseDepartment(),

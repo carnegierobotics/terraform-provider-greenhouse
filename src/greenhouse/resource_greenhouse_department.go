@@ -60,14 +60,6 @@ func resourceGreenhouseDepartment() *schema.Resource {
 	}
 }
 
-func resourceGreenhouseDepartmentObject(d *schema.ResourceData) *greenhouse.Department {
-	return &greenhouse.Department{
-		Name:     d.Get("name").(string),
-		ParentId: d.Get("parent_id").(int),
-		ChildIds: ConvertSliceInterfaceInt(d.Get("child_ids").(*schema.Set).List()),
-	}
-}
-
 func resourceGreenhouseDepartmentExists(d *schema.ResourceData, meta interface{}) (bool, error) {
 	id, err := strconv.Atoi(d.Id())
   if err != nil {
