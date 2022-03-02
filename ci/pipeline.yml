@@ -79,11 +79,11 @@ jobs:
         input_mapping:
           repo: repo 
         output_mapping:
-          build: terraform-providers 
+          build: terraform-provider-greenhouse
         <<: *step-config
       - put: built-provider
         <<: *step-config
         params:
-          path: terraform-providers/
+          path: terraform-provider-greenhouse/
           glob: "**/*/terraform-provider-greenhouse"
         
