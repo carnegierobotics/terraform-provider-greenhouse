@@ -87,6 +87,16 @@ func resourceGreenhouseJobRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("offices", obj.Offices)
 	d.Set("requisition_id", obj.RequisitionId)
 	d.Set("openings", obj.Openings)
+  d.Set("hiring_team", obj.HiringTeam)
+  d.Set("notes", obj.Notes)
+  d.Set("confidential", obj.Confidential)
+  d.Set("status", obj.Status)
+  d.Set("created_at", obj.CreatedAt)
+  d.Set("opened_at", obj.OpenedAt)
+  d.Set("closed_at", obj.ClosedAt)
+  d.Set("updated_at", obj.UpdatedAt)
+  d.Set("is_template", obj.IsTemplate)
+  d.Set("copied_from_id", obj.CopiedFromId)
 	return nil
 }
 
@@ -95,6 +105,13 @@ func resourceGreenhouseJobUpdate(d *schema.ResourceData, meta interface{}) error
 	if err != nil {
 		return err
 	}
+  if d.HasChange("hiring_team") {
+    teamUpdateObject := d.Get("hiring_team").(map[string][]greenhouse.HiringMemberUpdateInfo)
+    err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), id, &teamUpdateObject)
+    if err != nil {
+      return err
+    }
+  }
 	updateObject := greenhouse.JobUpdateInfo{
 		Name:                     d.Get("job_name").(string),
 		Notes:                    d.Get("notes").(string),
@@ -102,7 +119,7 @@ func resourceGreenhouseJobUpdate(d *schema.ResourceData, meta interface{}) error
 		RequisitionId:            d.Get("requisition_id").(string),
 		TeamsandResponsibilities: d.Get("teams_and_responsibilities").(string),
 		HowToSellThisJob:         d.Get("how_to_sell_this_job").(string),
-		OfficeIds:                d.Get("office_ids").([]int),
+		OfficeIds:                convertListIToListD(d.Get("office_ids").(*schema.Set).List()),
 		DepartmentId:             d.Get("department_id").(int),
 	}
 	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), id, &updateObject)
