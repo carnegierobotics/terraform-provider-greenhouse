@@ -18,6 +18,7 @@ description: |-
 ### Required
 
 - **number_of_openings** (Number)
+- **template_job_id** (Number)
 
 ### Optional
 

@@ -101,6 +101,10 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Required: true,
 		},
+    "template_job_id": {
+      Type:     schema.TypeInt,
+      Required: true,
+    },
 		"opening_ids": {
 			Type:     schema.TypeSet,
 			Optional: true,
