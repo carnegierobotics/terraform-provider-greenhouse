@@ -96,7 +96,7 @@ func resourceGreenhouseJobUpdate(d *schema.ResourceData, meta interface{}) error
 		return err
 	}
 	updateObject := greenhouse.JobUpdateInfo{
-		Name:                     d.Get("name").(string),
+		Name:                     d.Get("job_name").(string),
 		Notes:                    d.Get("notes").(string),
 		Anywhere:                 d.Get("anywhere").(bool),
 		RequisitionId:            d.Get("requisition_id").(string),
