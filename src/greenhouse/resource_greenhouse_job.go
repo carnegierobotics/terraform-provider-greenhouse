@@ -38,9 +38,9 @@ func resourceGreenhouseJobCreate(d *schema.ResourceData, meta interface{}) error
 		JobPostName:    d.Get("job_post_name").(string),
 		JobName:        d.Get("job_name").(string),
 		DepartmentId:   d.Get("department_id").(int),
-		OfficeIds:      d.Get("office_ids").([]int),
+		OfficeIds:      convertListIToListD(d.Get("office_ids").(*schema.Set).List()),
 		RequisitionId:  d.Get("requisition_id").(string),
-		OpeningIds:     d.Get("opening_ids").([]string),
+		OpeningIds:     convertListIToListA(d.Get("opening_ids").(*schema.Set).List()),
 	}
 	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), &createObject)
 	if err != nil {
@@ -49,6 +49,22 @@ func resourceGreenhouseJobCreate(d *schema.ResourceData, meta interface{}) error
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
 	return resourceGreenhouseJobRead(d, meta)
+}
+
+func convertListIToListD(list []interface{}) []int {
+  var newList []int
+  for i := range list {
+    newList[i] = list[i].(int)
+  }
+  return newList
+}
+
+func convertListIToListA(list []interface{}) []string {
+  var newList []string
+  for i := range list {
+    newList[i] = list[i].(string)
+  }
+  return newList
 }
 
 func resourceGreenhouseJobRead(d *schema.ResourceData, meta interface{}) error {
