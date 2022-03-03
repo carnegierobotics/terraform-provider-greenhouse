@@ -20,7 +20,7 @@ func schemaGreenhouseJobOpening() map[string]*schema.Schema {
     },
     "custom_fields": {
       Type:     schema.TypeSet,
-      Required: false,
+      Optional: true,
       Elem:     &schema.Resource{
         Schema: schemaGreenhouseCustomField(),
       },
