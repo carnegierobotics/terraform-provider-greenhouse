@@ -1,5 +1,6 @@
 #!/bin/bash
 cd ../src
+tfplugindocs generate
 go build -o terraform-provider-greenhouse
 export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
 export VERSION="$(cat ../src/VERSION)"
