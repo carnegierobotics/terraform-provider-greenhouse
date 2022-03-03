@@ -52,7 +52,10 @@ func resourceGreenhouseJobCreate(d *schema.ResourceData, meta interface{}) error
 }
 
 func convertListIToListD(list []interface{}) []int {
-  var newList []int
+  newList := make([]int, len(list))
+  if len(list) == 0 {
+    return newList
+  }
   for i := range list {
     newList[i] = list[i].(int)
   }
@@ -60,7 +63,10 @@ func convertListIToListD(list []interface{}) []int {
 }
 
 func convertListIToListA(list []interface{}) []string {
-  var newList []string
+  newList := make([]string, len(list))
+  if len(list) == 0 {
+    return newList
+  }
   for i := range list {
     newList[i] = list[i].(string)
   }
