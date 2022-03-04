@@ -1,9 +1,9 @@
 package greenhouse
 
 import (
-  "context"
+	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
@@ -14,7 +14,7 @@ func resourceGreenhouseUser() *schema.Resource {
 		ReadContext:   resourceGreenhouseUserRead,
 		UpdateContext: resourceGreenhouseUserUpdate,
 		DeleteContext: resourceGreenhouseUserDelete,
-		Exists: resourceGreenhouseUserExists,
+		Exists:        resourceGreenhouseUserExists,
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
 				return []*schema.ResourceData{d}, nil
@@ -41,7 +41,7 @@ func resourceGreenhouseUserCreate(ctx context.Context, d *schema.ResourceData, m
 	}
 	id, err := greenhouse.CreateUser(meta.(*greenhouse.Client), &createObject)
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
@@ -51,11 +51,11 @@ func resourceGreenhouseUserCreate(ctx context.Context, d *schema.ResourceData, m
 func resourceGreenhouseUserRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	obj, err := greenhouse.GetUser(meta.(*greenhouse.Client), id)
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	d.Set("name", obj.Name)
 	d.Set("first_name", obj.FirstName)
@@ -74,7 +74,7 @@ func resourceGreenhouseUserRead(ctx context.Context, d *schema.ResourceData, met
 func resourceGreenhouseUserUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	if d.HasChange("disable_user") {
 		if d.Get("disable_user").(bool) {
@@ -83,7 +83,7 @@ func resourceGreenhouseUserUpdate(ctx context.Context, d *schema.ResourceData, m
 			err = greenhouse.EnableUser(meta.(*greenhouse.Client), id, context.TODO())
 		}
 		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 	} else {
 		updateObject := greenhouse.UserUpdateInfo{
@@ -92,12 +92,12 @@ func resourceGreenhouseUserUpdate(ctx context.Context, d *schema.ResourceData, m
 		}
 		err = greenhouse.UpdateUser(meta.(*greenhouse.Client), id, &updateObject)
 		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 	}
 	return resourceGreenhouseUserRead(ctx, d, meta)
 }
 
 func resourceGreenhouseUserDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for users."},}
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for users."}}
 }

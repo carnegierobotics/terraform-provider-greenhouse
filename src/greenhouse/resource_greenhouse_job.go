@@ -1,11 +1,11 @@
 package greenhouse
 
 import (
-  "context"
+	"context"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-  "github.com/hashicorp/terraform-plugin-log/tflog"
-  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
@@ -16,7 +16,7 @@ func resourceGreenhouseJob() *schema.Resource {
 		ReadContext:   resourceGreenhouseJobRead,
 		UpdateContext: resourceGreenhouseJobUpdate,
 		DeleteContext: resourceGreenhouseJobDelete,
-		Exists: resourceGreenhouseJobExists,
+		Exists:        resourceGreenhouseJobExists,
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
 				return []*schema.ResourceData{d}, nil
@@ -47,7 +47,7 @@ func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, me
 	}
 	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), &createObject)
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
@@ -79,13 +79,13 @@ func convertListIToListA(list []interface{}) []string {
 func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	obj, err := greenhouse.GetJob(meta.(*greenhouse.Client), id)
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
+	tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
 	d.Set("job_name", obj.Name)
 	d.Set("departments", flattenDepartments(&obj.Departments))
 	d.Set("offices", flattenOffices(&obj.Offices))
@@ -101,21 +101,21 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("updated_at", obj.UpdatedAt)
 	d.Set("is_template", obj.IsTemplate)
 	d.Set("copied_from_id", obj.CopiedFromId)
-  d.Set("custom_fields", obj.CustomFields)
-  d.Set("keyed_custom_fields", obj.KeyedCustomFields)
+	d.Set("custom_fields", obj.CustomFields)
+	d.Set("keyed_custom_fields", obj.KeyedCustomFields)
 	return nil
 }
 
 func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	if d.HasChange("hiring_team") {
 		teamUpdateObject := convertHiringTeam(d.Get("hiring_team").(map[string][]interface{}))
 		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), id, &teamUpdateObject, context.TODO())
 		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 	}
 	updateObject := greenhouse.JobUpdateInfo{
@@ -130,7 +130,7 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 	}
 	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), id, &updateObject)
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	return resourceGreenhouseJobRead(ctx, d, meta)
 }
@@ -147,5 +147,5 @@ func convertHiringTeam(list map[string][]interface{}) map[string][]greenhouse.Hi
 }
 
 func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for jobs."},}
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for jobs."}}
 }

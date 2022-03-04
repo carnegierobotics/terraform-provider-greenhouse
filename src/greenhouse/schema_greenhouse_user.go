@@ -61,7 +61,7 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 		*/
 		"linked_candidate_ids": {
 			Type:     schema.TypeSet,
-      Optional: true,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,

@@ -1,7 +1,7 @@
 package greenhouse
 
 import (
-  "github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -17,7 +17,7 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 		},
 		"child_ids": {
 			Type:     schema.TypeSet,
-      Optional: true,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,
@@ -46,16 +46,16 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 }
 
 func flattenDepartments(list *[]greenhouse.Department) []interface{} {
-  if list != nil {
-    flatList := make([]interface{}, len(*list), len(*list))
-    for i, item := range *list {
-      dept := make(map[string]interface{})
-      dept["name"] = item.Name
-      dept["parent_id"] = item.ParentId
-      dept["child_ids"] = item.ChildIds
-      flatList[i] = dept
-    }
-    return flatList
-  }
-  return make([]interface{}, 0)
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, item := range *list {
+			dept := make(map[string]interface{})
+			dept["name"] = item.Name
+			dept["parent_id"] = item.ParentId
+			dept["child_ids"] = item.ChildIds
+			flatList[i] = dept
+		}
+		return flatList
+	}
+	return make([]interface{}, 0)
 }

@@ -1,7 +1,7 @@
 package greenhouse
 
 import (
-  "github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -28,7 +28,7 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 		},
 		"child_ids": {
 			Type:     schema.TypeSet,
-      Optional: true,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,
@@ -38,26 +38,26 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 }
 
 func flattenOffices(list *[]greenhouse.Office) []interface{} {
-  if list != nil {
-    flatList := make([]interface{}, len(*list), len(*list))
-    for i, item := range *list {
-      office := make(map[string]interface{})
-      office["name"] = item.Name
-      office["location"] = flattenLocation(&item.Location)
-      office["primary_context_user_id"] = item.PrimaryContactUserId
-      office["parent_id"] = item.ParentId
-      office["child_ids"] = item.ChildIds
-      flatList[i] = office
-    }
-    return flatList
-  }
-  return make([]interface{}, 0)
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, item := range *list {
+			office := make(map[string]interface{})
+			office["name"] = item.Name
+			office["location"] = flattenLocation(&item.Location)
+			office["primary_contact_user_id"] = item.PrimaryContactUserId
+			office["parent_id"] = item.ParentId
+			office["child_ids"] = item.ChildIds
+			flatList[i] = office
+		}
+		return flatList
+	}
+	return make([]interface{}, 0)
 }
 
 func flattenLocation(item *greenhouse.Location) map[string]interface{} {
-  location := make(map[string]interface{})
-  if item.Name != "" {
-    location["name"] = item.Name
-  }
-  return location
+	location := make(map[string]interface{})
+	if item.Name != "" {
+		location["name"] = item.Name
+	}
+	return location
 }

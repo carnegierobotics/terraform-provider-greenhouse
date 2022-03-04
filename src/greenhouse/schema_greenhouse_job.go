@@ -72,8 +72,8 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"departments": {
 			Type:     schema.TypeList,
-      MinItems: 1,
-      Optional: true,
+			MinItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseDepartment(),
@@ -88,18 +88,26 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"offices": {
 			Type:     schema.TypeSet,
-      Optional: true,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseOffice(),
 			},
 		},
 		"custom_fields": {
-			Type:     schema.TypeList,
-      MaxItems: 1,
+			Type:     schema.TypeMap,
 			Optional: true,
-			Elem: &schema.Resource{
-				Schema: schemaGreenhouseCustomField(),
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+		"keyed_custom_fields": {
+			Type:     schema.TypeMap,
+			Optional: true,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
 			},
 		},
 		"hiring_team_id": {
@@ -108,11 +116,11 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"hiring_team": {
 			Type:     schema.TypeList,
-      MaxItems: 1,
-      Optional: true,
+			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
-				Type:     schema.TypeSet,
+				Type: schema.TypeSet,
 				Elem: &schema.Resource{
 					Schema: schemaGreenhouseHiringMember(),
 				},

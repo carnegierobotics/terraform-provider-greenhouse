@@ -1,9 +1,9 @@
 package greenhouse
 
 import (
-  "strconv"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 )
 
 func Provider() *schema.Provider {
