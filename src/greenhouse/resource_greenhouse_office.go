@@ -2,18 +2,18 @@ package greenhouse
 
 import (
   "context"
-	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
 
 func resourceGreenhouseOffice() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceGreenhouseOfficeCreate,
-		Read:   resourceGreenhouseOfficeRead,
-		Update: resourceGreenhouseOfficeUpdate,
-		Delete: resourceGreenhouseOfficeDelete,
+		CreateContext: resourceGreenhouseOfficeCreate,
+		ReadContext:   resourceGreenhouseOfficeRead,
+		UpdateContext: resourceGreenhouseOfficeUpdate,
+		DeleteContext: resourceGreenhouseOfficeDelete,
 		Exists: resourceGreenhouseOfficeExists,
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
@@ -32,7 +32,7 @@ func resourceGreenhouseOfficeExists(d *schema.ResourceData, meta interface{}) (b
 	return greenhouse.Exists(meta.(*greenhouse.Client), "offices", id, context.TODO())
 }
 
-func resourceGreenhouseOfficeCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseOfficeCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	createObject := greenhouse.OfficeCreateInfo{
 		Name:                 d.Get("name").(string),
 		Location:             d.Get("location.name").(string),
@@ -41,21 +41,21 @@ func resourceGreenhouseOfficeCreate(d *schema.ResourceData, meta interface{}) er
 	}
 	id, err := greenhouse.CreateOffice(meta.(*greenhouse.Client), &createObject)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	return resourceGreenhouseOfficeRead(d, meta)
+	return resourceGreenhouseOfficeRead(ctx, d, meta)
 }
 
-func resourceGreenhouseOfficeRead(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseOfficeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	obj, err := greenhouse.GetOffice(meta.(*greenhouse.Client), id)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	d.Set("name", obj.Name)
 	d.Set("location", obj.Location)
@@ -65,10 +65,10 @@ func resourceGreenhouseOfficeRead(d *schema.ResourceData, meta interface{}) erro
 	return nil
 }
 
-func resourceGreenhouseOfficeUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseOfficeUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	updateObject := greenhouse.OfficeUpdateInfo{
 		Name:     d.Get("name").(string),
@@ -76,11 +76,11 @@ func resourceGreenhouseOfficeUpdate(d *schema.ResourceData, meta interface{}) er
 	}
 	err = greenhouse.UpdateOffice(meta.(*greenhouse.Client), id, &updateObject)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},} 
 	}
-	return resourceGreenhouseOfficeRead(d, meta)
+	return resourceGreenhouseOfficeRead(ctx, d, meta)
 }
 
-func resourceGreenhouseOfficeDelete(d *schema.ResourceData, meta interface{}) error {
-	return fmt.Errorf("Error: delete is not supported for offices.")
+func resourceGreenhouseOfficeDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for offices."},}
 }

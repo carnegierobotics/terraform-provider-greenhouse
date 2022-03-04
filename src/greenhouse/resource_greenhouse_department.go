@@ -2,9 +2,9 @@ package greenhouse
 
 import (
   "context"
-	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
 
@@ -12,10 +12,10 @@ type ReadFunc func(d *schema.ResourceData, m interface{}) error
 
 func resourceGreenhouseDepartment() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceGreenhouseDepartmentCreate,
-		Read:   resourceGreenhouseDepartmentRead,
-		Update: resourceGreenhouseDepartmentUpdate,
-		Delete: resourceGreenhouseDepartmentDelete,
+		CreateContext: resourceGreenhouseDepartmentCreate,
+		ReadContext:   resourceGreenhouseDepartmentRead,
+		UpdateContext: resourceGreenhouseDepartmentUpdate,
+		DeleteContext: resourceGreenhouseDepartmentDelete,
 		Exists: resourceGreenhouseDepartmentExists,
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
@@ -34,28 +34,28 @@ func resourceGreenhouseDepartmentExists(d *schema.ResourceData, meta interface{}
 	return greenhouse.Exists(meta.(*greenhouse.Client), "departments", id, context.TODO())
 }
 
-func resourceGreenhouseDepartmentCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseDepartmentCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	createObject := greenhouse.DepartmentCreateInfo{
 		Name:     d.Get("name").(string),
 		ParentId: d.Get("parent_id").(int),
 	}
 	id, err := greenhouse.CreateDepartment(meta.(*greenhouse.Client), &createObject)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	return resourceGreenhouseDepartmentRead(d, meta)
+	return resourceGreenhouseDepartmentRead(ctx, d, meta)
 }
 
-func resourceGreenhouseDepartmentRead(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), id)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	d.Set("name", obj.Name)
 	d.Set("parent_id", obj.ParentId)
@@ -63,21 +63,21 @@ func resourceGreenhouseDepartmentRead(d *schema.ResourceData, meta interface{}) 
 	return nil
 }
 
-func resourceGreenhouseDepartmentUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseDepartmentUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	updateObject := greenhouse.DepartmentUpdateInfo{
 		Name: d.Get("name").(string),
 	}
 	err = greenhouse.UpdateDepartment(meta.(*greenhouse.Client), id, &updateObject)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
-	return resourceGreenhouseDepartmentRead(d, meta)
+	return resourceGreenhouseDepartmentRead(ctx, d, meta)
 }
 
-func resourceGreenhouseDepartmentDelete(d *schema.ResourceData, meta interface{}) error {
-	return fmt.Errorf("Error: delete is not supported for departments.")
+func resourceGreenhouseDepartmentDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for departments."},}
 }

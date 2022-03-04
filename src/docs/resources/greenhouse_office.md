@@ -21,13 +21,10 @@ description: |-
 
 ### Optional
 
+- **child_ids** (Set of Number)
 - **id** (String) The ID of this resource.
 - **location** (Map of String)
 - **parent_id** (Number)
 - **primary_contact_user_id** (Number)
-
-### Read-Only
-
-- **child_ids** (Set of Number)
 
 

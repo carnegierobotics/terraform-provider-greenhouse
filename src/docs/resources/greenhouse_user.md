@@ -25,6 +25,7 @@ description: |-
 
 - **disable_user** (Boolean)
 - **id** (String) The ID of this resource.
+- **linked_candidate_ids** (Set of Number)
 - **send_email** (Boolean)
 
 ### Read-Only
@@ -32,7 +33,6 @@ description: |-
 - **created_at** (String)
 - **disabled** (Boolean)
 - **emails** (Set of String)
-- **linked_candidate_ids** (Set of Number)
 - **name** (String)
 - **site_admin** (Boolean)
 - **updated_at** (String)

@@ -2,18 +2,18 @@ package greenhouse
 
 import (
   "context"
-	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
 
 func resourceGreenhouseCloseReason() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceGreenhouseCloseReasonCreate,
-		Read:   resourceGreenhouseCloseReasonRead,
-		Update: resourceGreenhouseCloseReasonUpdate,
-		Delete: resourceGreenhouseCloseReasonDelete,
+		CreateContext: resourceGreenhouseCloseReasonCreate,
+		ReadContext:   resourceGreenhouseCloseReasonRead,
+		UpdateContext: resourceGreenhouseCloseReasonUpdate,
+		DeleteContext: resourceGreenhouseCloseReasonDelete,
 		Exists: resourceGreenhouseCloseReasonExists,
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
@@ -32,27 +32,27 @@ func resourceGreenhouseCloseReasonExists(d *schema.ResourceData, meta interface{
 	return greenhouse.Exists(meta.(*greenhouse.Client), "close_reasons", id, context.TODO())
 }
 
-func resourceGreenhouseCloseReasonCreate(d *schema.ResourceData, meta interface{}) error {
-	return fmt.Errorf("Error: create is not supported for close_reasons.")
+func resourceGreenhouseCloseReasonCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity:diag.Error, Summary: "Create is not supported for close_reasons."},}
 }
 
-func resourceGreenhouseCloseReasonRead(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseCloseReasonRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity:diag.Error, Summary: err.Error()},}
 	}
 	obj, err := greenhouse.GetCloseReason(meta.(*greenhouse.Client), id)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity:diag.Error, Summary: err.Error()},}
 	}
 	d.Set("name", obj.Name)
 	return nil
 }
 
-func resourceGreenhouseCloseReasonUpdate(d *schema.ResourceData, meta interface{}) error {
-	return fmt.Errorf("Error: update is not supported for close_reasons.")
+func resourceGreenhouseCloseReasonUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity:diag.Error, Summary: "Update is not supported for close_reasons."},}
 }
 
-func resourceGreenhouseCloseReasonDelete(d *schema.ResourceData, meta interface{}) error {
-	return fmt.Errorf("Error: delete is not supported for close_reasons.")
+func resourceGreenhouseCloseReasonDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity:diag.Error, Summary: "Delete is not supported for close_reasons."},}
 }

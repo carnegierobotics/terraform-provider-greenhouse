@@ -5,16 +5,17 @@ import (
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
   "github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
 
 func resourceGreenhouseJob() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceGreenhouseJobCreate,
-		Read:   resourceGreenhouseJobRead,
-		Update: resourceGreenhouseJobUpdate,
-		Delete: resourceGreenhouseJobDelete,
+		CreateContext: resourceGreenhouseJobCreate,
+		ReadContext:   resourceGreenhouseJobRead,
+		UpdateContext: resourceGreenhouseJobUpdate,
+		DeleteContext: resourceGreenhouseJobDelete,
 		Exists: resourceGreenhouseJobExists,
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
@@ -33,7 +34,7 @@ func resourceGreenhouseJobExists(d *schema.ResourceData, meta interface{}) (bool
 	return greenhouse.Exists(meta.(*greenhouse.Client), "jobs", id, context.TODO())
 }
 
-func resourceGreenhouseJobCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	createObject := greenhouse.JobCreateInfo{
 		TemplateJobId:  d.Get("template_job_id").(int),
 		NumberOpenings: d.Get("number_of_openings").(int),
@@ -46,11 +47,11 @@ func resourceGreenhouseJobCreate(d *schema.ResourceData, meta interface{}) error
 	}
 	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), &createObject)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	return resourceGreenhouseJobRead(d, meta)
+	return resourceGreenhouseJobRead(ctx, d, meta)
 }
 
 func convertListIToListD(list []interface{}) []int {
@@ -75,16 +76,16 @@ func convertListIToListA(list []interface{}) []string {
 	return newList
 }
 
-func resourceGreenhouseJobRead(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	obj, err := greenhouse.GetJob(meta.(*greenhouse.Client), id)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
-  tflog.Debug(context.Background(), "Debugging job", "job", fmt.Sprintf("%+v", obj))
+  tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
 	d.Set("job_name", obj.Name)
 	d.Set("departments", obj.Departments)
 	d.Set("offices", obj.Offices)
@@ -103,16 +104,16 @@ func resourceGreenhouseJobRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceGreenhouseJobUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	if d.HasChange("hiring_team") {
 		teamUpdateObject := convertHiringTeam(d.Get("hiring_team").(map[string][]interface{}))
 		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), id, &teamUpdateObject, context.TODO())
 		if err != nil {
-			return err
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 		}
 	}
 	updateObject := greenhouse.JobUpdateInfo{
@@ -127,9 +128,9 @@ func resourceGreenhouseJobUpdate(d *schema.ResourceData, meta interface{}) error
 	}
 	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), id, &updateObject)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
-	return resourceGreenhouseJobRead(d, meta)
+	return resourceGreenhouseJobRead(ctx, d, meta)
 }
 
 func convertHiringTeam(list map[string][]interface{}) map[string][]greenhouse.HiringMemberUpdateInfo {
@@ -143,6 +144,6 @@ func convertHiringTeam(list map[string][]interface{}) map[string][]greenhouse.Hi
 	return newMap
 }
 
-func resourceGreenhouseJobDelete(d *schema.ResourceData, meta interface{}) error {
-	return fmt.Errorf("Error: delete is not supported for jobs.")
+func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for jobs."},}
 }

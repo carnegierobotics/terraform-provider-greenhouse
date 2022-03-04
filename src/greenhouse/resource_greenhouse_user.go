@@ -2,18 +2,18 @@ package greenhouse
 
 import (
   "context"
-	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
 
 func resourceGreenhouseUser() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceGreenhouseUserCreate,
-		Read:   resourceGreenhouseUserRead,
-		Update: resourceGreenhouseUserUpdate,
-		Delete: resourceGreenhouseUserDelete,
+		CreateContext: resourceGreenhouseUserCreate,
+		ReadContext:   resourceGreenhouseUserRead,
+		UpdateContext: resourceGreenhouseUserUpdate,
+		DeleteContext: resourceGreenhouseUserDelete,
 		Exists: resourceGreenhouseUserExists,
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
@@ -32,7 +32,7 @@ func resourceGreenhouseUserExists(d *schema.ResourceData, meta interface{}) (boo
 	return greenhouse.Exists(meta.(*greenhouse.Client), "users", id, context.TODO())
 }
 
-func resourceGreenhouseUserCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseUserCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	createObject := greenhouse.UserCreateInfo{
 		FirstName: d.Get("first_name").(string),
 		LastName:  d.Get("last_name").(string),
@@ -41,21 +41,21 @@ func resourceGreenhouseUserCreate(d *schema.ResourceData, meta interface{}) erro
 	}
 	id, err := greenhouse.CreateUser(meta.(*greenhouse.Client), &createObject)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	return resourceGreenhouseUserRead(d, meta)
+	return resourceGreenhouseUserRead(ctx, d, meta)
 }
 
-func resourceGreenhouseUserRead(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseUserRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	obj, err := greenhouse.GetUser(meta.(*greenhouse.Client), id)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	d.Set("name", obj.Name)
 	d.Set("first_name", obj.FirstName)
@@ -71,10 +71,10 @@ func resourceGreenhouseUserRead(d *schema.ResourceData, meta interface{}) error 
 	return nil
 }
 
-func resourceGreenhouseUserUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceGreenhouseUserUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	if d.HasChange("disable_user") {
 		if d.Get("disable_user").(bool) {
@@ -83,7 +83,7 @@ func resourceGreenhouseUserUpdate(d *schema.ResourceData, meta interface{}) erro
 			err = greenhouse.EnableUser(meta.(*greenhouse.Client), id, context.TODO())
 		}
 		if err != nil {
-			return err
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 		}
 	} else {
 		updateObject := greenhouse.UserUpdateInfo{
@@ -92,12 +92,12 @@ func resourceGreenhouseUserUpdate(d *schema.ResourceData, meta interface{}) erro
 		}
 		err = greenhouse.UpdateUser(meta.(*greenhouse.Client), id, &updateObject)
 		if err != nil {
-			return err
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 		}
 	}
-	return resourceGreenhouseUserRead(d, meta)
+	return resourceGreenhouseUserRead(ctx, d, meta)
 }
 
-func resourceGreenhouseUserDelete(d *schema.ResourceData, meta interface{}) error {
-	return fmt.Errorf("Error: delete is not supported for users.")
+func resourceGreenhouseUserDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for users."},}
 }
