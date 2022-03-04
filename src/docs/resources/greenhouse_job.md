@@ -22,10 +22,12 @@ description: |-
 
 ### Optional
 
+- **anywhere** (Boolean)
 - **confidential** (Boolean)
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **hiring_team_id** (Number)
+- **how_to_sell_this_job** (String)
 - **id** (String) The ID of this resource.
 - **job_name** (String)
 - **job_post_name** (String)
@@ -34,6 +36,7 @@ description: |-
 - **opening_ids** (Block Set) (see [below for nested schema](#nestedblock--opening_ids))
 - **openings** (Set of Number)
 - **requisition_id** (String)
+- **teams_and_responsibilities** (String)
 
 ### Read-Only
 
@@ -41,7 +44,7 @@ description: |-
 - **copied_from_id** (Number)
 - **created_at** (String)
 - **departments** (Set of Object) (see [below for nested schema](#nestedatt--departments))
-- **hiring_team** (Map of String)
+- **hiring_team** (Map of Set of Object)
 - **is_template** (Boolean)
 - **offices** (Set of Object) (see [below for nested schema](#nestedatt--offices))
 - **opened_at** (String)
@@ -92,7 +95,7 @@ Read-Only:
 Read-Only:
 
 - **child_ids** (Set of Number)
-- **location** (String)
+- **location** (Map of String)
 - **name** (String)
 - **parent_id** (Number)
 - **primary_contact_user_id** (Number)

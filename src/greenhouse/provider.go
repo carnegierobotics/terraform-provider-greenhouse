@@ -1,10 +1,10 @@
 package greenhouse
 
 import (
+  "strconv"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"strconv"
 )
 
 func Provider() terraform.ResourceProvider {

@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+  "context"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -28,7 +29,7 @@ func resourceGreenhouseCloseReasonExists(d *schema.ResourceData, meta interface{
 	if err != nil {
 		return false, err
 	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "close_reasons", id)
+	return greenhouse.Exists(meta.(*greenhouse.Client), "close_reasons", id, context.TODO())
 }
 
 func resourceGreenhouseCloseReasonCreate(d *schema.ResourceData, meta interface{}) error {

@@ -11,8 +11,11 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 			Required: true,
 		},
 		"location": {
-			Type:     schema.TypeString,
+			Type:     schema.TypeMap,
 			Optional: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 		"primary_contact_user_id": {
 			Type:     schema.TypeInt,
@@ -24,6 +27,7 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 		},
 		"child_ids": {
 			Type:     schema.TypeSet,
+      Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,

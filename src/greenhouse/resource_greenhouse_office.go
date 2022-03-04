@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+  "context"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -28,13 +29,13 @@ func resourceGreenhouseOfficeExists(d *schema.ResourceData, meta interface{}) (b
 	if err != nil {
 		return false, err
 	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "offices", id)
+	return greenhouse.Exists(meta.(*greenhouse.Client), "offices", id, context.TODO())
 }
 
 func resourceGreenhouseOfficeCreate(d *schema.ResourceData, meta interface{}) error {
 	createObject := greenhouse.OfficeCreateInfo{
 		Name:                 d.Get("name").(string),
-		Location:             d.Get("location").(string),
+		Location:             d.Get("location.name").(string),
 		PrimaryContactUserId: d.Get("primary_contact_user_id").(int),
 		ParentId:             d.Get("parent_id").(int),
 	}
@@ -71,7 +72,7 @@ func resourceGreenhouseOfficeUpdate(d *schema.ResourceData, meta interface{}) er
 	}
 	updateObject := greenhouse.OfficeUpdateInfo{
 		Name:     d.Get("name").(string),
-		Location: d.Get("location").(string),
+		Location: d.Get("location.name").(string),
 	}
 	err = greenhouse.UpdateOffice(meta.(*greenhouse.Client), id, &updateObject)
 	if err != nil {

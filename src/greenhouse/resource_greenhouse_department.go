@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+  "context"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -30,7 +31,7 @@ func resourceGreenhouseDepartmentExists(d *schema.ResourceData, meta interface{}
 	if err != nil {
 		return false, err
 	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "departments", id)
+	return greenhouse.Exists(meta.(*greenhouse.Client), "departments", id, context.TODO())
 }
 
 func resourceGreenhouseDepartmentCreate(d *schema.ResourceData, meta interface{}) error {

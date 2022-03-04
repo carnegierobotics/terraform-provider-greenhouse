@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+  "context"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -28,7 +29,7 @@ func resourceGreenhouseUserExists(d *schema.ResourceData, meta interface{}) (boo
 	if err != nil {
 		return false, err
 	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "users", id)
+	return greenhouse.Exists(meta.(*greenhouse.Client), "users", id, context.TODO())
 }
 
 func resourceGreenhouseUserCreate(d *schema.ResourceData, meta interface{}) error {
@@ -77,9 +78,9 @@ func resourceGreenhouseUserUpdate(d *schema.ResourceData, meta interface{}) erro
 	}
 	if d.HasChange("disable_user") {
 		if d.Get("disable_user").(bool) {
-			err = greenhouse.DisableUser(meta.(*greenhouse.Client), id)
+			err = greenhouse.DisableUser(meta.(*greenhouse.Client), id, context.TODO())
 		} else {
-			err = greenhouse.EnableUser(meta.(*greenhouse.Client), id)
+			err = greenhouse.EnableUser(meta.(*greenhouse.Client), id, context.TODO())
 		}
 		if err != nil {
 			return err

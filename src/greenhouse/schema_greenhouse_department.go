@@ -16,6 +16,7 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 		},
 		"child_ids": {
 			Type:     schema.TypeSet,
+      Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,

@@ -22,18 +22,18 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
-    "anywhere": {
-      Type:     schema.TypeBool,
-      Optional: true,
-    },
-    "teams_and_responsibilities": {
-      Type:     schema.TypeString,
-      Optional: true,
-    },
-    "how_to_sell_this_job": {
-      Type:     schema.TypeString,
-      Optional: true,
-    },
+		"anywhere": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"teams_and_responsibilities": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"how_to_sell_this_job": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"confidential": {
 			Type:     schema.TypeBool,
 			Optional: true,
@@ -71,7 +71,9 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"departments": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
+      MinItems: 1,
+      Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseDepartment(),
@@ -86,13 +88,15 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"offices": {
 			Type:     schema.TypeSet,
+      Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseOffice(),
 			},
 		},
 		"custom_fields": {
-			Type:     schema.TypeMap,
+			Type:     schema.TypeList,
+      MaxItems: 1,
 			Optional: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseCustomField(),
@@ -103,23 +107,25 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"hiring_team": {
-			Type:     schema.TypeMap,
+			Type:     schema.TypeList,
+      MaxItems: 1,
+      Optional: true,
 			Computed: true,
-      Elem: &schema.Schema {
-			  Type: schema.TypeSet,
-        Elem: &schema.Resource{
-				  Schema: schemaGreenhouseHiringMember(),
-			  },
-		  },
-    },
+			Elem: &schema.Schema{
+				Type:     schema.TypeSet,
+				Elem: &schema.Resource{
+					Schema: schemaGreenhouseHiringMember(),
+				},
+			},
+		},
 		"number_of_openings": {
 			Type:     schema.TypeInt,
 			Required: true,
 		},
-    "template_job_id": {
-      Type:     schema.TypeInt,
-      Required: true,
-    },
+		"template_job_id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
 		"opening_ids": {
 			Type:     schema.TypeSet,
 			Optional: true,

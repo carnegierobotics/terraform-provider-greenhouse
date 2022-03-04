@@ -22,7 +22,7 @@ description: |-
 ### Optional
 
 - **id** (String) The ID of this resource.
-- **location** (String)
+- **location** (Map of String)
 - **parent_id** (Number)
 - **primary_contact_user_id** (Number)
 

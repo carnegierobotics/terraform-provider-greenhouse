@@ -10,32 +10,33 @@ func schemaGreenhouseJobOpening() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-    "status": {
-      Type:     schema.TypeString,
+		"status": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"close_reason_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"custom_fields": {
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseCustomField(),
+			},
+		},
+		"opened_at": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"closed_at": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"application_id": {
+			Type:     schema.TypeInt,
       Optional: true,
-    },
-    "close_reason_id": {
-      Type:     schema.TypeInt,
-      Optional: true,
-    },
-    "custom_fields": {
-      Type:     schema.TypeSet,
-      Optional: true,
-      Elem:     &schema.Resource{
-        Schema: schemaGreenhouseCustomField(),
-      },
-    },
-    "opened_at": {
-      Type:     schema.TypeString,
-      Computed: true,
-    },
-    "closed_at": {
-      Type:     schema.TypeString,
-      Computed: true,
-    },
-    "application_id": {
-      Type:     schema.TypeInt,
-      Computed: true,
-    },
+			Computed: true,
+		},
 	}
 }
