@@ -126,14 +126,14 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Required: true,
 		},
-		"opening_ids": {
+		"openings": {
 			Type:     schema.TypeSet,
 			Optional: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseJobOpening(),
 			},
 		},
-		"openings": {
+		"opening_ids": {
 			Type:     schema.TypeSet,
 			Optional: true,
 			Elem: &schema.Schema{

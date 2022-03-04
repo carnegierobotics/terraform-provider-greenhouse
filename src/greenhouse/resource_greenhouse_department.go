@@ -81,3 +81,19 @@ func resourceGreenhouseDepartmentUpdate(ctx context.Context, d *schema.ResourceD
 func resourceGreenhouseDepartmentDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for departments."},}
 }
+
+func flattenDepartments(list *[]greenhouse.Department) []interface{} {
+  if list != nil {
+    flatList := make([]interface{}, len(*list), len(*list))
+    for i, item := range *list {
+      dept := make(map[string]interface{})
+      dept["id"] = item.Id
+      dept["name"] = item.Name
+      dept["parent_id"] = item.ParentId
+      dept["child_ids"] = item.ChildIds
+      flatList[i] = dept
+    }
+    return flatList
+  }
+  return make([]interface{}, 0)
+}

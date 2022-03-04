@@ -87,7 +87,7 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	}
   tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
 	d.Set("job_name", obj.Name)
-	d.Set("departments", obj.Departments)
+	d.Set("departments", flattenDepartments(&obj.Departments))
 	d.Set("offices", obj.Offices)
 	d.Set("requisition_id", obj.RequisitionId)
 	d.Set("openings", obj.Openings)
