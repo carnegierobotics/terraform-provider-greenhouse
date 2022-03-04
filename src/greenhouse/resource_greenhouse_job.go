@@ -88,10 +88,10 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
   tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
 	d.Set("job_name", obj.Name)
 	d.Set("departments", flattenDepartments(&obj.Departments))
-	d.Set("offices", obj.Offices)
+	d.Set("offices", flattenOffices(&obj.Offices))
 	d.Set("requisition_id", obj.RequisitionId)
-	d.Set("openings", obj.Openings)
-	d.Set("hiring_team", obj.HiringTeam)
+	d.Set("openings", flattenJobOpenings(&obj.Openings))
+	d.Set("hiring_team", flattenHiringTeam(&obj.HiringTeam))
 	d.Set("notes", obj.Notes)
 	d.Set("confidential", obj.Confidential)
 	d.Set("status", obj.Status)
@@ -101,6 +101,8 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("updated_at", obj.UpdatedAt)
 	d.Set("is_template", obj.IsTemplate)
 	d.Set("copied_from_id", obj.CopiedFromId)
+  d.Set("custom_fields", obj.CustomFields)
+  d.Set("keyed_custom_fields", obj.KeyedCustomFields)
 	return nil
 }
 

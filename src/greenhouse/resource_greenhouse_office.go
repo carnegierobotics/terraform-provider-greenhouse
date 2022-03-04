@@ -58,7 +58,7 @@ func resourceGreenhouseOfficeRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	d.Set("name", obj.Name)
-	d.Set("location", obj.Location)
+	d.Set("location", flattenLocation(&obj.Location))
 	d.Set("primary_contact_user_id", obj.PrimaryContactUserId)
 	d.Set("parent_id", obj.ParentId)
 	d.Set("child_ids", obj.ChildIds)
@@ -76,7 +76,7 @@ func resourceGreenhouseOfficeUpdate(ctx context.Context, d *schema.ResourceData,
 	}
 	err = greenhouse.UpdateOffice(meta.(*greenhouse.Client), id, &updateObject)
 	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},} 
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()},}
 	}
 	return resourceGreenhouseOfficeRead(ctx, d, meta)
 }
