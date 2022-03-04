@@ -53,12 +53,10 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 		},
-		/* Not in our product tier
-		   "employee_id": {
-		     Type:     schema.TypeString,
-		     Optional: true,
-		   },
-		*/
+		"employee_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"linked_candidate_ids": {
 			Type:     schema.TypeSet,
 			Optional: true,
