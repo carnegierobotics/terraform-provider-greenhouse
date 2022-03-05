@@ -91,7 +91,7 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("offices", flattenOffices(&obj.Offices))
 	d.Set("requisition_id", obj.RequisitionId)
 	d.Set("openings", flattenJobOpenings(&obj.Openings))
-	d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
+	//d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
 	d.Set("notes", obj.Notes)
 	d.Set("confidential", obj.Confidential)
 	d.Set("status", obj.Status)
@@ -111,8 +111,9 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	if d.HasChange("hiring_team") {
-		teamUpdateObject := convertHiringTeam(d.Get("hiring_team").(map[string][]interface{}))
+	if d.HasChanges("hiring_team") {
+		//teamUpdateObject := convertHiringTeam(ctx, d.Get("hiring_team").(map[string][]interface{}))
+    teamUpdateObject := d.Get("hiring_team").(map[string][]greenhouse.HiringMemberUpdateInfo)
 		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), id, &teamUpdateObject, context.TODO())
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -135,7 +136,7 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 	return resourceGreenhouseJobRead(ctx, d, meta)
 }
 
-func convertHiringTeam(list map[string][]interface{}) map[string][]greenhouse.HiringMemberUpdateInfo {
+func convertHiringTeam(ctx context.Context, list map[string][]interface{}) map[string][]greenhouse.HiringMemberUpdateInfo {
 	var newMap map[string][]greenhouse.HiringMemberUpdateInfo
 	for k, v := range list {
 		newMap[k] = make([]greenhouse.HiringMemberUpdateInfo, len(v))
@@ -143,6 +144,7 @@ func convertHiringTeam(list map[string][]interface{}) map[string][]greenhouse.Hi
 			newMap[k][i] = list[k][i].(greenhouse.HiringMemberUpdateInfo)
 		}
 	}
+	tflog.Debug(ctx, "Converting hiring team", "team", fmt.Sprintf("%+v", newMap))
 	return newMap
 }
 
