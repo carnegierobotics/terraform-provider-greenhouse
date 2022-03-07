@@ -14,10 +14,10 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 		"parent_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
+			Default:  0,
 		},
 		"child_ids": {
 			Type:     schema.TypeSet,
-			Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,

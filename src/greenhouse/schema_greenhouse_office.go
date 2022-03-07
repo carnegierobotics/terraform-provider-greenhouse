@@ -11,9 +11,14 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+    "location_name": {
+      Type:     schema.TypeString,
+      Optional: true,
+      Default:  "",
+    },
 		"location": {
 			Type:     schema.TypeMap,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -21,14 +26,15 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 		"primary_contact_user_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
+			Default:  0,
 		},
 		"parent_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
+			Default:  0,
 		},
 		"child_ids": {
 			Type:     schema.TypeSet,
-			Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,

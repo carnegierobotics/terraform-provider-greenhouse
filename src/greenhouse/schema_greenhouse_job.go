@@ -9,34 +9,42 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		"job_name": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"job_post_name": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"requisition_id": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"notes": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"anywhere": {
 			Type:     schema.TypeBool,
 			Optional: true,
+			Default:  false,
 		},
 		"teams_and_responsibilities": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"how_to_sell_this_job": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"confidential": {
 			Type:     schema.TypeBool,
 			Optional: true,
+			Default:  false,
 		},
 		"status": {
 			Type:     schema.TypeString,
@@ -69,11 +77,10 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		"department_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
+			Default:  0,
 		},
 		"departments": {
 			Type:     schema.TypeList,
-			MinItems: 1,
-			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseDepartment(),
@@ -88,7 +95,6 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"offices": {
 			Type:     schema.TypeSet,
-			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseOffice(),
@@ -97,7 +103,6 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		"custom_fields": {
 			Type:     schema.TypeMap,
 			Optional: true,
-			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -115,15 +120,10 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 				},
 			},
 		*/
-		"hiring_team_id": {
-			Type:     schema.TypeInt,
-			Optional: true,
-		},
 		"hiring_team": {
 			Type:     schema.TypeList,
-			MaxItems: 1,
 			Optional: true,
-			Computed: true,
+      MaxItems: 1,
 			Elem: &schema.Schema{
 				Type: schema.TypeMap,
 				Elem: &schema.Schema{
@@ -131,6 +131,14 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 					Elem: &schema.Resource{
 						Schema: schemaGreenhouseHiringMember(),
 					},
+          /*
+          Elem: &schema.Schema{
+            Type: schema.TypeMap,
+            Elem: &schema.Schema{
+              Type: schema.TypeString,
+            },
+          },
+          */
 				},
 			},
 		},
@@ -144,7 +152,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"openings": {
 			Type:     schema.TypeSet,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseJobOpening(),
 			},

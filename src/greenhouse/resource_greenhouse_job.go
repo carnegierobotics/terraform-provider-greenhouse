@@ -16,25 +16,15 @@ func resourceGreenhouseJob() *schema.Resource {
 		ReadContext:   resourceGreenhouseJobRead,
 		UpdateContext: resourceGreenhouseJobUpdate,
 		DeleteContext: resourceGreenhouseJobDelete,
-		Exists:        resourceGreenhouseJobExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
-		},
+			StateContext: schema.ImportStatePassthroughContext,
+    },
 		Schema: schemaGreenhouseJob(),
 	}
 }
 
-func resourceGreenhouseJobExists(d *schema.ResourceData, meta interface{}) (bool, error) {
-	id, err := strconv.Atoi(d.Id())
-	if err != nil {
-		return false, err
-	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "jobs", id, context.TODO())
-}
-
 func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+  tflog.Debug(ctx, "Started resourceGreenhouseJobCreate")
 	createObject := greenhouse.JobCreateInfo{
 		TemplateJobId:  d.Get("template_job_id").(int),
 		NumberOpenings: d.Get("number_of_openings").(int),
@@ -51,7 +41,8 @@ func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, me
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	return resourceGreenhouseJobRead(ctx, d, meta)
+  tflog.Debug(ctx, "Kicking off resourceGreenhouseJobUpdate from resourceGreenhouseJobCreate")
+	return resourceGreenhouseJobUpdate(ctx, d, meta)
 }
 
 func convertListIToListD(list []interface{}) []int {
@@ -77,6 +68,7 @@ func convertListIToListA(list []interface{}) []string {
 }
 
 func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+  tflog.Debug(ctx, "Started resourceGreenhouseJobRead")
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -91,7 +83,8 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("offices", flattenOffices(&obj.Offices))
 	d.Set("requisition_id", obj.RequisitionId)
 	d.Set("openings", flattenJobOpenings(&obj.Openings))
-	//d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
+	d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
+  tflog.Debug(ctx, "Hiring team after flattening", "team", fmt.Sprintf("%+v", d.Get("hiring_team")))
 	d.Set("notes", obj.Notes)
 	d.Set("confidential", obj.Confidential)
 	d.Set("status", obj.Status)
@@ -103,17 +96,18 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("copied_from_id", obj.CopiedFromId)
 	d.Set("custom_fields", obj.CustomFields)
 	//d.Set("keyed_custom_fields", obj.KeyedCustomFields)
+  tflog.Debug(ctx, "Finished resourceGreenhouseJobRead")
 	return nil
 }
 
 func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+  tflog.Debug(ctx, "Started resourceGreenhouseJobUpdate")
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	if d.HasChanges("hiring_team") {
-		//teamUpdateObject := convertHiringTeam(ctx, d.Get("hiring_team").(map[string][]interface{}))
-    teamUpdateObject := d.Get("hiring_team").(map[string][]greenhouse.HiringMemberUpdateInfo)
+		teamUpdateObject := d.Get("hiring_team").([]map[string][]greenhouse.HiringMemberUpdateInfo)[0]
 		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), id, &teamUpdateObject, context.TODO())
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -133,19 +127,8 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
+  tflog.Debug(ctx, "Kicking off resourceGreenhouseJobRead from resourceGreenhouseJobUpdate")
 	return resourceGreenhouseJobRead(ctx, d, meta)
-}
-
-func convertHiringTeam(ctx context.Context, list map[string][]interface{}) map[string][]greenhouse.HiringMemberUpdateInfo {
-	var newMap map[string][]greenhouse.HiringMemberUpdateInfo
-	for k, v := range list {
-		newMap[k] = make([]greenhouse.HiringMemberUpdateInfo, len(v))
-		for i := range v {
-			newMap[k][i] = list[k][i].(greenhouse.HiringMemberUpdateInfo)
-		}
-	}
-	tflog.Debug(ctx, "Converting hiring team", "team", fmt.Sprintf("%+v", newMap))
-	return newMap
 }
 
 func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

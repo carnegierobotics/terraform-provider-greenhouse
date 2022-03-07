@@ -25,6 +25,7 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 		"send_email": {
 			Type:     schema.TypeBool,
 			Optional: true,
+			Default:  false,
 		},
 		"updated_at": {
 			Type:     schema.TypeString,
@@ -37,6 +38,7 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 		"disable_user": {
 			Type:     schema.TypeBool,
 			Optional: true,
+			Default:  false,
 		},
 		"disabled": {
 			Type:     schema.TypeBool,
@@ -56,10 +58,10 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 		"employee_id": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"linked_candidate_ids": {
 			Type:     schema.TypeSet,
-			Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,

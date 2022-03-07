@@ -45,7 +45,7 @@ func resourceGreenhouseDepartmentCreate(ctx context.Context, d *schema.ResourceD
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	return resourceGreenhouseDepartmentRead(ctx, d, meta)
+	return resourceGreenhouseDepartmentUpdate(ctx, d, meta)
 }
 
 func resourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

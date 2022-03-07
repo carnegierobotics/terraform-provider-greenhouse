@@ -12,7 +12,7 @@ func schemaGreenhouseHiringMember() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"user_id": {
 			Type:     schema.TypeInt,
-			Optional: true,
+			Required: true,
 		},
 		"active": {
 			Type:     schema.TypeBool,
@@ -37,11 +37,11 @@ func schemaGreenhouseHiringMember() map[string]*schema.Schema {
 		},
 		"first_name": {
 			Type:     schema.TypeString,
-			Computed: true,
+			Optional: true,
 		},
 		"last_name": {
 			Type:     schema.TypeString,
-			Computed: true,
+			Optional: true,
 		},
 		"name": {
 			Type:     schema.TypeString,
@@ -81,18 +81,10 @@ func flattenHiringTeam(ctx context.Context, list *map[string][]greenhouse.Hiring
 		flatMap := make([]interface{}, 1)
 		flatMap[0] = make(map[string]interface{})
 		for k, team := range *list {
-			flatMap[0].(map[string]interface{})[k] = make([]interface{}, len(team), len(team))
+      flatMap[0].(map[string]interface{})[k] = make([]interface{}, len(team), len(team))
 			if team != nil {
 				for i, item := range team {
-					tflog.Debug(ctx, "User data", "user", fmt.Sprintf("%+v", item))
-					member := make(map[string]interface{})
-					member["user_id"] = item.UserId
-					member["active"] = item.Active
-					member["first_name"] = item.FirstName
-					member["last_name"] = item.LastName
-					member["name"] = item.Name
-					member["responsible"] = item.Responsible
-					member["employee_id"] = item.EmployeeId
+          member, _ := flattenHiringTeamMember(ctx, item)
 					flatMap[0].(map[string]interface{})[k].([]interface{})[i] = member
 				}
 			}
@@ -101,4 +93,17 @@ func flattenHiringTeam(ctx context.Context, list *map[string][]greenhouse.Hiring
 		return flatMap
 	}
 	return make([]interface{}, 0)
+}
+
+func flattenHiringTeamMember(ctx context.Context, item greenhouse.HiringMember) (map[string]interface{}, error) {
+	tflog.Debug(ctx, "User data", "user", fmt.Sprintf("%+v", item))
+	member := make(map[string]interface{})
+	member["user_id"] = item.UserId
+	member["active"] = item.Active
+	member["first_name"] = item.FirstName
+	member["last_name"] = item.LastName
+	member["name"] = item.Name
+	member["responsible"] = item.Responsible
+	member["employee_id"] = item.EmployeeId
+  return member, nil
 }
