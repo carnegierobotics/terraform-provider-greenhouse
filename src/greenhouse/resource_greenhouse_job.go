@@ -107,7 +107,10 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	if d.HasChanges("hiring_team") {
-		teamUpdateObject := d.Get("hiring_team").([]map[string][]greenhouse.HiringMemberUpdateInfo)[0]
+		teamUpdateObject, err := transformHiringTeam(ctx, d.Get("hiring_team"))
+    if err != nil {
+      return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+    }
 		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), id, &teamUpdateObject, context.TODO())
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -129,6 +132,20 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 	}
   tflog.Debug(ctx, "Kicking off resourceGreenhouseJobRead from resourceGreenhouseJobUpdate")
 	return resourceGreenhouseJobRead(ctx, d, meta)
+}
+
+func transformHiringTeam(ctx context.Context, hiringTeam interface{}) (map[string][]greenhouse.HiringMemberUpdateInfo, error) {
+  update := make(map[string][]greenhouse.HiringMemberUpdateInfo)
+  for _, team := range hiringTeam.([]interface{}) {
+    teamItem := team.(map[string]interface{})
+    teamName := teamItem["name"].(string)
+    members := teamItem["members"].([]greenhouse.HiringMemberUpdateInfo)
+    update[teamName] = make([]greenhouse.HiringMemberUpdateInfo, len(members), len(members))
+    for j, member := range members {
+      update[teamName][j] = member
+    }
+  }
+  return update, nil
 }
 
 func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

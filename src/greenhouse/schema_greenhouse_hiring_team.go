@@ -8,6 +8,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+func schemaGreenhouseHiringTeam() map[string]*schema.Schema {
+  return map[string]*schema.Schema{
+    "name": {
+      Type:     schema.TypeString,
+      Required: true,
+    },
+    "members": {
+      Type:     schema.TypeList,
+      Required: true,
+      Elem: &schema.Resource{
+        Schema: schemaGreenhouseHiringMember(),
+      },
+    },
+  }
+}
+
 func schemaGreenhouseHiringMember() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"user_id": {
@@ -77,20 +93,31 @@ Hiring team is map[string][]HiringMember
 }
 */
 func flattenHiringTeam(ctx context.Context, list *map[string][]greenhouse.HiringMember) []interface{} {
-	if list != nil {
-		flatMap := make([]interface{}, 1)
-		flatMap[0] = make(map[string]interface{})
-		for k, team := range *list {
-      flatMap[0].(map[string]interface{})[k] = make([]interface{}, len(team), len(team))
-			if team != nil {
-				for i, item := range team {
-          member, _ := flattenHiringTeamMember(ctx, item)
-					flatMap[0].(map[string]interface{})[k].([]interface{})[i] = member
-				}
-			}
+  if list != nil {
+    flatMap := make([]interface{}, len(*list), len(*list))
+    teamCount := 0
+    for k, team := range *list {
+      flatTeam := make(map[string]interface{})
+      flatTeam["name"] = k
+      flatTeam["members"] = flattenOneTeam(ctx, team)
+      flatMap[teamCount] = flatTeam
+      teamCount++
+    }
+    tflog.Debug(ctx, "Flattened hiring team", fmt.Sprintf("%+v", flatMap))
+    return flatMap
+  }
+  return make([]interface{}, 0)
+}
+
+func flattenOneTeam(ctx context.Context, team []greenhouse.HiringMember) []interface{} {
+	if team != nil {
+    flatMap := make([]interface{}, len(team), len(team))
+	  for i, member := range team {
+      member, _ := flattenHiringTeamMember(ctx, member)
+  	  flatMap[i] = member
 		}
-		tflog.Debug(ctx, "Flattened team", "team", fmt.Sprintf("%+v", flatMap))
-		return flatMap
+	  tflog.Debug(ctx, "Flattened team", "team", fmt.Sprintf("%+v", flatMap))
+	  return flatMap
 	}
 	return make([]interface{}, 0)
 }
