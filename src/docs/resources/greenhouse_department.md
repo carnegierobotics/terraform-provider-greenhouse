@@ -21,8 +21,11 @@ description: |-
 
 ### Optional
 
-- **child_ids** (Set of Number)
 - **id** (String) The ID of this resource.
 - **parent_id** (Number)
+
+### Read-Only
+
+- **child_ids** (Set of Number)
 
 

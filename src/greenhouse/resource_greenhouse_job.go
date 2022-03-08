@@ -2,12 +2,13 @@ package greenhouse
 
 import (
 	"context"
+  "encoding/json"
 	"fmt"
+  "strconv"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"strconv"
 )
 
 func resourceGreenhouseJob() *schema.Resource {
@@ -83,7 +84,7 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("offices", flattenOffices(&obj.Offices))
 	d.Set("requisition_id", obj.RequisitionId)
 	d.Set("openings", flattenJobOpenings(&obj.Openings))
-	d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
+	//d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
   tflog.Debug(ctx, "Hiring team after flattening", "team", fmt.Sprintf("%+v", d.Get("hiring_team")))
 	d.Set("notes", obj.Notes)
 	d.Set("confidential", obj.Confidential)
@@ -136,15 +137,25 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 
 func transformHiringTeam(ctx context.Context, hiringTeam interface{}) (map[string][]greenhouse.HiringMemberUpdateInfo, error) {
   update := make(map[string][]greenhouse.HiringMemberUpdateInfo)
-  for _, team := range hiringTeam.([]interface{}) {
+  for _, team := range hiringTeam.(*schema.Set).List() {
     teamItem := team.(map[string]interface{})
     teamName := teamItem["name"].(string)
-    members := teamItem["members"].([]greenhouse.HiringMemberUpdateInfo)
+    members := teamItem["members"].(*schema.Set).List()
     update[teamName] = make([]greenhouse.HiringMemberUpdateInfo, len(members), len(members))
     for j, member := range members {
-      update[teamName][j] = member
+      var obj greenhouse.HiringMemberUpdateInfo
+      marshaled, err := json.Marshal(member)
+      if err != nil {
+        return nil, err
+      }
+      err = json.Unmarshal(marshaled, &obj)
+      if err != nil {
+        return nil, err
+      }
+      update[teamName][j] = obj
     }
   }
+  tflog.Debug(ctx, "Updating hiring team", "updateObj", fmt.Sprintf("%+v", update))
   return update, nil
 }
 

@@ -24,20 +24,16 @@ description: |-
 
 - **anywhere** (Boolean)
 - **confidential** (Boolean)
-- **custom_fields** (Block List, Max: 1) (see [below for nested schema](#nestedblock--custom_fields))
+- **custom_fields** (Map of String)
 - **department_id** (Number)
-- **departments** (Block List) (see [below for nested schema](#nestedblock--departments))
-- **hiring_team** (List of Set of Object)
-- **hiring_team_id** (Number)
+- **hiring_team** (Block Set) (see [below for nested schema](#nestedblock--hiring_team))
 - **how_to_sell_this_job** (String)
 - **id** (String) The ID of this resource.
 - **job_name** (String)
 - **job_post_name** (String)
 - **notes** (String)
 - **office_ids** (Set of Number)
-- **offices** (Block Set) (see [below for nested schema](#nestedblock--offices))
-- **opening_ids** (Block Set) (see [below for nested schema](#nestedblock--opening_ids))
-- **openings** (Set of Number)
+- **opening_ids** (Set of Number)
 - **requisition_id** (String)
 - **teams_and_responsibilities** (String)
 
@@ -46,71 +42,80 @@ description: |-
 - **closed_at** (String)
 - **copied_from_id** (Number)
 - **created_at** (String)
+- **departments** (List of Object) (see [below for nested schema](#nestedatt--departments))
 - **is_template** (Boolean)
+- **offices** (Set of Object) (see [below for nested schema](#nestedatt--offices))
 - **opened_at** (String)
+- **openings** (Set of Object) (see [below for nested schema](#nestedatt--openings))
 - **status** (String)
 - **updated_at** (String)
 
-<a id="nestedblock--custom_fields"></a>
-### Nested Schema for `custom_fields`
+<a id="nestedblock--hiring_team"></a>
+### Nested Schema for `hiring_team`
 
 Required:
 
+- **members** (Block Set, Min: 1) (see [below for nested schema](#nestedblock--hiring_team--members))
 - **name** (String)
 
-
-<a id="nestedblock--departments"></a>
-### Nested Schema for `departments`
+<a id="nestedblock--hiring_team--members"></a>
+### Nested Schema for `hiring_team.members`
 
 Required:
 
-- **name** (String)
+- **user_id** (Number)
 
 Optional:
 
+- **responsible_for_active_candidates** (Boolean)
+- **responsible_for_future_candidates** (Boolean)
+- **responsible_for_inactive_candidates** (Boolean)
+
+Read-Only:
+
+- **employee_id** (String)
+- **first_name** (String)
+- **last_name** (String)
+- **name** (String)
+- **responsible** (Boolean)
+
+
+
+<a id="nestedatt--departments"></a>
+### Nested Schema for `departments`
+
+Read-Only:
+
 - **child_ids** (Set of Number)
+- **name** (String)
 - **parent_id** (Number)
 
 
-<a id="nestedblock--offices"></a>
+<a id="nestedatt--offices"></a>
 ### Nested Schema for `offices`
 
-Required:
-
-- **name** (String)
-
-Optional:
+Read-Only:
 
 - **child_ids** (Set of Number)
 - **location** (Map of String)
+- **location_name** (String)
+- **name** (String)
 - **parent_id** (Number)
 - **primary_contact_user_id** (Number)
 
 
-<a id="nestedblock--opening_ids"></a>
-### Nested Schema for `opening_ids`
-
-Required:
-
-- **opening_id** (String)
-
-Optional:
-
-- **application_id** (Number)
-- **close_reason_id** (Number)
-- **custom_fields** (Block Set) (see [below for nested schema](#nestedblock--opening_ids--custom_fields))
-- **status** (String)
+<a id="nestedatt--openings"></a>
+### Nested Schema for `openings`
 
 Read-Only:
 
+- **application_id** (Number)
+- **close_reason** (Map of String)
+- **close_reason_id** (Number)
 - **closed_at** (String)
+- **custom_fields** (Map of String)
 - **opened_at** (String)
-
-<a id="nestedblock--opening_ids--custom_fields"></a>
-### Nested Schema for `opening_ids.custom_fields`
-
-Required:
-
-- **name** (String)
+- **opening_id** (String)
+- **status** (String)
 
 

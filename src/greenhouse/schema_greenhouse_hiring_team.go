@@ -15,7 +15,7 @@ func schemaGreenhouseHiringTeam() map[string]*schema.Schema {
       Required: true,
     },
     "members": {
-      Type:     schema.TypeList,
+      Type:     schema.TypeSet,
       Required: true,
       Elem: &schema.Resource{
         Schema: schemaGreenhouseHiringMember(),
@@ -30,13 +30,14 @@ func schemaGreenhouseHiringMember() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Required: true,
 		},
+    /*
 		"active": {
 			Type:     schema.TypeBool,
 			Computed: true,
 		},
+    */
 		"responsible": {
 			Type:     schema.TypeBool,
-			Optional: true,
 			Computed: true,
 		},
 		"responsible_for_future_candidates": {
@@ -53,11 +54,11 @@ func schemaGreenhouseHiringMember() map[string]*schema.Schema {
 		},
 		"first_name": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"last_name": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"name": {
 			Type:     schema.TypeString,
@@ -65,7 +66,6 @@ func schemaGreenhouseHiringMember() map[string]*schema.Schema {
 		},
 		"employee_id": {
 			Type:     schema.TypeString,
-			Optional: true,
 			Computed: true,
 		},
 	}
@@ -125,7 +125,7 @@ func flattenOneTeam(ctx context.Context, team []greenhouse.HiringMember) []inter
 func flattenHiringTeamMember(ctx context.Context, item greenhouse.HiringMember) (map[string]interface{}, error) {
 	tflog.Debug(ctx, "User data", "user", fmt.Sprintf("%+v", item))
 	member := make(map[string]interface{})
-	member["user_id"] = item.UserId
+	member["user_id"] = item.Id
 	member["active"] = item.Active
 	member["first_name"] = item.FirstName
 	member["last_name"] = item.LastName
