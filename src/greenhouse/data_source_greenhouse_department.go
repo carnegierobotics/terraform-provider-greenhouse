@@ -1,14 +1,14 @@
 package greenhouse
 
 import (
-  "strconv"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 )
 
 func dataSourceGreenhouseDepartment() *schema.Resource {
 	return &schema.Resource{
-		Read:   dataSourceGreenhouseDepartmentRead,
+		Read: dataSourceGreenhouseDepartmentRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -18,13 +18,13 @@ func dataSourceGreenhouseDepartment() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-      "child_ids": {
-        Type:     schema.TypeSet,
-        Optional: true,
-        Elem: &schema.Schema{
-          Type: schema.TypeInt,
-        },
-      },
+			"child_ids": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeInt,
+				},
+			},
 			/* Not in our product tier
 			   "parent_department_external_id": {
 			     Type: schema.TypeString,
@@ -50,9 +50,9 @@ func dataSourceGreenhouseDepartment() *schema.Resource {
 
 func dataSourceGreenhouseDepartmentRead(d *schema.ResourceData, meta interface{}) error {
 	id, err := strconv.Atoi(d.Id())
-  if err != nil {
-    return err
-  }
+	if err != nil {
+		return err
+	}
 	obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), id)
 	if err != nil {
 		return err

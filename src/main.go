@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/carnegierobotics/terraform-provider-greenhouse/greenhouse"
-	"github.com/hashicorp/terraform-plugin-sdk/plugin"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 )
 
 func main() {

@@ -1,0 +1,24 @@
+---
+platform: linux
+inputs:
+  - name: repo
+outputs:
+  - name: build
+params:
+  RT_URL: "https://crl.jfrog.io/artifactory"
+  GOPROXY: "https://((writer-artifactory-user)):((writer-artifactory-token))@crl.jfrog.io/artifactory/api/go/go"
+  GOSUMDB: "off"
+run:
+  dir: repo/src
+  path: /bin/bash 
+  args:
+    - -c
+    - |
+      go mod vendor
+      go mod download -x
+      go build -o terraform-provider-greenhouse
+      export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
+      export VERSION="$(cat VERSION)"
+      export OUTPUT_DIR="../../build/$VERSION/$OS_ARCH"
+      mkdir -p $OUTPUT_DIR 
+      mv terraform-provider-greenhouse $OUTPUT_DIR 
