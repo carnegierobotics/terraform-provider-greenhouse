@@ -31,7 +31,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			Optional: true,
 			Default:  false,
 		},
-		"teams_and_responsibilities": {
+		"team_and_responsibilities": {
 			Type:     schema.TypeString,
 			Optional: true,
 			Default:  "",

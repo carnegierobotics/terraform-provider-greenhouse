@@ -35,7 +35,7 @@ description: |-
 - **office_ids** (Set of Number)
 - **opening_ids** (Set of Number)
 - **requisition_id** (String)
-- **teams_and_responsibilities** (String)
+- **team_and_responsibilities** (String)
 
 ### Read-Only
 

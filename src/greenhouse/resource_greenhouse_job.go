@@ -122,7 +122,7 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 		Notes:                    d.Get("notes").(string),
 		Anywhere:                 d.Get("anywhere").(bool),
 		RequisitionId:            d.Get("requisition_id").(string),
-		TeamsandResponsibilities: d.Get("teams_and_responsibilities").(string),
+		TeamandResponsibilities:  d.Get("team_and_responsibilities").(string),
 		HowToSellThisJob:         d.Get("how_to_sell_this_job").(string),
 		OfficeIds:                convertListIToListD(d.Get("office_ids").(*schema.Set).List()),
 		DepartmentId:             d.Get("department_id").(int),
