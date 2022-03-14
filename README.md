@@ -12,6 +12,7 @@ GOPRIVATE=github.com/carnegierobotics/*
 Generated docs can be found at [src/docs](https://github.com/carnegierobotics/terraform-provider-greenhouse/tree/main/src/docs), but they're not super-readable in GitHub markdown. Below is a summary of how to manage each resource type.
 ### Provider setup
 ***Note:*** this is not necessary if you're using the pipeline to run Terraform.
+
 |Attribute|Type|Required|Default|Description|
 |---------|----|--------|-------|-----------|
 |harvest_token|String|yes|-|Token for the Harvest API|
@@ -24,6 +25,7 @@ Generated docs can be found at [src/docs](https://github.com/carnegierobotics/te
 |---------|----|--------|-------|-----------|
 |name|String|yes|-|The department's name|
 |parent_id|Integer|no|-|The ID of this department's parent department|
+
 Example:
 ```
 resource "greenhouse_department" "mydepartment" {
@@ -32,12 +34,14 @@ resource "greenhouse_department" "mydepartment" {
 }
 ```
 ### Offices
+
 |Attribute|Type|Required|Default|Description|
 |---------|----|--------|-------|-----------|
 |name|String|yes|-|The office's name|
 |location_name|String|no|-|A free-text field for the office's location|
 |parent_id|Integer|no|-|The ID of this office's parent office|
 |primary_contact_user_id|Integer|no|-|The ID of this office's primary contact user|
+
 Example:
 ```
 resource "greenhouse_office" "myoffice" {
@@ -48,6 +52,7 @@ resource "greenhouse_office" "myoffice" {
 }
 ```
 ### Users
+
 |Attribute|Type|Required|Default|Description|
 |---------|----|--------|-------|-----------|
 |first_name|String|yes|-|The user's first name|
@@ -56,6 +61,7 @@ resource "greenhouse_office" "myoffice" {
 |disable_user|Boolean|no|false|If true, disable this user|
 |employee_id|String|no|-|Free-text for an internal employee ID|
 |send_email|Boolean|no|false|Send this user a notification email|
+
 Example:
 ```
 resource "greenhouse_user" "bigbossperson" {
@@ -68,6 +74,7 @@ resource "greenhouse_user" "bigbossperson" {
 }
 ```
 ### Jobs
+
 |Attribute|Type|Required|Default|Description|
 |---------|----|--------|-------|-----------|
 |number_of_openings|Integer|yes|-|Number of openings for this job|
@@ -97,6 +104,7 @@ Hiring team member block set:
 |responsible_for_active_candidates|Boolean|no|false|The user is responsible for active candidates|
 |responsible_for_future_candidates|Boolean|no|false|The user is responsible for future candidates|
 |responsible_for_inactive_candidates|Boolean|no|false|The user is responsible for inactive candidates|
+
 Example:
 ```
 resource "greenhouse_job" "mynewjob" {
