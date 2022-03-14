@@ -20,6 +20,18 @@ resources:
       uri: git@github.com:carnegierobotics/terraform-provider-greenhouse.git 
       branch: ((project-branch))
       <<: *git-token 
+      paths:
+        - src
+    <<: *step-config
+  - name: repo-ci
+    type: git
+    icon: git
+    source:
+      uri: git@github.com:carnegierobotics/terraform-provider-greenhouse.git
+      branch: ((project-branch))
+      <<: *git-token
+      paths:
+        - ci
     <<: *step-config
   - name: build-image
     type: registry-image
