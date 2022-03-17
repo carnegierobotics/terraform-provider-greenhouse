@@ -2,11 +2,11 @@ package greenhouse
 
 import (
 	"context"
-  "fmt"
-  "strconv"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 )
 
 func resourceGreenhouseCloseReason() *schema.Resource {
@@ -42,7 +42,7 @@ func resourceGreenhouseCloseReasonRead(ctx context.Context, d *schema.ResourceDa
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	obj, err := greenhouse.GetCloseReason(meta.(*greenhouse.Client), id)
+	obj, err := greenhouse.GetCloseReason(meta.(*greenhouse.Client), ctx, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}

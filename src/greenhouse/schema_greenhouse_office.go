@@ -18,7 +18,7 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 		},
 		"location": {
 			Type:     schema.TypeList,
-      MaxItems: 1,
+			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseLocation(),

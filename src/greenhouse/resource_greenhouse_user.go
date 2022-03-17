@@ -2,11 +2,11 @@ package greenhouse
 
 import (
 	"context"
-  "fmt"
-  "strconv"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 )
 
 func resourceGreenhouseUser() *schema.Resource {
@@ -40,7 +40,7 @@ func resourceGreenhouseUserCreate(ctx context.Context, d *schema.ResourceData, m
 		Email:     d.Get("primary_email_address").(string),
 		SendEmail: d.Get("send_email").(bool),
 	}
-	id, err := greenhouse.CreateUser(meta.(*greenhouse.Client), &createObject)
+	id, err := greenhouse.CreateUser(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -54,7 +54,7 @@ func resourceGreenhouseUserRead(ctx context.Context, d *schema.ResourceData, met
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	obj, err := greenhouse.GetUser(meta.(*greenhouse.Client), id)
+	obj, err := greenhouse.GetUser(meta.(*greenhouse.Client), ctx, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -79,9 +79,9 @@ func resourceGreenhouseUserUpdate(ctx context.Context, d *schema.ResourceData, m
 	}
 	if d.HasChange("disable_user") {
 		if d.Get("disable_user").(bool) {
-			err = greenhouse.DisableUser(meta.(*greenhouse.Client), id, context.TODO())
+			err = greenhouse.DisableUser(meta.(*greenhouse.Client), ctx, id)
 		} else {
-			err = greenhouse.EnableUser(meta.(*greenhouse.Client), id, context.TODO())
+			err = greenhouse.EnableUser(meta.(*greenhouse.Client), ctx, id)
 		}
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -91,7 +91,7 @@ func resourceGreenhouseUserUpdate(ctx context.Context, d *schema.ResourceData, m
 			FirstName: d.Get("first_name").(string),
 			LastName:  d.Get("last_name").(string),
 		}
-		err = greenhouse.UpdateUser(meta.(*greenhouse.Client), id, &updateObject)
+		err = greenhouse.UpdateUser(meta.(*greenhouse.Client), ctx, id, &updateObject)
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}

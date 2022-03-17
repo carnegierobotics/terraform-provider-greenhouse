@@ -36,7 +36,7 @@ func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, me
 		RequisitionId:  d.Get("requisition_id").(string),
 		OpeningIds:     convertListIToListA(d.Get("opening_ids").(*schema.Set).List()),
 	}
-	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), &createObject)
+	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -74,7 +74,7 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	obj, err := greenhouse.GetJob(meta.(*greenhouse.Client), id)
+	obj, err := greenhouse.GetJob(meta.(*greenhouse.Client), ctx, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -112,7 +112,7 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
-		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), id, &teamUpdateObject, context.TODO())
+		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), ctx, id, &teamUpdateObject)
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
@@ -127,7 +127,7 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 		OfficeIds:               convertListIToListD(d.Get("office_ids").(*schema.Set).List()),
 		DepartmentId:            d.Get("department_id").(int),
 	}
-	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), id, &updateObject)
+	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), ctx, id, &updateObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}

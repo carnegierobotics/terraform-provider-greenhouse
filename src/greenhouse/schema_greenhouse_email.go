@@ -10,33 +10,33 @@ func schemaGreenhouseEmail() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-    "subject": {
-      Type: schema.TypeString,
-      Computed: true,
-    },
-    "body": {
-      Type:     schema.TypeString,
-      Computed: true,
-    },
-    "to": {
-      Type:   schema.TypeString,
-      Computed: true,
-    },
-    "from": {
-      Type: schema.TypeString,
-      Computed: true,
-    },
-    "cc": {
-      Type: schema.TypeString,
-      Computed: true,
-    },
-    "user": {
-      Type:     schema.TypeSet,
-      MaxItems: 1,
-      Computed: true,
-      Elem: &schema.Resource{
-        Schema: schemaGreenhouseUserBasics(),
-      },
-    },
+		"subject": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"body": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"to": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"from": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cc": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"user": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseUserBasics(),
+			},
+		},
 	}
 }

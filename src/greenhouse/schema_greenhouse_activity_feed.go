@@ -9,16 +9,16 @@ func schemaGreenhouseActivityFeed() map[string]*schema.Schema {
 		"notes": {
 			Type:     schema.TypeList,
 			Computed: true,
-      Elem: &schema.Resource{
-        Schema: schemaGreenhouseNote(),
-      },
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseNote(),
+			},
 		},
 		"emails": {
 			Type:     schema.TypeList,
 			Computed: true,
-      Elem: &schema.Resource{
-        Schema: schemaGreenhouseEmail(),
-      },
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseEmail(),
+			},
 		},
 		"activities": {
 			Type:     schema.TypeList,

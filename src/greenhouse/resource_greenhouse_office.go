@@ -2,11 +2,11 @@ package greenhouse
 
 import (
 	"context"
-  "fmt"
-  "strconv"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 )
 
 func resourceGreenhouseOffice() *schema.Resource {
@@ -40,7 +40,7 @@ func resourceGreenhouseOfficeCreate(ctx context.Context, d *schema.ResourceData,
 		PrimaryContactUserId: d.Get("primary_contact_user_id").(int),
 		ParentId:             d.Get("parent_id").(int),
 	}
-	id, err := greenhouse.CreateOffice(meta.(*greenhouse.Client), &createObject)
+	id, err := greenhouse.CreateOffice(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -54,7 +54,7 @@ func resourceGreenhouseOfficeRead(ctx context.Context, d *schema.ResourceData, m
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	obj, err := greenhouse.GetOffice(meta.(*greenhouse.Client), id)
+	obj, err := greenhouse.GetOffice(meta.(*greenhouse.Client), ctx, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -75,7 +75,7 @@ func resourceGreenhouseOfficeUpdate(ctx context.Context, d *schema.ResourceData,
 		Name:     d.Get("name").(string),
 		Location: d.Get("location.name").(string),
 	}
-	err = greenhouse.UpdateOffice(meta.(*greenhouse.Client), id, &updateObject)
+	err = greenhouse.UpdateOffice(meta.(*greenhouse.Client), ctx, id, &updateObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}

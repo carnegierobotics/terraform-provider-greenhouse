@@ -10,36 +10,36 @@ func schemaGreenhouseEducation() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
-    "discipline_id": {
-      Type: schema.TypeInt,
-      Optional: true,
-    },
-    "degree_id": {
-      Type:     schema.TypeInt,
-      Optional: true,
-    },
-    "start_month": {
-      Type:     schema.TypeInt,
-      Optional: true,
-    },
-    "start_year": {
-      Type: schema.TypeInt,
-      Optional: true,
-    },
-    "start_date": {
-      Type: schema.TypeString,
-      Optional: true,
-    },
-    "end_month": {
-      Type: schema.TypeInt,
-      Optional: true,
-    },
-    "end_year": {
-      Type: schema.TypeInt,
-    },
-    "end_date": {
-      Type: schema.TypeString,
-      Optional: true,
-    },
+		"discipline_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"degree_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"start_month": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"start_year": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"start_date": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"end_month": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"end_year": {
+			Type: schema.TypeInt,
+		},
+		"end_date": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 	}
 }

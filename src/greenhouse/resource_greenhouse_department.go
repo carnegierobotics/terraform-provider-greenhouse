@@ -2,11 +2,11 @@ package greenhouse
 
 import (
 	"context"
-  "fmt"
-  "strconv"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 )
 
 type ReadFunc func(d *schema.ResourceData, m interface{}) error
@@ -40,7 +40,7 @@ func resourceGreenhouseDepartmentCreate(ctx context.Context, d *schema.ResourceD
 		Name:     d.Get("name").(string),
 		ParentId: d.Get("parent_id").(int),
 	}
-	id, err := greenhouse.CreateDepartment(meta.(*greenhouse.Client), &createObject)
+	id, err := greenhouse.CreateDepartment(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -54,7 +54,7 @@ func resourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceDat
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), id)
+	obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), ctx, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -72,7 +72,7 @@ func resourceGreenhouseDepartmentUpdate(ctx context.Context, d *schema.ResourceD
 	updateObject := greenhouse.DepartmentUpdateInfo{
 		Name: d.Get("name").(string),
 	}
-	err = greenhouse.UpdateDepartment(meta.(*greenhouse.Client), id, &updateObject)
+	err = greenhouse.UpdateDepartment(meta.(*greenhouse.Client), ctx, id, &updateObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
