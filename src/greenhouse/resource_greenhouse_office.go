@@ -2,10 +2,11 @@ package greenhouse
 
 import (
 	"context"
+  "fmt"
+  "strconv"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"strconv"
 )
 
 func resourceGreenhouseOffice() *schema.Resource {
@@ -29,7 +30,7 @@ func resourceGreenhouseOfficeExists(d *schema.ResourceData, meta interface{}) (b
 	if err != nil {
 		return false, err
 	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "offices", id, context.TODO())
+	return greenhouse.Exists(meta.(*greenhouse.Client), context.TODO(), fmt.Sprintf("v1/offices/%d", id))
 }
 
 func resourceGreenhouseOfficeCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

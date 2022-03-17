@@ -2,10 +2,11 @@ package greenhouse
 
 import (
 	"context"
+  "fmt"
+  "strconv"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"strconv"
 )
 
 type ReadFunc func(d *schema.ResourceData, m interface{}) error
@@ -31,7 +32,7 @@ func resourceGreenhouseDepartmentExists(d *schema.ResourceData, meta interface{}
 	if err != nil {
 		return false, err
 	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "departments", id, context.TODO())
+	return greenhouse.Exists(meta.(*greenhouse.Client), context.TODO(), fmt.Sprintf("v1/departments/%d", id))
 }
 
 func resourceGreenhouseDepartmentCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

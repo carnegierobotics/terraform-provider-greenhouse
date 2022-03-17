@@ -11,16 +11,17 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-    "location_name": {
-      Type:     schema.TypeString,
-      Optional: true,
-      Default:  "",
-    },
+		"location_name": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Default:  "",
+		},
 		"location": {
-			Type:     schema.TypeMap,
+			Type:     schema.TypeList,
+      MaxItems: 1,
 			Computed: true,
-			Elem: &schema.Schema{
-				Type: schema.TypeString,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseLocation(),
 			},
 		},
 		"primary_contact_user_id": {
@@ -58,12 +59,4 @@ func flattenOffices(list *[]greenhouse.Office) []interface{} {
 		return flatList
 	}
 	return make([]interface{}, 0)
-}
-
-func flattenLocation(item *greenhouse.Location) map[string]interface{} {
-	location := make(map[string]interface{})
-	if item.Name != "" {
-		location["name"] = item.Name
-	}
-	return location
 }
