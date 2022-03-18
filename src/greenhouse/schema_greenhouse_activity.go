@@ -6,15 +6,15 @@ import (
 
 func schemaGreenhouseActivity() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
+		"body": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 		"created_at": {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
 		"subject": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"body": {
 			Type:     schema.TypeString,
 			Computed: true,
 		},

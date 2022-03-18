@@ -6,25 +6,74 @@ import (
 
 func schemaGreenhouseApplication() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"candidate_id": {
-			Type:        schema.TypeInt,
-			Description: "The ID of the candidate applying for this job.",
+		"answers": {
+			Type:        schema.TypeSet,
+			Description: "",
 			Computed:    true,
-		},
-		"prospect": {
-			Type:        schema.TypeBool,
-			Description: "The candidate is a prospect and has not yet applied.",
-			Computed:    true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseAnswer(),
+			},
 		},
 		"applied_at": {
 			Type:        schema.TypeString,
 			Description: "The date of the application.",
 			Computed:    true,
 		},
-		"rejected_at": {
-			Type:        schema.TypeString,
-			Description: "The date of the application's rejection.",
+		"attachments": {
+			Type:        schema.TypeSet,
+			Description: "",
 			Computed:    true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseAttachment(),
+			},
+		},
+		"candidate_id": {
+			Type:        schema.TypeInt,
+			Description: "The ID of the candidate applying for this job.",
+			Computed:    true,
+		},
+		"credited_to": {
+			Type:        schema.TypeSet,
+			Description: "The user who will receive credit for this application.",
+			MaxItems:    1,
+			Computed:    true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseUserBasics(),
+			},
+		},
+		"current_stage": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseTypeIdName(),
+			},
+		},
+		"custom_fields": {
+			Type:     schema.TypeMap,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+		"jobs": {
+			Type:     schema.TypeSet,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseJob(),
+			},
+		},
+		"job_post_id": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"keyed_custom_fields": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseKeyedCustomFields(),
+			},
 		},
 		"last_activity_at": {
 			Type:        schema.TypeString,
@@ -40,25 +89,58 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 				Schema: schemaGreenhouseLocation(),
 			},
 		},
-		"credited_to": {
-			Type:        schema.TypeSet,
-			Description: "The user who will receive credit for this application.",
-			MaxItems:    1,
+		"prospect": {
+			Type:        schema.TypeBool,
+			Description: "The candidate is a prospect and has not yet applied.",
 			Computed:    true,
+		},
+		"prospect_detail": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
+			Computed: true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseUserBasics(),
+				Schema: schemaGreenhouseProspectDetail(),
 			},
 		},
-		"private": {
-			Type:     schema.TypeBool,
+		"prospective_department": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
 			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseDepartment(),
+			},
 		},
-		"visiblity": {
-			Type:     schema.TypeString,
+		"prospective_office": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
 			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseOffice(),
+			},
 		},
-		"visibility": {
-			Type:     schema.TypeString,
+		"referrer": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseTypeTypeValue(),
+			},
+		},
+		"rejected_at": {
+			Type:        schema.TypeString,
+			Description: "The date of the application's rejection.",
+			Computed:    true,
+		},
+		"source": {
+			Type:        schema.TypeSet,
+			Description: "",
+			Computed:    true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseSource(),
+			},
+		},
+		"source_id": {
+			Type:     schema.TypeInt,
 			Computed: true,
 		},
 		"status": {

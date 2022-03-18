@@ -6,37 +6,12 @@ import (
 
 func schemaGreenhouseCandidate() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"first_name": {
-			Type:        schema.TypeString,
-			Description: "The candidate's first name.",
-			Required:    true,
-		},
-		"last_name": {
-			Type:        schema.TypeString,
-			Description: "The candidate's last name.",
-			Required:    true,
-		},
-		"company": {
-			Type:        schema.TypeString,
-			Description: "The candidate's company.",
-			Optional:    true,
-		},
-		"title": {
-			Type:        schema.TypeString,
-			Description: "The candidate's title.",
-			Optional:    true,
-		},
-		"is_private": {
-			Type:        schema.TypeBool,
-			Description: "This candidate is private.",
-			Optional:    true,
-		},
-		"phone_numbers": {
-			Type:        schema.TypeSet,
-			Description: "The candidate's phone number(s).",
+		"activity_feed_notes": {
+			Type:        schema.TypeList,
+			Description: "The candidate's activity feed.",
 			Optional:    true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseValueType(),
+				Schema: schemaGreenhouseActivityFeed(),
 			},
 		},
 		"addresses": {
@@ -44,31 +19,55 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Description: "The candidate's address(es).",
 			Optional:    true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseValueType(),
+				Schema: schemaGreenhouseTypeTypeValue(),
 			},
 		},
-		"email_addresses": {
-			Type:        schema.TypeSet,
-			Description: "The candidate's email address(es).",
-			Optional:    true,
+		"application": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseValueType(),
+				Schema: schemaGreenhouseApplication(),
 			},
 		},
-		"website_addresses": {
-			Type:        schema.TypeSet,
-			Description: "The candidate's website(s).",
-			Optional:    true,
-			Elem: &schema.Resource{
-				Schema: schemaGreenhouseValueType(),
+		"application_ids": {
+			Type:     schema.TypeSet,
+			MaxItems: 1,
+			Elem: &schema.Schema{
+				Type: schema.TypeInt,
 			},
 		},
-		"social_media_addresses": {
-			Type:        schema.TypeSet,
-			Description: "The candidate's social media address(es).",
+		"applications": {
+			Type:        schema.TypeList,
+			Description: "Applications the candidate has submitted.",
 			Optional:    true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseValueType(),
+				Schema: schemaGreenhouseApplication(),
+			},
+		},
+		"can_email": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"company": {
+			Type:        schema.TypeString,
+			Description: "The candidate's company.",
+			Optional:    true,
+		},
+		"coordinator": {
+			Type:        schema.TypeList,
+			Description: "The candidate's coordinator.",
+			MaxItems:    1,
+			Optional:    true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseRecruiter(),
+			},
+		},
+		"custom_fields": {
+			Type:        schema.TypeSet,
+			Description: "Custom fields for this candidate.",
+			Optional:    true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseCustomField(),
 			},
 		},
 		"educations": {
@@ -79,6 +78,14 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 				Schema: schemaGreenhouseEducation(),
 			},
 		},
+		"email_addresses": {
+			Type:        schema.TypeSet,
+			Description: "The candidate's email address(es).",
+			Optional:    true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseTypeTypeValue(),
+			},
+		},
 		"employments": {
 			Type:        schema.TypeList,
 			Description: "The candidate's employment background.",
@@ -87,20 +94,34 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 				Schema: schemaGreenhouseEmployment(),
 			},
 		},
-		"tags": {
-			Type:        schema.TypeSet,
-			Description: "Tags for this candidate.",
+		"first_name": {
+			Type:        schema.TypeString,
+			Description: "The candidate's first name.",
+			Required:    true,
+		},
+		"is_private": {
+			Type:        schema.TypeBool,
+			Description: "This candidate is private.",
 			Optional:    true,
+		},
+		"last_name": {
+			Type:        schema.TypeString,
+			Description: "The candidate's last name.",
+			Required:    true,
+		},
+		"linked_user_ids": {
+			Type:     schema.TypeSet,
+			Computed: true,
 			Elem: &schema.Schema{
-				Type: schema.TypeString,
+				Type: schema.TypeInt,
 			},
 		},
-		"custom_fields": {
+		"phone_numbers": {
 			Type:        schema.TypeSet,
-			Description: "Custom fields for this candidate.",
+			Description: "The candidate's phone number(s).",
 			Optional:    true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseCustomField(),
+				Schema: schemaGreenhouseTypeTypeValue(),
 			},
 		},
 		"recruiter": {
@@ -112,29 +133,33 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 				Schema: schemaGreenhouseRecruiter(),
 			},
 		},
-		"coordinator": {
-			Type:        schema.TypeList,
-			Description: "The candidate's coordinator.",
-			MaxItems:    1,
+		"social_media_addresses": {
+			Type:        schema.TypeSet,
+			Description: "The candidate's social media address(es).",
 			Optional:    true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseRecruiter(),
+				Schema: schemaGreenhouseTypeTypeValue(),
 			},
 		},
-		"activity_feed_notes": {
-			Type:        schema.TypeList,
-			Description: "The candidate's activity feed.",
+		"tags": {
+			Type:        schema.TypeSet,
+			Description: "Tags for this candidate.",
 			Optional:    true,
-			Elem: &schema.Resource{
-				Schema: schemaGreenhouseActivityFeed(),
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
 			},
 		},
-		"applications": {
-			Type:        schema.TypeList,
-			Description: "Applications the candidate has submitted.",
+		"title": {
+			Type:        schema.TypeString,
+			Description: "The candidate's title.",
+			Optional:    true,
+		},
+		"website_addresses": {
+			Type:        schema.TypeSet,
+			Description: "The candidate's website(s).",
 			Optional:    true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseApplication(),
+				Schema: schemaGreenhouseTypeTypeValue(),
 			},
 		},
 	}

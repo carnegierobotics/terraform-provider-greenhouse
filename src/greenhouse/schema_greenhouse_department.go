@@ -7,14 +7,13 @@ import (
 
 func schemaGreenhouseDepartment() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"name": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"parent_id": {
-			Type:     schema.TypeInt,
+		"child_department_external_ids": {
+			Type:     schema.TypeSet,
 			Optional: true,
-			Default:  0,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 		"child_ids": {
 			Type:     schema.TypeSet,
@@ -23,25 +22,24 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 				Type: schema.TypeInt,
 			},
 		},
-		/* Not in our product tier
-		   "parent_department_external_id": {
-		     Type: schema.TypeString,
-		     Optional: true,
-		     Computed: true,
-		   },
-		   "child_department_external_ids": {
-		     Type: schema.TypeSet,
-		     Optional: true,
-		     Computed: true,
-		     Elem: &schema.Schema {
-		       Type: schema.TypeString,
-		     }
-		   },
-		   "external_id": {
-		     Type: schema.TypeString,
-		     Optional: true,
-		   }
-		*/
+		"external_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"parent_department_external_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"parent_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  0,
+		},
 	}
 }
 

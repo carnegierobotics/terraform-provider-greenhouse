@@ -6,11 +6,11 @@ import (
 
 func schemaGreenhouseActivityFeed() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"notes": {
+		"activities": {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseNote(),
+				Schema: schemaGreenhouseActivity(),
 			},
 		},
 		"emails": {
@@ -20,11 +20,11 @@ func schemaGreenhouseActivityFeed() map[string]*schema.Schema {
 				Schema: schemaGreenhouseEmail(),
 			},
 		},
-		"activities": {
+		"notes": {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseActivity(),
+				Schema: schemaGreenhouseNote(),
 			},
 		},
 	}
