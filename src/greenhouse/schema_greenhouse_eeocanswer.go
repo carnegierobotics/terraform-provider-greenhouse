@@ -4,9 +4,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func schemaGreenhouseCandidateTag() map[string]*schema.Schema {
+func schemaGreenhouseEEOCAnswer() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"name": {
+		"description": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"message": {
 			Type:     schema.TypeString,
 			Computed: true,
 		},

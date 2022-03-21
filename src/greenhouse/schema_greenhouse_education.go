@@ -6,27 +6,23 @@ import (
 
 func schemaGreenhouseEducation() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"school_id": {
-			Type:     schema.TypeInt,
-			Optional: true,
-		},
-		"discipline_id": {
-			Type:     schema.TypeInt,
-			Optional: true,
-		},
+    "degree": {
+      Type: schema.TypeString,
+      Computed: true,
+    },
 		"degree_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
-		"start_month": {
+    "discipline": {
+      Type: schema.TypeString,
+      Computed: true,
+    },
+		"discipline_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
-		"start_year": {
-			Type:     schema.TypeInt,
-			Optional: true,
-		},
-		"start_date": {
+		"end_date": {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
@@ -35,10 +31,23 @@ func schemaGreenhouseEducation() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"end_year": {
-			Type: schema.TypeInt,
+			Type:     schema.TypeInt,
+			Optional: true,
 		},
-		"end_date": {
+		"school_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"start_date": {
 			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"start_month": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"start_year": {
+			Type:     schema.TypeInt,
 			Optional: true,
 		},
 	}

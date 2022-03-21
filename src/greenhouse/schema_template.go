@@ -4,11 +4,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func schemaGreenhouseCloseReason() map[string]*schema.Schema {
+func schemaGreenhouseXXX() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"name": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
+
 	}
 }

@@ -7,17 +7,17 @@ import (
 
 func schemaGreenhouseCustomField() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-    "active": {
-      Type: schema.TypeBool,
-      Computed: true,
-    },
+		"active": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
 		"api_only": {
 			Type:        schema.TypeBool,
 			Description: "Updates to this field may only be made via Harvest.",
 			Optional:    true,
 			Default:     false,
 		},
-			"custom_field_options": {
+		"custom_field_options": {
 			Type:        schema.TypeList,
 			Description: "For single_select and multi_select field_types, this is the list of options for that select.",
 			Optional:    true,
@@ -25,7 +25,7 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 				Schema: schemaGreenhouseCustomFieldOption(),
 			},
 		},
-	"department_ids": {
+		"department_ids": {
 			Type:        schema.TypeSet,
 			Description: "The custom field is only displayed for objects in these departments.",
 			Optional:    true,
@@ -33,13 +33,13 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 				Type: schema.TypeInt,
 			},
 		},
-    "departments": {
-      Type: schema.TypeList,
-      Computed: true,
-      Elem: &schema.Resource{
-        Schema: schemaGreenhouseDepartment(),
-      },
-    },
+		"departments": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseDepartment(),
+			},
+		},
 		"description": {
 			Type:        schema.TypeString,
 			Description: "The field's description in Greenhouse",
@@ -67,10 +67,10 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			Description: "The field's name in Greenhouse",
 			Required:    true,
 		},
-    "name_key": {
-      Type: schema.TypeString,
-      Computed: true,
-    },
+		"name_key": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 		"office_ids": {
 			Type:        schema.TypeSet,
 			Description: "The custom field is only displayed for objects in these offices.",
@@ -79,17 +79,17 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 				Type: schema.TypeInt,
 			},
 		},
-    "offices": {
-      Type: schema.TypeSet,
-      Computed: true,
-      Elem: &schema.Resource{
-        Schema: schemaGreenhouseOffice(),
-      },
-    },
-    "priority": {
-      Type: schema.TypeInt,
-      Computed: true,
-    },
+		"offices": {
+			Type:     schema.TypeSet,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseOffice(),
+			},
+		},
+		"priority": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
 		"private": {
 			Type:        schema.TypeBool,
 			Description: "Denotes a private field in Greenhouse.",

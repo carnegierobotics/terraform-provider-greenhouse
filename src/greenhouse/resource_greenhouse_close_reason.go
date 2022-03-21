@@ -21,7 +21,7 @@ func resourceGreenhouseCloseReason() *schema.Resource {
 				return []*schema.ResourceData{d}, nil
 			},
 		},
-		Schema: schemaGreenhouseCloseReason(),
+		Schema: schemaGreenhouseTypeIdName(),
 	}
 }
 
