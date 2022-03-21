@@ -29,6 +29,14 @@ description: |-
 ### Read-Only
 
 - **child_ids** (Set of Number)
-- **location** (Map of String)
+- **location** (List of Object) (see [below for nested schema](#nestedatt--location))
+
+<a id="nestedatt--location"></a>
+### Nested Schema for `location`
+
+Read-Only:
+
+- **address** (String)
+- **name** (String)
 
 

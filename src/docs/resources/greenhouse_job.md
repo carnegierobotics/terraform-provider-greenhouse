@@ -86,8 +86,11 @@ Read-Only:
 
 Read-Only:
 
+- **child_department_external_ids** (Set of String)
 - **child_ids** (Set of Number)
+- **external_id** (String)
 - **name** (String)
+- **parent_department_external_id** (String)
 - **parent_id** (Number)
 
 
@@ -97,11 +100,20 @@ Read-Only:
 Read-Only:
 
 - **child_ids** (Set of Number)
-- **location** (Map of String)
+- **location** (List of Object) (see [below for nested schema](#nestedobjatt--offices--location))
 - **location_name** (String)
 - **name** (String)
 - **parent_id** (Number)
 - **primary_contact_user_id** (Number)
+
+<a id="nestedobjatt--offices--location"></a>
+### Nested Schema for `offices.location`
+
+Read-Only:
+
+- **address** (String)
+- **name** (String)
+
 
 
 <a id="nestedatt--openings"></a>
