@@ -104,6 +104,11 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Description: "This candidate is private.",
 			Optional:    true,
 		},
+		"is_prospect": {
+			Type:        schema.TypeBool,
+			Description: "This candidate is a prospect.",
+			Required:    true,
+		},
 		"last_name": {
 			Type:        schema.TypeString,
 			Description: "The candidate's last name.",

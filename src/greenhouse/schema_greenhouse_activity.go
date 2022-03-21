@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -27,4 +29,25 @@ func schemaGreenhouseActivity() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func flattenActivities(ctx context.Context, list *[]greenhouse.Activity) []interface{} {
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, activity := range *list {
+			activity, _ := flattenActivity(ctx, &activity)
+			flatList[i] = activity
+		}
+		return flatList
+	}
+	return make([]interface{}, 0)
+}
+
+func flattenActivity(ctx context.Context, item *greenhouse.Activity) (map[string]interface{}, error) {
+	activity := make(map[string]interface{})
+	activity["body"] = item.Body
+	activity["created_at"] = item.CreatedAt
+	activity["subject"] = item.Subject
+	activity["user"] = flattenUserBasics(ctx, &item.User)
+	return activity, nil
 }

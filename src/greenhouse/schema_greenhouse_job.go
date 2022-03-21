@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -150,4 +152,21 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func flattenJobs(ctx context.Context, list *[]greenhouse.Job) []interface{} {
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, item := range *list {
+			flatList[i] = flattenJob(ctx, &item)
+		}
+		return flatList
+	}
+	return make([]interface{}, 0)
+}
+
+func flattenJob(ctx context.Context, item *greenhouse.Job) map[string]interface{} {
+	job := make(map[string]interface{})
+	job["answer"] = item.Name
+	return job
 }

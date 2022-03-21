@@ -6,13 +6,13 @@ import (
 
 func schemaGreenhouseUserPermission() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-    "job_id": {
-      Type: schema.TypeInt,
-      Required: true,
-    },
-    "user_role_id": {
-      Type: schema.TypeInt,
-      Required: true,
-    },
+		"job_id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
+		"user_role_id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
 	}
 }

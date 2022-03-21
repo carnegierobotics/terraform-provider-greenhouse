@@ -6,13 +6,13 @@ import (
 
 func schemaGreenhouseUserRole() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-    "name": {
-      Type: schema.TypeString,
-      Required: true,
-    },
-    "type": {
-      Type: schema.TypeString,
-      Required: true,
-    },
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"type": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 	}
 }

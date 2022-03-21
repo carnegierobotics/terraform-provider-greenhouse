@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -24,4 +26,13 @@ func schemaGreenhouseUserBasics() map[string]*schema.Schema {
 			Default:  "",
 		},
 	}
+}
+
+func flattenUserBasics(ctx context.Context, item *greenhouse.User) map[string]interface{} {
+	user := make(map[string]interface{})
+	user["employee_id"] = item.EmployeeId
+	user["first_name"] = item.FirstName
+	user["last_name"] = item.LastName
+	user["name"] = item.Name
+	return user
 }

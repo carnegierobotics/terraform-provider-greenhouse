@@ -80,11 +80,11 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	}
 	tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
 	d.Set("job_name", obj.Name)
-	d.Set("departments", flattenDepartments(&obj.Departments))
-	d.Set("offices", flattenOffices(&obj.Offices))
+	d.Set("departments", flattenDepartments(ctx, &obj.Departments))
+	d.Set("offices", flattenOffices(ctx, &obj.Offices))
 	d.Set("requisition_id", obj.RequisitionId)
-	d.Set("openings", flattenJobOpenings(&obj.Openings))
-	//d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
+	d.Set("openings", flattenJobOpenings(ctx, &obj.Openings))
+	d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
 	tflog.Debug(ctx, "Hiring team after flattening", "team", fmt.Sprintf("%+v", d.Get("hiring_team")))
 	d.Set("notes", obj.Notes)
 	d.Set("confidential", obj.Confidential)
@@ -96,7 +96,7 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("is_template", obj.IsTemplate)
 	d.Set("copied_from_id", obj.CopiedFromId)
 	d.Set("custom_fields", obj.CustomFields)
-	//d.Set("keyed_custom_fields", obj.KeyedCustomFields)
+	d.Set("keyed_custom_fields", flattenKeyedCustomFields(ctx, &obj.KeyedCustomFields))
 	tflog.Debug(ctx, "Finished resourceGreenhouseJobRead")
 	return nil
 }

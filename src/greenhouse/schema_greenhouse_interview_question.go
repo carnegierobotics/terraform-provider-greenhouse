@@ -6,9 +6,9 @@ import (
 
 func schemaGreenhouseInterviewQuestion() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-    "question": {
-      Type: schema.TypeString,
-      Required: true,
-    },
+		"question": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 	}
 }

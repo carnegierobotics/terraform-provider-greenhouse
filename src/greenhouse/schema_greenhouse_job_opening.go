@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -49,7 +50,7 @@ func schemaGreenhouseJobOpening() map[string]*schema.Schema {
 	}
 }
 
-func flattenJobOpenings(list *[]greenhouse.JobOpening) []interface{} {
+func flattenJobOpenings(ctx context.Context, list *[]greenhouse.JobOpening) []interface{} {
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
@@ -59,7 +60,8 @@ func flattenJobOpenings(list *[]greenhouse.JobOpening) []interface{} {
 			opening["opened_at"] = item.OpenedAt
 			opening["closed_at"] = item.ClosedAt
 			opening["application_id"] = item.ApplicationId
-			opening["close_reason"] = flattenCloseReason(&item.CloseReason)
+			convertedCloseReason := greenhouse.TypeIdName(item.CloseReason)
+			opening["close_reason"] = flattenTypeIdName(ctx, &convertedCloseReason)
 			opening["custom_fields"] = item.CustomFields
 			flatList[i] = opening
 		}
@@ -68,7 +70,7 @@ func flattenJobOpenings(list *[]greenhouse.JobOpening) []interface{} {
 	return make([]interface{}, 0)
 }
 
-func flattenCloseReason(item *greenhouse.CloseReason) map[string]interface{} {
+func flattenCloseReason(ctx context.Context, item *greenhouse.CloseReason) map[string]interface{} {
 	flatItem := make(map[string]interface{})
 	if item.Name != "" {
 		flatItem["name"] = item.Name

@@ -51,7 +51,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		},
 		"custom_fields": {
 			Type:     schema.TypeMap,
-			Computed: true,
+			Optional: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -72,7 +72,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseKeyedCustomFields(),
+				Schema: schemaGreenhouseKeyedCustomField(),
 			},
 		},
 		"last_activity_at": {
@@ -102,6 +102,19 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 				Schema: schemaGreenhouseProspectDetail(),
 			},
 		},
+		"prospect_pool_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"prospect_pool_stage_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		// I suspect this is a typo in their docs, but just in case.
+		"prospect_stage_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
 		"prospective_department": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
@@ -121,7 +134,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		"referrer": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
-			Computed: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeTypeValue(),
 			},
@@ -141,7 +154,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		},
 		"source_id": {
 			Type:     schema.TypeInt,
-			Computed: true,
+			Optional: true,
 		},
 		"status": {
 			Type:     schema.TypeString,

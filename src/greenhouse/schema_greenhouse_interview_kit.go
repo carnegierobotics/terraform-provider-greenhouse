@@ -6,16 +6,16 @@ import (
 
 func schemaGreenhouseInterviewKit() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-    "content": {
-      Type: schema.TypeString,
-      Required: true,
-    },
-    "questions": {
-      Type: schema.TypeSet,
-      Required: true,
-      Elem: &schema.Resource{
-        Schema: schemaGreenhouseInterviewQuestion(),
-      },
-    },
+		"content": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"questions": {
+			Type:     schema.TypeSet,
+			Required: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseInterviewQuestion(),
+			},
+		},
 	}
 }

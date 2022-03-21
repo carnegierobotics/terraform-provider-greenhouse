@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -39,4 +41,27 @@ func schemaGreenhouseEmail() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func flattenEmails(ctx context.Context, list *[]greenhouse.Email) []interface{} {
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, email := range *list {
+			email := flattenEmail(ctx, &email)
+			flatList[i] = email
+		}
+		return flatList
+	}
+	return make([]interface{}, 0)
+}
+
+func flattenEmail(ctx context.Context, item *greenhouse.Email) map[string]interface{} {
+	email := make(map[string]interface{})
+	email["body"] = item.Body
+	email["cc"] = item.Cc
+	email["created_at"] = item.CreatedAt
+	email["subject"] = item.Subject
+	email["to"] = item.To
+	email["user"] = flattenUserBasics(ctx, &item.User)
+	return email
 }

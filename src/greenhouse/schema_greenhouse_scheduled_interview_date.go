@@ -6,13 +6,13 @@ import (
 
 func schemaGreenhouseScheduledInterviewDate() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-    "date": {
-      Type: schema.TypeString,
-      Optional: true,
-    },
-    "date_time": {
-      Type: schema.TypeString,
-      Optional: true,
-    },
+		"date": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"date_time": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 	}
 }

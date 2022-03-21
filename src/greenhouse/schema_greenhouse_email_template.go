@@ -13,9 +13,9 @@ func schemaGreenhouseEmailTemplate() map[string]*schema.Schema {
 		"cc": {
 			Type:     schema.TypeSet,
 			Optional: true,
-      Elem: &schema.Schema{
-        Type: schema.TypeString,
-      },
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 		"created_at": {
 			Type:     schema.TypeString,
@@ -33,14 +33,14 @@ func schemaGreenhouseEmailTemplate() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
-    "type": {
-      Type: schema.TypeString,
-      Optional: true,
-    },
-    "updated_at": {
-      Type: schema.TypeString,
-      Optional: true,
-    },
+		"type": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"updated_at": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"user": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,

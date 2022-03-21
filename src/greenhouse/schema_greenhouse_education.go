@@ -6,18 +6,18 @@ import (
 
 func schemaGreenhouseEducation() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-    "degree": {
-      Type: schema.TypeString,
-      Computed: true,
-    },
+		"degree": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 		"degree_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
-    "discipline": {
-      Type: schema.TypeString,
-      Computed: true,
-    },
+		"discipline": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 		"discipline_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
