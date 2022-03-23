@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -36,6 +37,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 			Type:        schema.TypeSet,
 			Description: "The user who will receive credit for this application.",
 			MaxItems:    1,
+			Optional:    true,
 			Computed:    true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUserBasics(),
@@ -44,6 +46,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		"current_stage": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeIdName(),
@@ -70,6 +73,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		"keyed_custom_fields": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseKeyedCustomField(),
@@ -84,6 +88,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 			Type:        schema.TypeList,
 			Description: "The contents of a location question on a job post.",
 			MaxItems:    1,
+			Optional:    true,
 			Computed:    true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseLocation(),
@@ -97,6 +102,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		"prospect_detail": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseProspectDetail(),
@@ -117,7 +123,6 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		},
 		"prospective_department": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseDepartment(),
@@ -125,7 +130,6 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		},
 		"prospective_office": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseOffice(),
@@ -161,4 +165,12 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
+}
+
+func convertToApplicationList(list []interface{}) *[]greenhouse.Application {
+	newList := make([]greenhouse.Application, len(list))
+	for i := range list {
+		newList[i] = list[i].(greenhouse.Application)
+	}
+	return &newList
 }

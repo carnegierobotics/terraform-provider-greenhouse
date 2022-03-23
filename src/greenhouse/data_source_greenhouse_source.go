@@ -5,29 +5,30 @@ import (
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+  "strconv"
 )
 
-func dataSourceGreenhouseDepartment() *schema.Resource {
+func dataSourceGreenhouseSource() *schema.Resource {
 	return &schema.Resource{
-		ReadContext:   dataSourceGreenhouseDepartmentRead,
+		ReadContext:   dataSourceGreenhouseSourceRead,
 		Schema: map[string]*schema.Schema{
       "name": {
         Type: schema.TypeString,
-        Optional: true,
+        Required: true,
       },
     },
 	}
 }
 
-func dataSourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	list, err := greenhouse.GetAllDepartments(meta.(*greenhouse.Client), ctx)
+func dataSourceGreenhouseSourceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	list, err := greenhouse.GetAllSources(meta.(*greenhouse.Client), ctx)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
   name := d.Get("name").(string)
-  for _, department := range *list {
-    if department.Name == name {
-      d.SetId(strconf.Itoa(department.Id))
+  for _, source := range *list {
+    if source.Name == name {
+      d.SetId(strconv.Itoa(source.Id))
       return nil
     }
   }

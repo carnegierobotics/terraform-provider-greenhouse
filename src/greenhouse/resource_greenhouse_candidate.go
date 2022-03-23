@@ -2,6 +2,7 @@ package greenhouse
 
 import (
 	"context"
+  "encoding/json"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -36,32 +37,66 @@ func resourceGreenhouseCandidateExists(d *schema.ResourceData, meta interface{})
 
 func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	tflog.Debug(ctx, "Started resourceGreenhouseCandidateCreate.")
-	createObject := greenhouse.Candidate{
-		FirstName:            d.Get("first_name").(string),
-		LastName:             d.Get("last_name").(string),
-		Company:              d.Get("company").(string),
-		Title:                d.Get("title").(string),
-		PhoneNumbers:         d.Get("phone_numbers").([]greenhouse.TypeTypeValue),
-		Addresses:            d.Get("addresses").([]greenhouse.TypeTypeValue),
-		EmailAddresses:       d.Get("email_addresses").([]greenhouse.TypeTypeValue),
-		WebsiteAddresses:     d.Get("website_addresses").([]greenhouse.TypeTypeValue),
-		SocialMediaAddresses: d.Get("social_media_addresses").([]greenhouse.TypeTypeValue),
-		Educations:           d.Get("educations").([]greenhouse.Education),
-		Employments:          d.Get("employments").([]greenhouse.Employment),
-		Tags:                 d.Get("tags").([]string),
-		CustomFields:         d.Get("custom_fields").(map[string]interface{}),
-		ActivityFeedNotes:    d.Get("activity_feed_notes").([]greenhouse.ActivityFeed),
-	}
+  tflog.Debug(ctx, fmt.Sprintf("FirstName: %s", d.Get("first_name").(string)))
+  createObj := greenhouse.Candidate{
+	  FirstName: d.Get("first_name").(string),
+    LastName: d.Get("last_name").(string),
+    Company: d.Get("company").(string),
+	  Title: d.Get("title").(string),
+	  PhoneNumbers: *convertToTypeTypeValueList(d.Get("phone_numbers").(*schema.Set).List()),
+	  Addresses: *convertToTypeTypeValueList(d.Get("addresses").(*schema.Set).List()),
+	  EmailAddresses: *convertToTypeTypeValueList(d.Get("email_addresses").(*schema.Set).List()),
+    WebsiteAddresses: *convertToTypeTypeValueList(d.Get("website_addresses").(*schema.Set).List()),
+    SocialMediaAddresses: *convertToTypeTypeValueList(d.Get("social_media_addresses").(*schema.Set).List()),
+	  Educations: *convertToEducationList(d.Get("educations").([]interface{})),
+	  Employments: *convertToEmploymentList(d.Get("employments").([]interface{})),
+	  Tags: *ConvertSliceInterfaceString(d.Get("tags").(*schema.Set).List()),
+	  //CustomFields: d.Get("custom_fields").(*schema.Set)(map[string]interface{}),
+	  ActivityFeedNotes: *convertToActivityFeedList(d.Get("activity_feed_notes").([]interface{})),
+  }
+  tflog.Debug(ctx, fmt.Sprintf("Initial candidate: %+v", createObj))
 	var err error
+  var diagErr diag.Diagnostics
 	var id int
 	if d.Get("is_prospect").(bool) {
-		createObject.Recruiter = d.Get("recruiter").(greenhouse.User)
-		createObject.Coordinator = d.Get("coordinator").(greenhouse.User)
-		createObject.Application = d.Get("application").(greenhouse.Application)
-		id, err = greenhouse.CreateProspect(meta.(*greenhouse.Client), ctx, &createObject)
+    recruiter := d.Get("recruiter").([]interface{})
+    if len(recruiter) == 1 {
+      var recruiterObj greenhouse.User
+		  diagErr = convertType(ctx, recruiter[0], &recruiterObj)
+      if diagErr != nil {
+        return diagErr
+      }
+      createObj.Recruiter = &recruiterObj
+    }
+    coordinator := d.Get("coordinator").([]interface{})
+    if len(coordinator) == 1 {
+      var coordinatorObj greenhouse.User
+		  diagErr = convertType(ctx, coordinator[0], &coordinatorObj)
+      if diagErr != nil {
+        return diagErr
+      }
+      createObj.Coordinator = &coordinatorObj
+    }
+    application := d.Get("application").([]interface{})
+    if len(application) == 1 {
+      var applicationObj greenhouse.Application
+		  diagErr = convertType(ctx, application[0], &applicationObj)
+      if diagErr != nil {
+        return diagErr
+      }
+      createObj.Application = &applicationObj
+    }
+    tflog.Debug(ctx, fmt.Sprintf("Creating prospect: %+v", createObj))
+    jsonBody, err := json.Marshal(createObj)
+    if err != nil {
+      return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+    }
+    tflog.Debug(ctx, fmt.Sprintf("JSON will be: %s", string(jsonBody)))
+		id, err = greenhouse.CreateProspect(meta.(*greenhouse.Client), ctx, &createObj)
 	} else {
-		createObject.Applications = d.Get("applications").([]greenhouse.Application)
-		id, err = greenhouse.CreateCandidate(meta.(*greenhouse.Client), ctx, &createObject)
+		createObj.Applications = *convertToApplicationList(d.Get("applications").(*schema.Set).List())
+    tflog.Debug(ctx, fmt.Sprintf("Creating candidate: %+v", createObj))
+		id, err = greenhouse.CreateCandidate(meta.(*greenhouse.Client), ctx, &createObj)
 	}
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}

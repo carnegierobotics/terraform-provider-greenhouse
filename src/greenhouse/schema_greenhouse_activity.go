@@ -22,7 +22,6 @@ func schemaGreenhouseActivity() map[string]*schema.Schema {
 		},
 		"user": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUserBasics(),
@@ -48,6 +47,6 @@ func flattenActivity(ctx context.Context, item *greenhouse.Activity) (map[string
 	activity["body"] = item.Body
 	activity["created_at"] = item.CreatedAt
 	activity["subject"] = item.Subject
-	activity["user"] = flattenUserBasics(ctx, &item.User)
+	activity["user"] = flattenUserBasics(ctx, item.User)
 	return activity, nil
 }

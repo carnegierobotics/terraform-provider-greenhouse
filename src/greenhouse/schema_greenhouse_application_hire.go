@@ -17,6 +17,7 @@ func schemaGreenhouseApplicationHire() map[string]*schema.Schema {
 		"user": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUserBasics(),

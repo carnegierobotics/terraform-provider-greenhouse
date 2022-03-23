@@ -32,6 +32,7 @@ func schemaGreenhouseScorecard() map[string]*schema.Schema {
 		"interview_step": {
 			Type:     schema.TypeMap,
 			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeIdName(),
@@ -54,7 +55,6 @@ func schemaGreenhouseScorecard() map[string]*schema.Schema {
 		},
 		"ratings": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeSet,
@@ -69,7 +69,6 @@ func schemaGreenhouseScorecard() map[string]*schema.Schema {
 		},
 		"submitted_by": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUser(),

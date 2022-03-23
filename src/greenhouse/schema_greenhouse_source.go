@@ -17,8 +17,9 @@ func schemaGreenhouseSource() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"type": {
-			Type:     schema.TypeMap,
+			Type:     schema.TypeSet,
 			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeIdName(),
@@ -30,6 +31,6 @@ func schemaGreenhouseSource() map[string]*schema.Schema {
 func flattenSource(ctx context.Context, item *greenhouse.Source) map[string]interface{} {
 	source := make(map[string]interface{})
 	source["public_name"] = item.PublicName
-	source["type"] = flattenTypeIdName(ctx, &item.Type)
+	source["type"] = flattenTypeIdName(ctx, item.Type)
 	return source
 }

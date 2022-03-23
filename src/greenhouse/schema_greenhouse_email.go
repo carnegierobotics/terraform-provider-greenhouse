@@ -35,6 +35,7 @@ func schemaGreenhouseEmail() map[string]*schema.Schema {
 		"user": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUserBasics(),
@@ -62,6 +63,6 @@ func flattenEmail(ctx context.Context, item *greenhouse.Email) map[string]interf
 	email["created_at"] = item.CreatedAt
 	email["subject"] = item.Subject
 	email["to"] = item.To
-	email["user"] = flattenUserBasics(ctx, &item.User)
+	email["user"] = flattenUserBasics(ctx, item.User)
 	return email
 }

@@ -8,10 +8,10 @@ func schemaGreenhouseRejectionReason() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"name": {
 			Type:     schema.TypeString,
-			Computed: true,
+			Required: true,
 		},
 		"type": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{

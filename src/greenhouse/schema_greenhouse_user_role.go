@@ -12,7 +12,7 @@ func schemaGreenhouseUserRole() map[string]*schema.Schema {
 		},
 		"type": {
 			Type:     schema.TypeString,
-			Required: true,
+			Computed: true,
 		},
 	}
 }

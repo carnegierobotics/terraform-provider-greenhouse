@@ -19,6 +19,14 @@ func schemaGreenhouseTypeTypeValue() map[string]*schema.Schema {
 	}
 }
 
+func convertToTypeTypeValueList(list []interface{}) *[]greenhouse.TypeTypeValue {
+	newList := make([]greenhouse.TypeTypeValue, len(list))
+	for i := range list {
+		newList[i] = list[i].(greenhouse.TypeTypeValue)
+	}
+	return &newList
+}
+
 func flattenTypeTypeValues(ctx context.Context, list *[]greenhouse.TypeTypeValue) []interface{} {
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))

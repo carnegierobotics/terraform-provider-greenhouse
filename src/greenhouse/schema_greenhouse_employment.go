@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -23,4 +24,12 @@ func schemaGreenhouseEmployment() map[string]*schema.Schema {
 			Optional: true,
 		},
 	}
+}
+
+func convertToEmploymentList(list []interface{}) *[]greenhouse.Employment {
+	newList := make([]greenhouse.Employment, len(list))
+	for i := range list {
+		newList[i] = list[i].(greenhouse.Employment)
+	}
+	return &newList
 }

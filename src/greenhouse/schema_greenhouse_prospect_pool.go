@@ -12,7 +12,7 @@ func schemaGreenhouseProspectPool() map[string]*schema.Schema {
 		},
 		"name": {
 			Type:     schema.TypeString,
-			Computed: true,
+			Required: true,
 		},
 		"prospect_stages": {
 			Type:     schema.TypeSet,

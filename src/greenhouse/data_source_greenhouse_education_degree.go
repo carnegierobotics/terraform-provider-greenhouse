@@ -7,27 +7,27 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func dataSourceGreenhouseDepartment() *schema.Resource {
+func dataSourceGreenhouseEducationDegree() *schema.Resource {
 	return &schema.Resource{
-		ReadContext:   dataSourceGreenhouseDepartmentRead,
+		ReadContext:   dataSourceGreenhouseEducationDegreeRead,
 		Schema: map[string]*schema.Schema{
       "name": {
         Type: schema.TypeString,
-        Optional: true,
+        Required: true,
       },
     },
 	}
 }
 
-func dataSourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	list, err := greenhouse.GetAllDepartments(meta.(*greenhouse.Client), ctx)
+func dataSourceGreenhouseEducationDegreeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	list, err := greenhouse.GetAllDegrees(meta.(*greenhouse.Client), ctx)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
   name := d.Get("name").(string)
-  for _, department := range *list {
-    if department.Name == name {
-      d.SetId(strconf.Itoa(department.Id))
+  for _, degree := range *list {
+    if degree.Name == name {
+      d.SetId(strconf.Itoa(degree.Id))
       return nil
     }
   }

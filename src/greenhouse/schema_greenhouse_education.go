@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -51,4 +52,12 @@ func schemaGreenhouseEducation() map[string]*schema.Schema {
 			Optional: true,
 		},
 	}
+}
+
+func convertToEducationList(list []interface{}) *[]greenhouse.Education {
+	newList := make([]greenhouse.Education, len(list))
+	for i := range list {
+		newList[i] = list[i].(greenhouse.Education)
+	}
+	return &newList
 }

@@ -19,6 +19,7 @@ func schemaGreenhouseNote() map[string]*schema.Schema {
 		"user": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUserBasics(),
@@ -56,7 +57,7 @@ func flattenNote(ctx context.Context, item *greenhouse.Note) map[string]interfac
 	note["body"] = item.Body
 	note["created_at"] = item.CreatedAt
 	note["private"] = item.Private
-	note["user"] = flattenUserBasics(ctx, &item.User)
+	note["user"] = flattenUserBasics(ctx, item.User)
 	note["visibility"] = item.Visibility
 	return note
 }
