@@ -39,11 +39,11 @@ func schemaGreenhouseScorecard() map[string]*schema.Schema {
 		},
 		"interviewer": {
 			Type:     schema.TypeList,
-      MaxItems: 1,
+			MaxItems: 1,
 			Computed: true,
-      Elem: &schema.Resource{
-        Schema: schemaGreenhouseUser(),
-      },
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseUser(),
+			},
 		},
 		"overall_recommendation": {
 			Type:     schema.TypeString,

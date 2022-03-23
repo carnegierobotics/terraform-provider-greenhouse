@@ -24,11 +24,11 @@ func dataSourceGreenhouseDemographicQuestionRead(ctx context.Context, d *schema.
 	for _, question := range *list {
 		if question.Name == name {
 			d.SetId(strconv.Itoa(question.Id))
-      d.Set("active", question.Active)
-      d.Set("answer_type", question.AnswerType)
-      d.Set("demographic_question_set_id", question.DemographicQuestionSetId)
-      d.Set("required", question.Required)
-      d.Set("translations", flattenTranslations(ctx, &question.Translations))
+			d.Set("active", question.Active)
+			d.Set("answer_type", question.AnswerType)
+			d.Set("demographic_question_set_id", question.DemographicQuestionSetId)
+			d.Set("required", question.Required)
+			d.Set("translations", flattenTranslations(ctx, &question.Translations))
 			return nil
 		}
 	}

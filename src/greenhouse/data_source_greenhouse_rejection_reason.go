@@ -26,7 +26,7 @@ func dataSourceGreenhouseRejectionReasonRead(ctx context.Context, d *schema.Reso
 	for _, reason := range *list {
 		if reason.Name == name {
 			d.SetId(strconv.Itoa(reason.Id))
-      d.Set("type", flattenTypeIdName(ctx, &reason.Type))
+			d.Set("type", flattenTypeIdName(ctx, &reason.Type))
 			return nil
 		}
 	}

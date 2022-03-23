@@ -26,10 +26,10 @@ func schemaGreenhouseDemographicAnswer() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
-    "id": {
-      Type: schema.TypeInt,
-      Required: true,
-    },
+		"id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
 		"updated_at": {
 			Type:     schema.TypeString,
 			Computed: true,

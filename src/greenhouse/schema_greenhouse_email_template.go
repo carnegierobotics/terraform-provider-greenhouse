@@ -25,10 +25,10 @@ func schemaGreenhouseEmailTemplate() map[string]*schema.Schema {
 			Type:     schema.TypeBool,
 			Computed: true,
 		},
-    "description": {
-      Type: schema.TypeString,
-      Computed: true,
-    },
+		"description": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 		"from": {
 			Type:     schema.TypeString,
 			Computed: true,
@@ -37,10 +37,10 @@ func schemaGreenhouseEmailTemplate() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-    "name": {
-      Type: schema.TypeString,
-      Required: true,
-    },
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"type": {
 			Type:     schema.TypeString,
 			Computed: true,

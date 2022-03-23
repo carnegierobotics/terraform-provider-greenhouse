@@ -22,11 +22,11 @@ func dataSourceGreenhouseDemographicAnswerRead(ctx context.Context, d *schema.Re
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	d.SetId(strconv.Itoa(answer.Id))
-  d.Set("application_id", answer.ApplicationId)
-  d.Set("created_at", answer.CreatedAt)
-  d.Set("demographic_answer_option_id", answer.DemographicAnswerOptionId)
-  d.Set("demographic_question_id", answer.DemographicQuestionId)
-  d.Set("free_form_text", answer.FreeFormText)
-  d.Set("updated_at", answer.UpdatedAt)
+	d.Set("application_id", answer.ApplicationId)
+	d.Set("created_at", answer.CreatedAt)
+	d.Set("demographic_answer_option_id", answer.DemographicAnswerOptionId)
+	d.Set("demographic_question_id", answer.DemographicQuestionId)
+	d.Set("free_form_text", answer.FreeFormText)
+	d.Set("updated_at", answer.UpdatedAt)
 	return nil
 }

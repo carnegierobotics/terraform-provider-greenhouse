@@ -24,8 +24,8 @@ func dataSourceGreenhouseDemographicQuestionSetRead(ctx context.Context, d *sche
 	for _, set := range *list {
 		if set.Title == title {
 			d.SetId(strconv.Itoa(set.Id))
-      d.Set("active", set.Active)
-      d.Set("description", set.Description)
+			d.Set("active", set.Active)
+			d.Set("description", set.Description)
 			return nil
 		}
 	}

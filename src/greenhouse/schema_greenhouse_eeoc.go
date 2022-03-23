@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -8,11 +10,11 @@ func schemaGreenhouseEEOC() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"application_id": {
 			Type:     schema.TypeInt,
-			Computed: true,
+			Required: true,
 		},
 		"candidate_id": {
 			Type:     schema.TypeInt,
-			Computed: true,
+			Required: true,
 		},
 		"disability_status": {
 			Type:     schema.TypeSet,
@@ -51,4 +53,12 @@ func schemaGreenhouseEEOC() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func flattenEEOCAnswer(ctx context.Context, item *greenhouse.EEOCAnswer) map[string]interface{} {
+	answer := make(map[string]interface{})
+	answer["description"] = item.Description
+	answer["id"] = item.Id
+	answer["message"] = item.Message
+	return answer
 }

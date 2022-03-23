@@ -18,10 +18,10 @@ func schemaGreenhouseDemographicAnswerOption() map[string]*schema.Schema {
 			Type:     schema.TypeBool,
 			Computed: true,
 		},
-    "id": {
-      Type: schema.TypeInt,
-      Required: true,
-    },
+		"id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
 		"name": {
 			Type:     schema.TypeString,
 			Computed: true,

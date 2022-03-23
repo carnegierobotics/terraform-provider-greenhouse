@@ -29,6 +29,7 @@ func dataSourceGreenhouseEducationDisciplineRead(ctx context.Context, d *schema.
 	for _, discipline := range *list {
 		if discipline.Name == name {
 			d.SetId(strconv.Itoa(discipline.Id))
+			d.Set("priority", discipline.Priority)
 			return nil
 		}
 	}
