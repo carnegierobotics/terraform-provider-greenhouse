@@ -16,7 +16,7 @@ func schemaGreenhouseDemographicQuestionSet() map[string]*schema.Schema {
 		},
 		"title": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Required: true,
 		},
 	}
 }

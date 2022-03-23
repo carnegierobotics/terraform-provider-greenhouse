@@ -72,7 +72,7 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 	}
 }
 
-func flattenUser(ctx context.Context, item *greenhouse.User) (map[string]interface{}, error) {
+func flattenUser(ctx context.Context, item *greenhouse.User) map[string]interface{} {
 	user := make(map[string]interface{})
 	user["created_at"] = item.CreatedAt
 	user["disabled"] = item.Disabled
@@ -85,5 +85,5 @@ func flattenUser(ctx context.Context, item *greenhouse.User) (map[string]interfa
 	user["primary_email_address"] = item.PrimaryEmail
 	user["site_admin"] = item.SiteAdmin
 	user["updated_at"] = item.UpdatedAt
-	return user, nil
+	return user
 }

@@ -8,27 +8,27 @@ func schemaGreenhouseDemographicQuestion() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"active": {
 			Type:     schema.TypeBool,
-			Optional: true,
+			Computed: true,
 		},
 		"answer_type": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"demographic_question_set_id": {
 			Type:     schema.TypeInt,
-			Optional: true,
+			Computed: true,
 		},
 		"name": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Required: true,
 		},
 		"required": {
 			Type:     schema.TypeBool,
-			Optional: true,
+			Computed: true,
 		},
 		"translations": {
 			Type:     schema.TypeSet,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTranslation(),
 			},

@@ -22,7 +22,6 @@ func schemaGreenhouseRejectionReason() map[string]*schema.Schema {
 		},
 		"type": {
 			Type:     schema.TypeList,
-			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeIdName(),

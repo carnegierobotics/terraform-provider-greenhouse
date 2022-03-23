@@ -100,20 +100,11 @@ Read-Only:
 Read-Only:
 
 - **child_ids** (Set of Number)
-- **location** (List of Object) (see [below for nested schema](#nestedobjatt--offices--location))
+- **location** (Map of String)
 - **location_name** (String)
 - **name** (String)
 - **parent_id** (Number)
 - **primary_contact_user_id** (Number)
-
-<a id="nestedobjatt--offices--location"></a>
-### Nested Schema for `offices.location`
-
-Read-Only:
-
-- **address** (String)
-- **name** (String)
-
 
 
 <a id="nestedatt--openings"></a>

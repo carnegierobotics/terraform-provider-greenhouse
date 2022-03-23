@@ -8,11 +8,11 @@ func schemaGreenhouseEmailTemplate() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"body": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"cc": {
 			Type:     schema.TypeSet,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -23,28 +23,35 @@ func schemaGreenhouseEmailTemplate() map[string]*schema.Schema {
 		},
 		"default": {
 			Type:     schema.TypeBool,
-			Optional: true,
+			Computed: true,
 		},
+    "description": {
+      Type: schema.TypeString,
+      Computed: true,
+    },
 		"from": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"html_body": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
+    "name": {
+      Type: schema.TypeString,
+      Required: true,
+    },
 		"type": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"updated_at": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"user": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
-			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUser(),
