@@ -12,22 +12,31 @@ func schemaGreenhouseJobStage() map[string]*schema.Schema {
 		},
 		"interviews": {
 			Type:     schema.TypeSet,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseInterview(),
 			},
 		},
+		"id": {
+			Type:          schema.TypeInt,
+			Optional:      true,
+			ConflictsWith: []string{"job_id", "name"},
+		},
 		"job_id": {
-			Type:     schema.TypeInt,
-			Optional: true,
+			Type:          schema.TypeInt,
+			Optional:      true,
+			ConflictsWith: []string{"id"},
+			RequiredWith:  []string{"name"},
 		},
 		"name": {
-			Type:     schema.TypeString,
-			Optional: true,
+			Type:          schema.TypeString,
+			Optional:      true,
+			ConflictsWith: []string{"id"},
+			RequiredWith:  []string{"name"},
 		},
 		"priority": {
 			Type:     schema.TypeInt,
-			Optional: true,
+			Computed: true,
 		},
 		"updated_at": {
 			Type:     schema.TypeString,

@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -34,4 +36,25 @@ func schemaGreenhouseInterview() map[string]*schema.Schema {
 			Optional: true,
 		},
 	}
+}
+
+func flattenInterviews(ctx context.Context, list *[]greenhouse.Interview) []interface{} {
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, item := range *list {
+			flatList[i] = flattenInterview(ctx, &item)
+		}
+		return flatList
+	}
+	return make([]interface{}, 0)
+}
+
+func flattenInterview(ctx context.Context, item *greenhouse.Interview) map[string]interface{} {
+	interview := make(map[string]interface{})
+	interview["default_interviewer_users"] = flattenInterviewers(ctx, &item.DefaultInterviewerUsers)
+	interview["estimated_minutes"] = item.EstimatedMinutes
+	interview["interview_kit"] = flattenInterviewKit(ctx, item.InterviewKit)[0]
+	interview["name"] = item.Name
+	interview["schedulable"] = item.Schedulable
+	return interview
 }
