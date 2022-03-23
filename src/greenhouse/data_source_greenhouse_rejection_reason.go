@@ -17,13 +17,15 @@ func dataSourceGreenhouseRejectionReason() *schema.Resource {
 
 func dataSourceGreenhouseRejectionReasonRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
   name := d.Get("name").(string)
-	list, err := greenhouse.GetAllRejectionReasons(meta.(*greenhouse.Client), ctx)
+  defaults := d.Get("include_defaults").(bool)
+  pp := d.Get("per_page").(int)
+	list, err := greenhouse.GetAllRejectionReasons(meta.(*greenhouse.Client), ctx, defaults, pp)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
   for _, reason := range *list {
     if reason.Name == name {
-      d.SetId(strconf.Itoa(reason.Id))
+      d.SetId(strconv.Itoa(reason.Id))
       return nil
     }
   }

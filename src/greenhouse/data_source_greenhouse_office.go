@@ -5,6 +5,7 @@ import (
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+  "strconv"
 )
 
 func dataSourceGreenhouseOffice() *schema.Resource {
@@ -28,7 +29,7 @@ func dataSourceGreenhouseOfficeRead(ctx context.Context, d *schema.ResourceData,
 	  }
     for _, office := range *list {
       if office.Name == name {
-        d.SetId(strconf.Itoa(office.Id))
+        d.SetId(strconv.Itoa(office.Id))
         return nil
       }
     }

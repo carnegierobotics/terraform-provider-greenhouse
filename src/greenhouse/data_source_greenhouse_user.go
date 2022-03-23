@@ -5,6 +5,7 @@ import (
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+  "strconv"
 )
 
 func dataSourceGreenhouseUser() *schema.Resource {
@@ -27,7 +28,7 @@ func dataSourceGreenhouseUserRead(ctx context.Context, d *schema.ResourceData, m
   name := d.Get("name").(string)
   for _, user := range *list {
     if user.Name == name {
-      d.SetId(strconf.Itoa(user.Id))
+      d.SetId(strconv.Itoa(user.Id))
       return nil
     }
   }

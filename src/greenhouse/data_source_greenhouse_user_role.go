@@ -23,7 +23,7 @@ func dataSourceGreenhouseUserRoleRead(ctx context.Context, d *schema.ResourceDat
 	}
   for _, role := range *list {
     if role.Name == name {
-      d.SetId(strconf.Itoa(role.Id))
+      d.SetId(strconv.Itoa(role.Id))
       return nil
     }
   }

@@ -23,7 +23,7 @@ func dataSourceGreenhouseProspectPoolRead(ctx context.Context, d *schema.Resourc
 	}
   for _, pool := range *list {
     if pool.Name == name {
-      d.SetId(strconf.Itoa(pool.Id))
+      d.SetId(strconv.Itoa(pool.Id))
       return nil
     }
   }
