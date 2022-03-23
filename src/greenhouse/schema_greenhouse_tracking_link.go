@@ -13,7 +13,7 @@ func schemaGreenhouseTrackingLink() map[string]*schema.Schema {
 		"credited_to": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUser(),
 			},
@@ -21,38 +21,38 @@ func schemaGreenhouseTrackingLink() map[string]*schema.Schema {
 		"job_board": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseJobBoard(),
 			},
 		},
 		"job_id": {
 			Type:     schema.TypeInt,
-			Optional: true,
+			Computed: true,
 		},
 		"job_post_id": {
 			Type:     schema.TypeInt,
-			Optional: true,
+			Computed: true,
 		},
 		"related_post_id": {
 			Type:     schema.TypeInt,
-			Optional: true,
+			Computed: true,
 		},
 		"related_post_type": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"source": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseSource(),
 			},
 		},
 		"token": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Required: true,
 		},
 		"updated_at": {
 			Type:     schema.TypeString,

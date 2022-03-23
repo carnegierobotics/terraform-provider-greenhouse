@@ -27,7 +27,7 @@ func dataSourceGreenhouseScorecardRead(ctx context.Context, d *schema.ResourceDa
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	d.SetId(strconv.Itoa(card.Id))
-	d.Set("applicationId", card.ApplicationId)
+	d.Set("application_id", card.ApplicationId)
 	d.Set("attributes", flattenScorecardAttributes(ctx, &card.Attributes))
 	d.Set("candidate_id", card.CandidateId)
 	d.Set("created_at", card.CreatedAt)
