@@ -5,27 +5,27 @@ import (
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-  "strconv"
+	"strconv"
 )
 
 func dataSourceGreenhouseUserRole() *schema.Resource {
 	return &schema.Resource{
-		ReadContext:   dataSourceGreenhouseUserRoleRead,
-		Schema: schemaGreenhouseUserRole(),
+		ReadContext: dataSourceGreenhouseUserRoleRead,
+		Schema:      schemaGreenhouseUserRole(),
 	}
 }
 
 func dataSourceGreenhouseUserRoleRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-  name := d.Get("name").(string)
+	name := d.Get("name").(string)
 	list, err := greenhouse.GetAllUserRoles(meta.(*greenhouse.Client), ctx)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  for _, role := range *list {
-    if role.Name == name {
-      d.SetId(strconv.Itoa(role.Id))
-      return nil
-    }
-  }
+	for _, role := range *list {
+		if role.Name == name {
+			d.SetId(strconv.Itoa(role.Id))
+			return nil
+		}
+	}
 	return nil
 }

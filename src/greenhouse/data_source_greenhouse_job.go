@@ -5,18 +5,18 @@ import (
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-  "strconv"
+	"strconv"
 )
 
 func dataSourceGreenhouseJob() *schema.Resource {
 	return &schema.Resource{
-		ReadContext:   dataSourceGreenhouseJobRead,
+		ReadContext: dataSourceGreenhouseJobRead,
 		Schema: map[string]*schema.Schema{
-      "name": {
-        Type: schema.TypeString,
-        Optional: true,
-      },
-    },
+			"name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+		},
 	}
 }
 
@@ -25,12 +25,12 @@ func dataSourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  name := d.Get("name").(string)
-  for _, job := range *list {
-    if job.Name == name {
-      d.SetId(strconv.Itoa(job.Id))
-      return nil
-    }
-  }
+	name := d.Get("name").(string)
+	for _, job := range *list {
+		if job.Name == name {
+			d.SetId(strconv.Itoa(job.Id))
+			return nil
+		}
+	}
 	return nil
 }

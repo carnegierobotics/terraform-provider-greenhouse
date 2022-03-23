@@ -14,10 +14,10 @@ func schemaGreenhouseActivityFeed() map[string]*schema.Schema {
 				Schema: schemaGreenhouseActivity(),
 			},
 		},
-    "candidate_id": {
-      Type:     schema.TypeInt,
-      Required: true,
-    },
+		"candidate_id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
 		"emails": {
 			Type:     schema.TypeList,
 			Computed: true,

@@ -29,12 +29,12 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseApplication(),
 			},
-      ConflictsWith: []string{"applications"},
+			ConflictsWith: []string{"applications"},
 		},
 		"application_ids": {
 			Type:     schema.TypeSet,
 			MaxItems: 1,
-      Computed: true,
+			Computed: true,
 			Optional: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,
@@ -47,7 +47,7 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseApplication(),
 			},
-      ConflictsWith: []string{"application"},
+			ConflictsWith: []string{"application"},
 		},
 		"can_email": {
 			Type:     schema.TypeBool,

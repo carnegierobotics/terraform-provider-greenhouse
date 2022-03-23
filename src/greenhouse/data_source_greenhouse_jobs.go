@@ -9,16 +9,16 @@ import (
 
 func dataSourceGreenhouseJobs() *schema.Resource {
 	return &schema.Resource{
-		ReadContext:   dataSourceGreenhouseJobsRead,
+		ReadContext: dataSourceGreenhouseJobsRead,
 		Schema: map[string]*schema.Schema{
-      "names": {
-        Type: schema.TypeList,
-        Computed: true,
-        Elem: &schema.Schema{
-          Type: schema.TypeString,
-        },
-      },
-    },
+			"names": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+		},
 	}
 }
 
@@ -27,11 +27,11 @@ func dataSourceGreenhouseJobsRead(ctx context.Context, d *schema.ResourceData, m
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  jobs := make([]string, len(*list), len(*list))
-  for i, job := range *list {
-    jobs[i] = job.Name
-  }
-  d.SetId("all")
+	jobs := make([]string, len(*list), len(*list))
+	for i, job := range *list {
+		jobs[i] = job.Name
+	}
+	d.SetId("all")
 	d.Set("names", jobs)
 	return nil
 }

@@ -109,19 +109,19 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 		},
-    /*
-		"keyed_custom_fields": {
-			Type:     schema.TypeMap,
-			Optional: true,
-			Computed: true,
-			Elem: &schema.Schema{
-				Type: schema.TypeMap,
+		/*
+			"keyed_custom_fields": {
+				Type:     schema.TypeMap,
+				Optional: true,
+				Computed: true,
 				Elem: &schema.Schema{
-					Type: schema.TypeString,
+					Type: schema.TypeMap,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
 				},
 			},
-		},
-    */
+		*/
 		"hiring_team": {
 			Type:     schema.TypeSet,
 			Optional: true,

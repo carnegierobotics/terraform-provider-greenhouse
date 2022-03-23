@@ -9,27 +9,27 @@ import (
 
 func dataSourceGreenhouseSources() *schema.Resource {
 	return &schema.Resource{
-		ReadContext:   dataSourceGreenhouseSourcesRead,
+		ReadContext: dataSourceGreenhouseSourcesRead,
 		Schema: map[string]*schema.Schema{
-      "names": {
-        Type: schema.TypeList,
-        Computed: true,
-        Elem: &schema.Schema{
-          Type: schema.TypeString,
-        },
-      },
-      "public_names": {
-        Type: schema.TypeList,
-        Computed: true,
-        Elem: &schema.Schema{
-          Type: schema.TypeString,
-        },
-      },
-      "query": {
-        Type: schema.TypeString,
-        Optional: true,
-      },
-    },
+			"names": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"public_names": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"query": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+		},
 	}
 }
 
@@ -38,14 +38,14 @@ func dataSourceGreenhouseSourcesRead(ctx context.Context, d *schema.ResourceData
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  names := make([]string, len(*list), len(*list))
-  public_names := make([]string, len(*list), len(*list))
-  for i, source := range *list {
-    names[i] = source.Name
-    public_names[i] = source.PublicName
-  }
-  d.SetId("all")
+	names := make([]string, len(*list), len(*list))
+	public_names := make([]string, len(*list), len(*list))
+	for i, source := range *list {
+		names[i] = source.Name
+		public_names[i] = source.PublicName
+	}
+	d.SetId("all")
 	d.Set("names", names)
-  d.Set("public_names", public_names)
+	d.Set("public_names", public_names)
 	return nil
 }

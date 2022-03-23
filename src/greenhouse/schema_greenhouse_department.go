@@ -2,9 +2,9 @@ package greenhouse
 
 import (
 	"context"
-  "fmt"
-  "github.com/hashicorp/terraform-plugin-log/tflog"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -47,24 +47,24 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 }
 
 func flattenDepartments(ctx context.Context, list *[]greenhouse.Department) []interface{} {
-  tflog.Debug(ctx, "Flattening department list", "deptlist", fmt.Sprintf("%+v", list))
+	tflog.Debug(ctx, "Flattening department list", "deptlist", fmt.Sprintf("%+v", list))
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenDepartment(ctx, &item)
 		}
-    tflog.Debug(ctx, "Flattened department list", "deptlist", fmt.Sprintf("%+v", flatList))
+		tflog.Debug(ctx, "Flattened department list", "deptlist", fmt.Sprintf("%+v", flatList))
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenDepartment(ctx context.Context, item *greenhouse.Department) map[string]interface{} {
-  tflog.Debug(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
+	tflog.Debug(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
 	dept := make(map[string]interface{})
 	dept["name"] = item.Name
 	dept["parent_id"] = item.ParentId
 	dept["child_ids"] = item.ChildIds
-  tflog.Debug(ctx, "Flattened department", "department", fmt.Sprintf("%+v", dept))
+	tflog.Debug(ctx, "Flattened department", "department", fmt.Sprintf("%+v", dept))
 	return dept
 }

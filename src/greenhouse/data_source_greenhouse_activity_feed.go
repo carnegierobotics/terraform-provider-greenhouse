@@ -10,8 +10,8 @@ import (
 
 func dataSourceGreenhouseActivityFeed() *schema.Resource {
 	return &schema.Resource{
-		ReadContext:   dataSourceGreenhouseActivityFeedRead,
-		Schema: schemaGreenhouseActivityFeed(),
+		ReadContext: dataSourceGreenhouseActivityFeedRead,
+		Schema:      schemaGreenhouseActivityFeed(),
 	}
 }
 
@@ -21,7 +21,7 @@ func dataSourceGreenhouseActivityFeedRead(ctx context.Context, d *schema.Resourc
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  d.SetId(strconv.Itoa(candidateId))
+	d.SetId(strconv.Itoa(candidateId))
 	d.Set("activities", flattenActivities(ctx, &obj.Activities))
 	d.Set("emails", flattenEmails(ctx, &obj.Emails))
 	d.Set("notes", flattenNotes(ctx, &obj.Notes))
