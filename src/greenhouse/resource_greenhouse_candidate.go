@@ -117,21 +117,9 @@ func resourceGreenhouseCandidateRead(ctx context.Context, d *schema.ResourceData
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	convertedAddresses := []greenhouse.TypeTypeValue(obj.Addresses)
-	d.Set("addresses", flattenTypeTypeValues(ctx, &convertedAddresses))
-	d.Set("application_ids", obj.ApplicationIds)
-	d.Set("attachments", flattenAttachments(ctx, &obj.Attachments))
-	d.Set("company", obj.Company)
-	d.Set("created_at", obj.CreatedAt)
-	d.Set("first_name", obj.FirstName)
-	d.Set("is_private", obj.IsPrivate)
-	d.Set("last_activity", obj.LastActivity)
-	d.Set("last_name", obj.LastName)
-	convertedPhoneNumbers := []greenhouse.TypeTypeValue(obj.PhoneNumbers)
-	d.Set("phone_numbers", flattenTypeTypeValues(ctx, &convertedPhoneNumbers))
-	d.Set("photo_url", obj.PhotoUrl)
-	d.Set("title", obj.Title)
-	d.Set("updated_at", obj.UpdatedAt)
+  for k, v := range flattenCandidate(ctx, obj) {
+    d.Set(k, v)
+  }
 	tflog.Debug(ctx, "Finished resourceGreenhouseCandidateRead.")
 	return nil
 }

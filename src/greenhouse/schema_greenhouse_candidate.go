@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+  "context"
+  "github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -173,4 +175,24 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[string]interface{} {
+  candidate := make(map[string]interface{})
+  convertedAddresses := []greenhouse.TypeTypeValue(item.Addresses)
+  candidate["addresses"] = flattenTypeTypeValues(ctx, &convertedAddresses)
+  candidate["application_ids"] = item.ApplicationIds
+  candidate["attachments"] = flattenAttachments(ctx, &item.Attachments)
+  candidate["company"] = item.Company
+  candidate["created_at"] = item.CreatedAt
+  candidate["first_name"] = item.FirstName
+  candidate["is_private"] = item.IsPrivate
+  candidate["last_activity"] = item.LastActivity
+  candidate["last_name"] = item.LastName
+  convertedPhoneNumbers := []greenhouse.TypeTypeValue(item.PhoneNumbers)
+  candidate["phone_numbers"] = flattenTypeTypeValues(ctx, &convertedPhoneNumbers)
+  candidate["photo_url"] = item.PhotoUrl
+  candidate["title"] = item.Title
+  candidate["updated_at"] = item.UpdatedAt
+  return candidate
 }

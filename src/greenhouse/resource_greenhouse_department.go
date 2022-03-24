@@ -58,9 +58,9 @@ func resourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceDat
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	d.Set("name", obj.Name)
-	d.Set("parent_id", obj.ParentId)
-	d.Set("child_ids", obj.ChildIds)
+  for k, v := range flattenDepartment(ctx, obj) {
+    d.Set(k, v)
+  }
 	return nil
 }
 

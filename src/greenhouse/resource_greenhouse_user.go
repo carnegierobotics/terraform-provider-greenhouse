@@ -58,17 +58,9 @@ func resourceGreenhouseUserRead(ctx context.Context, d *schema.ResourceData, met
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	d.Set("name", obj.Name)
-	d.Set("first_name", obj.FirstName)
-	d.Set("last_name", obj.LastName)
-	d.Set("employee_id", obj.EmployeeId)
-	d.Set("primary_email_address", obj.PrimaryEmail)
-	d.Set("updated_at", obj.UpdatedAt)
-	d.Set("created_at", obj.CreatedAt)
-	d.Set("disabled", obj.Disabled)
-	d.Set("site_admin", obj.SiteAdmin)
-	d.Set("emails", obj.Emails)
-	d.Set("linked_candidate_ids", obj.LinkedCandidateIds)
+  for k, v := range flattenUser(ctx, obj) {
+    d.Set(k, v)
+  }
 	return nil
 }
 

@@ -51,7 +51,9 @@ func resourceGreenhouseCandidateTagRead(ctx context.Context, d *schema.ResourceD
 		tflog.Debug(ctx, fmt.Sprintf("Could not find tag with id %d", id))
 		return nil
 	}
-	d.Set("name", obj.Name)
+  for k, v := range flattenCandidateTag(ctx, obj) {
+    d.Set(k, v)
+  }
 	return nil
 }
 

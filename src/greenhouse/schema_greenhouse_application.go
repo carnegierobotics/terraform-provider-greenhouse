@@ -1,6 +1,7 @@
 package greenhouse
 
 import (
+  "context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -193,4 +194,42 @@ func convertToApplicationList(list []interface{}) *[]greenhouse.Application {
 		newList[i] = list[i].(greenhouse.Application)
 	}
 	return &newList
+}
+
+func flattenApplications(ctx context.Context, list *[]greenhouse.Application) []interface{} {
+  if list != nil {
+    flatList := make([]interface{}, len(*list), len(*list))
+    for i, item := range *list {
+      flatList[i] = flattenApplication(ctx, &item)
+    }
+    return flatList
+  }
+  return make([]interface{}, 0, 0)
+}
+
+func flattenApplication(ctx context.Context, item *greenhouse.Application) map[string]interface{} {
+  app := make(map[string]interface{})
+  app["answers"] = flattenAnswers(ctx, &item.Answers)
+  app["applied_at"] = item.AppliedAt
+  app["attachments"] = flattenAttachments(ctx, &item.Attachments)
+  app["candidate_id"] = item.CandidateId
+  app["credited_to"] = flattenUser(ctx, item.CreditedTo)
+  convertedStage := greenhouse.TypeIdName(*item.CurrentStage)
+  app["current_stage"] = flattenTypeIdName(ctx, &convertedStage)
+  app["custom_fields"] = item.CustomFields
+  app["jobs"] = flattenJobs(ctx, &item.Jobs)
+  app["job_post_id"] = item.JobPostId
+  app["keyed_custom_fields"] = item.KeyedCustomFields
+  app["last_activity_at"] = item.LastActivityAt
+  app["location"] = flattenLocation(ctx, item.Location)
+  app["prospect"] = item.Prospect
+  app["prospect_detail"] = flattenProspectDetail(ctx, item.ProspectDetail)
+  app["prospective_department"] = flattenDepartment(ctx, item.ProspectiveDepartment)
+  app["prospective_office"] = flattenOffice(ctx, item.ProspectiveOffice)
+  app["rejected_at"] = item.RejectedAt
+  app["rejection_details"] = item.RejectionDetails
+  app["rejection_reason"] = item.RejectionReason
+  app["source"] = flattenSource(ctx, item.Source)
+  app["status"] = item.Status
+  return app
 }

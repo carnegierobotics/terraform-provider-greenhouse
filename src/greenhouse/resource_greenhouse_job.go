@@ -79,24 +79,9 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
-	d.Set("job_name", obj.Name)
-	d.Set("departments", flattenDepartments(ctx, &obj.Departments))
-	d.Set("offices", flattenOffices(ctx, &obj.Offices))
-	d.Set("requisition_id", obj.RequisitionId)
-	d.Set("openings", flattenJobOpenings(ctx, &obj.Openings))
-	d.Set("hiring_team", flattenHiringTeam(ctx, &obj.HiringTeam))
-	tflog.Debug(ctx, "Hiring team after flattening", "team", fmt.Sprintf("%+v", d.Get("hiring_team")))
-	d.Set("notes", obj.Notes)
-	d.Set("confidential", obj.Confidential)
-	d.Set("status", obj.Status)
-	d.Set("created_at", obj.CreatedAt)
-	d.Set("opened_at", obj.OpenedAt)
-	d.Set("closed_at", obj.ClosedAt)
-	d.Set("updated_at", obj.UpdatedAt)
-	d.Set("is_template", obj.IsTemplate)
-	d.Set("copied_from_id", obj.CopiedFromId)
-	d.Set("custom_fields", obj.CustomFields)
-	d.Set("keyed_custom_fields", flattenKeyedCustomFields(ctx, &obj.KeyedCustomFields))
+  for k, v := range flattenJob(ctx, obj) {
+    d.Set(k, v)
+  }
 	tflog.Debug(ctx, "Finished resourceGreenhouseJobRead")
 	return nil
 }
