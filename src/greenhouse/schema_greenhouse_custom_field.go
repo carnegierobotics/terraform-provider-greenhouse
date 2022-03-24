@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -127,4 +129,37 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			ValidateFunc: validation.StringInSlice([]string{"short_text", "long_text", "yes_no", "single_select", "multi_select", "currency", "currency_range", "number", "number_range", "date", "url", "user"}, false),
 		},
 	}
+}
+
+func flattenCustomFields(ctx context.Context, list *[]greenhouse.CustomField) []interface{} {
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, item := range *list {
+			flatList[i] = flattenCustomField(ctx, &item)
+		}
+		return flatList
+	}
+	return make([]interface{}, 0, 0)
+}
+
+func flattenCustomField(ctx context.Context, item *greenhouse.CustomField) map[string]interface{} {
+	fields := make(map[string]interface{})
+	fields["active"] = item.Active
+	fields["api_only"] = item.ApiOnly
+	fields["custom_field_options"] = flattenCustomFieldOptions(ctx, &item.CustomFieldOptions)
+	fields["departments"] = flattenDepartments(ctx, &item.Departments)
+	fields["description"] = item.Description
+	fields["expose_in_job_board_api"] = item.ExposeInJobBoardAPI
+	fields["field_type"] = item.FieldType
+	fields["name"] = item.Name
+	fields["name_key"] = item.NameKey
+	fields["offices"] = flattenOffices(ctx, &item.Offices)
+	fields["priority"] = item.Priority
+	fields["private"] = item.Private
+	fields["require_approval"] = item.RequireApproval
+	fields["required"] = item.Required
+	fields["template_token_string"] = item.TemplateTokenString
+	fields["trigger_new_version"] = item.TriggerNewVersion
+	fields["value_type"] = item.ValueType
+	return fields
 }
