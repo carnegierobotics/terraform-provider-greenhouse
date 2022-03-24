@@ -58,9 +58,9 @@ func resourceGreenhouseUserRead(ctx context.Context, d *schema.ResourceData, met
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  for k, v := range flattenUser(ctx, obj) {
-    d.Set(k, v)
-  }
+	for k, v := range flattenUser(ctx, obj) {
+		d.Set(k, v)
+	}
 	return nil
 }
 

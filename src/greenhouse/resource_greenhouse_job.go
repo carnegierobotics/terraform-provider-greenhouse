@@ -79,9 +79,9 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
-  for k, v := range flattenJob(ctx, obj) {
-    d.Set(k, v)
-  }
+	for k, v := range flattenJob(ctx, obj) {
+		d.Set(k, v)
+	}
 	tflog.Debug(ctx, "Finished resourceGreenhouseJobRead")
 	return nil
 }

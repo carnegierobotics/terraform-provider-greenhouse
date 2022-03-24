@@ -117,9 +117,9 @@ func resourceGreenhouseCandidateRead(ctx context.Context, d *schema.ResourceData
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  for k, v := range flattenCandidate(ctx, obj) {
-    d.Set(k, v)
-  }
+	for k, v := range flattenCandidate(ctx, obj) {
+		d.Set(k, v)
+	}
 	tflog.Debug(ctx, "Finished resourceGreenhouseCandidateRead.")
 	return nil
 }

@@ -7,15 +7,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func dataSourceGreenhouseApplications() *schema.Resource {
+func dataSourceGreenhouseCandidates() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceGreenhouseApplicationsRead,
+		ReadContext: dataSourceGreenhouseCandidatesRead,
 		Schema: map[string]*schema.Schema{
-			"applications": {
-				Type:     schema.TypeList,
+			"candidate_ids": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeInt,
+				},
+			},
+			"candidates": {
+				Type:     schema.TypeSet,
 				Computed: true,
 				Elem: &schema.Resource{
-					Schema: schemaGreenhouseApplication(),
+					Schema: schemaGreenhouseCandidate(),
 				},
 			},
 			"created_after": {
@@ -26,15 +33,19 @@ func dataSourceGreenhouseApplications() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
+			"email": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"job_id": {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"last_activity_after": {
+			"updated_after": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"status": {
+			"updated_before": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -42,12 +53,12 @@ func dataSourceGreenhouseApplications() *schema.Resource {
 	}
 }
 
-func dataSourceGreenhouseApplicationsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	list, err := greenhouse.GetAllApplications(meta.(*greenhouse.Client), ctx)
+func dataSourceGreenhouseCandidatesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	list, err := greenhouse.GetAllCandidates(meta.(*greenhouse.Client), ctx)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	d.SetId("all")
-	d.Set("applications", flattenApplications(ctx, list))
+	d.Set("candidates", flattenCandidates(ctx, list))
 	return nil
 }

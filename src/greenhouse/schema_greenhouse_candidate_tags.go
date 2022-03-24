@@ -26,7 +26,7 @@ func flattenCandidateTags(ctx context.Context, list *[]greenhouse.CandidateTag) 
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
-      flatList[i] = flattenCandidateTag(ctx, &item)
+			flatList[i] = flattenCandidateTag(ctx, &item)
 		}
 		return flatList
 	}
@@ -34,10 +34,10 @@ func flattenCandidateTags(ctx context.Context, list *[]greenhouse.CandidateTag) 
 }
 
 func flattenCandidateTag(ctx context.Context, item *greenhouse.CandidateTag) map[string]interface{} {
-  tag := make(map[string]interface{})
-  converted := greenhouse.TypeIdName(*item)
-  for k, v := range flattenTypeIdName(ctx, &converted) {
-    tag[k] = v
-  }
-  return tag
+	tag := make(map[string]interface{})
+	converted := greenhouse.TypeIdName(*item)
+	for k, v := range flattenTypeIdName(ctx, &converted) {
+		tag[k] = v
+	}
+	return tag
 }
