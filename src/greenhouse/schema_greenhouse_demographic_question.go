@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -34,4 +36,26 @@ func schemaGreenhouseDemographicQuestion() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func flattenDemographicQuestions(ctx context.Context, list *[]greenhouse.DemographicQuestion) []interface{} {
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, item := range *list {
+			flatList[i] = flattenDemographicQuestion(ctx, &item)
+		}
+		return flatList
+	}
+	return make([]interface{}, 0, 0)
+}
+
+func flattenDemographicQuestion(ctx context.Context, item *greenhouse.DemographicQuestion) map[string]interface{} {
+	question := make(map[string]interface{})
+	question["active"] = item.Active
+	question["answer_type"] = item.AnswerType
+	question["demographic_question_set_id"] = item.DemographicQuestionSetId
+	question["name"] = item.Name
+	question["required"] = item.Required
+	question["translations"] = flattenTranslations(ctx, &item.Translations)
+	return question
 }

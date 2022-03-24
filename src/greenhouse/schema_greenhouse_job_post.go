@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -58,4 +60,32 @@ func schemaGreenhouseJobPost() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
+}
+
+func flattenJobPosts(ctx context.Context, list *[]greenhouse.JobPost) []interface{} {
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, item := range *list {
+			flatList[i] = flattenJobPost(ctx, &item)
+		}
+		return flatList
+	}
+	return make([]interface{}, 0, 0)
+}
+
+func flattenJobPost(ctx context.Context, item *greenhouse.JobPost) map[string]interface{} {
+	post := make(map[string]interface{})
+	post["active"] = item.Active
+	post["content"] = item.Content
+	post["created_at"] = item.CreatedAt
+	post["demographic_question_set_id"] = item.DemographicQuestionSetId
+	post["external"] = item.External
+	post["first_published_at"] = item.FirstPublishedAt
+	post["internal"] = item.Internal
+	post["internal_content"] = item.InternalContent
+	post["job_id"] = item.JobId
+	post["live"] = item.Live
+	post["questions"] = flattenDemographicQuestions(ctx, &item.Questions)
+	post["updated_at"] = item.UpdatedAt
+	return post
 }
