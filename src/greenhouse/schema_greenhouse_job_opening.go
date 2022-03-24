@@ -57,26 +57,30 @@ func flattenJobOpenings(ctx context.Context, list *[]greenhouse.JobOpening) []in
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
-			opening := make(map[string]interface{})
-			opening["opening_id"] = item.OpeningId
-			opening["status"] = item.Status
-			opening["opened_at"] = item.OpenedAt
-			opening["closed_at"] = item.ClosedAt
-			opening["application_id"] = item.ApplicationId
-			if item.CloseReason != nil {
-				convertedCloseReason := greenhouse.TypeIdName(*item.CloseReason)
-				tflog.Debug(ctx, "Converted close reason", "reason", fmt.Sprintf("%+v", convertedCloseReason))
-				opening["close_reason"] = flattenTypeIdName(ctx, &convertedCloseReason)
-			} else {
-				opening["close_reason"] = nil
-			}
-			opening["custom_fields"] = item.CustomFields
-			flatList[i] = opening
+			flatList[i] = flattenJobOpening(ctx, &item)
 		}
 		tflog.Debug(ctx, "Flattened job opening list", "opening list", fmt.Sprintf("%+v", flatList))
 		return flatList
 	}
 	return make([]interface{}, 0)
+}
+
+func flattenJobOpening(ctx context.Context, item *greenhouse.JobOpening) map[string]interface{} {
+	opening := make(map[string]interface{})
+	opening["opening_id"] = item.OpeningId
+	opening["status"] = item.Status
+	opening["opened_at"] = item.OpenedAt
+	opening["closed_at"] = item.ClosedAt
+	opening["application_id"] = item.ApplicationId
+	if item.CloseReason != nil {
+		convertedCloseReason := greenhouse.TypeIdName(*item.CloseReason)
+		tflog.Debug(ctx, "Converted close reason", "reason", fmt.Sprintf("%+v", convertedCloseReason))
+		opening["close_reason"] = flattenTypeIdName(ctx, &convertedCloseReason)
+	} else {
+		opening["close_reason"] = nil
+	}
+	opening["custom_fields"] = item.CustomFields
+	return opening
 }
 
 func flattenCloseReason(ctx context.Context, item *greenhouse.CloseReason) map[string]interface{} {

@@ -153,6 +153,9 @@ func resourceGreenhouseCandidateUpdate(ctx context.Context, d *schema.ResourceDa
 	if d.HasChanges("email_notes") {
 
 	}
+	if d.HasChanges("tags") {
+
+	}
 	tflog.Debug(ctx, "Kicking off resourceGreenhouseCandidateRead from resourceGreenhouseCandidateUpdate.")
 	return resourceGreenhouseCandidateRead(ctx, d, meta)
 }

@@ -59,6 +59,14 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 		},
+		"from_stage_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"hire": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
 		"jobs": {
 			Type:     schema.TypeSet,
 			Computed: true,
@@ -93,6 +101,14 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseLocation(),
 			},
+		},
+		"new_job_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"new_stage_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
 		},
 		"prospect": {
 			Type:        schema.TypeBool,
@@ -142,6 +158,10 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeTypeValue(),
 			},
+		},
+		"reject": {
+			Type:     schema.TypeBool,
+			Optional: true,
 		},
 		"rejected_at": {
 			Type:        schema.TypeString,

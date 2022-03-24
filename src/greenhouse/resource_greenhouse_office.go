@@ -58,11 +58,9 @@ func resourceGreenhouseOfficeRead(ctx context.Context, d *schema.ResourceData, m
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	d.Set("name", obj.Name)
-	d.Set("location", flattenLocation(ctx, obj.Location))
-	d.Set("primary_contact_user_id", obj.PrimaryContactUserId)
-	d.Set("parent_id", obj.ParentId)
-	d.Set("child_ids", obj.ChildIds)
+	for k, v := range flattenOffice(ctx, obj) {
+		d.Set(k, v)
+	}
 	return nil
 }
 

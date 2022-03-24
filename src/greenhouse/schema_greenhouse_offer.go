@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -24,6 +26,10 @@ func schemaGreenhouseOffer() map[string]*schema.Schema {
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
+		},
+		"id": {
+			Type:     schema.TypeInt,
+			Optional: true,
 		},
 		"job_id": {
 			Type:     schema.TypeInt,
@@ -69,4 +75,21 @@ func schemaGreenhouseOffer() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
+}
+
+func flattenOffer(ctx context.Context, item *greenhouse.Offer) map[string]interface{} {
+	offer := make(map[string]interface{})
+	offer["application_id"] = item.ApplicationId
+	offer["candidate_id"] = item.CandidateId
+	offer["created_at"] = item.CreatedAt
+	offer["custom_fields"] = item.CustomFields
+	offer["job_id"] = item.JobId
+	offer["keyed_custom_fields"] = item.KeyedCustomFields
+	offer["opening"] = flattenJobOpening(ctx, item.Opening)
+	offer["resolved_at"] = item.ResolvedAt
+	offer["sent_at"] = item.SentAt
+	offer["starts_at"] = item.StartsAt
+	offer["status"] = item.Status
+	offer["version"] = item.Version
+	return offer
 }
