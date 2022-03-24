@@ -86,8 +86,11 @@ Read-Only:
 
 Read-Only:
 
+- **child_department_external_ids** (Set of String)
 - **child_ids** (Set of Number)
+- **external_id** (String)
 - **name** (String)
+- **parent_department_external_id** (String)
 - **parent_id** (Number)
 
 

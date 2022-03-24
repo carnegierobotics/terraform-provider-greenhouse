@@ -2,6 +2,7 @@ package greenhouse
 
 import (
 	"context"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -29,7 +30,7 @@ func resourceGreenhouseOfficeExists(d *schema.ResourceData, meta interface{}) (b
 	if err != nil {
 		return false, err
 	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "offices", id, context.TODO())
+	return greenhouse.Exists(meta.(*greenhouse.Client), context.TODO(), fmt.Sprintf("v1/offices/%d", id))
 }
 
 func resourceGreenhouseOfficeCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -39,7 +40,7 @@ func resourceGreenhouseOfficeCreate(ctx context.Context, d *schema.ResourceData,
 		PrimaryContactUserId: d.Get("primary_contact_user_id").(int),
 		ParentId:             d.Get("parent_id").(int),
 	}
-	id, err := greenhouse.CreateOffice(meta.(*greenhouse.Client), &createObject)
+	id, err := greenhouse.CreateOffice(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -53,15 +54,13 @@ func resourceGreenhouseOfficeRead(ctx context.Context, d *schema.ResourceData, m
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	obj, err := greenhouse.GetOffice(meta.(*greenhouse.Client), id)
+	obj, err := greenhouse.GetOffice(meta.(*greenhouse.Client), ctx, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	d.Set("name", obj.Name)
-	d.Set("location", flattenLocation(&obj.Location))
-	d.Set("primary_contact_user_id", obj.PrimaryContactUserId)
-	d.Set("parent_id", obj.ParentId)
-	d.Set("child_ids", obj.ChildIds)
+	for k, v := range flattenOffice(ctx, obj) {
+		d.Set(k, v)
+	}
 	return nil
 }
 
@@ -74,7 +73,7 @@ func resourceGreenhouseOfficeUpdate(ctx context.Context, d *schema.ResourceData,
 		Name:     d.Get("name").(string),
 		Location: d.Get("location.name").(string),
 	}
-	err = greenhouse.UpdateOffice(meta.(*greenhouse.Client), id, &updateObject)
+	err = greenhouse.UpdateOffice(meta.(*greenhouse.Client), ctx, id, &updateObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}

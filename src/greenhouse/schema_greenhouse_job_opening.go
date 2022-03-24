@@ -1,7 +1,10 @@
 package greenhouse
 
 import (
+	"context"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -49,29 +52,43 @@ func schemaGreenhouseJobOpening() map[string]*schema.Schema {
 	}
 }
 
-func flattenJobOpenings(list *[]greenhouse.JobOpening) []interface{} {
+func flattenJobOpenings(ctx context.Context, list *[]greenhouse.JobOpening) []interface{} {
+	tflog.Debug(ctx, "Flattening job opening list", "opening list", fmt.Sprintf("%+v", list))
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
-			opening := make(map[string]interface{})
-			opening["opening_id"] = item.OpeningId
-			opening["status"] = item.Status
-			opening["opened_at"] = item.OpenedAt
-			opening["closed_at"] = item.ClosedAt
-			opening["application_id"] = item.ApplicationId
-			opening["close_reason"] = flattenCloseReason(&item.CloseReason)
-			opening["custom_fields"] = item.CustomFields
-			flatList[i] = opening
+			flatList[i] = flattenJobOpening(ctx, &item)
 		}
+		tflog.Debug(ctx, "Flattened job opening list", "opening list", fmt.Sprintf("%+v", flatList))
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
-func flattenCloseReason(item *greenhouse.CloseReason) map[string]interface{} {
+func flattenJobOpening(ctx context.Context, item *greenhouse.JobOpening) map[string]interface{} {
+	opening := make(map[string]interface{})
+	opening["opening_id"] = item.OpeningId
+	opening["status"] = item.Status
+	opening["opened_at"] = item.OpenedAt
+	opening["closed_at"] = item.ClosedAt
+	opening["application_id"] = item.ApplicationId
+	if item.CloseReason != nil {
+		convertedCloseReason := greenhouse.TypeIdName(*item.CloseReason)
+		tflog.Debug(ctx, "Converted close reason", "reason", fmt.Sprintf("%+v", convertedCloseReason))
+		opening["close_reason"] = flattenTypeIdName(ctx, &convertedCloseReason)
+	} else {
+		opening["close_reason"] = nil
+	}
+	opening["custom_fields"] = item.CustomFields
+	return opening
+}
+
+func flattenCloseReason(ctx context.Context, item *greenhouse.CloseReason) map[string]interface{} {
+	tflog.Debug(ctx, "Flattening close reason", "reason", fmt.Sprintf("%+v", item))
 	flatItem := make(map[string]interface{})
 	if item.Name != "" {
 		flatItem["name"] = item.Name
 	}
+	tflog.Debug(ctx, "Flattened close reason", "reason", fmt.Sprintf("%+v", flatItem))
 	return flatItem
 }

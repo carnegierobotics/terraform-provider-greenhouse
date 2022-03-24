@@ -67,18 +67,21 @@ jobs:
   - name: apply-template
     old_name: apply-template
     plan:
-      - get: repo 
+      - get: repo-ci 
         trigger: true
         <<: *step-config
       - set_pipeline: self
-        file: repo/ci/pipeline.yml
+        file: repo-ci/pipeline.yml
         var_files: 
-          - repo/ci/vars.yml
+          - repo-ci/vars.yml
   - name: build
     <<: *job-config
     plan:
       - get: repo
         trigger: true
+        <<: *step-config
+      - get: repo-ci
+        trigger: false
         <<: *step-config
         passed: [apply-template]
       - get: build-image
@@ -86,7 +89,7 @@ jobs:
         <<: *step-config
       - task: build
         privileged: false 
-        file: repo/ci/tasks/build.yml
+        file: repo-ci/tasks/build.yml
         image: build-image
         input_mapping:
           repo: repo 

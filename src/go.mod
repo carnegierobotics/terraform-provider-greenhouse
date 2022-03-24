@@ -3,10 +3,12 @@ module github.com/carnegierobotics/terraform-provider-greenhouse
 go 1.17
 
 require (
-	github.com/carnegierobotics/greenhouse-client-go v0.0.20
+	github.com/carnegierobotics/greenhouse-client-go v0.0.24
 	github.com/hashicorp/terraform-plugin-log v0.2.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.10.1
 )
+
+//replace github.com/carnegierobotics/greenhouse-client-go => ../../greenhouse-client-go/src
 
 require (
 	cloud.google.com/go v0.65.0 // indirect
@@ -69,6 +71,7 @@ require (
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/oklog/run v1.0.0 // indirect
+	github.com/peterhellberg/link v1.1.0 // indirect
 	github.com/posener/complete v1.2.1 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/ulikunitz/xz v0.5.8 // indirect

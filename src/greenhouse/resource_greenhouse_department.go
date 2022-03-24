@@ -2,6 +2,7 @@ package greenhouse
 
 import (
 	"context"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -31,15 +32,15 @@ func resourceGreenhouseDepartmentExists(d *schema.ResourceData, meta interface{}
 	if err != nil {
 		return false, err
 	}
-	return greenhouse.Exists(meta.(*greenhouse.Client), "departments", id, context.TODO())
+	return greenhouse.Exists(meta.(*greenhouse.Client), context.TODO(), fmt.Sprintf("v1/departments/%d", id))
 }
 
 func resourceGreenhouseDepartmentCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	createObject := greenhouse.DepartmentCreateInfo{
+	createObject := greenhouse.Department{
 		Name:     d.Get("name").(string),
 		ParentId: d.Get("parent_id").(int),
 	}
-	id, err := greenhouse.CreateDepartment(meta.(*greenhouse.Client), &createObject)
+	id, err := greenhouse.CreateDepartment(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -53,13 +54,13 @@ func resourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceDat
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), id)
+	obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), ctx, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	d.Set("name", obj.Name)
-	d.Set("parent_id", obj.ParentId)
-	d.Set("child_ids", obj.ChildIds)
+	for k, v := range flattenDepartment(ctx, obj) {
+		d.Set(k, v)
+	}
 	return nil
 }
 
@@ -68,10 +69,10 @@ func resourceGreenhouseDepartmentUpdate(ctx context.Context, d *schema.ResourceD
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	updateObject := greenhouse.DepartmentUpdateInfo{
+	updateObject := greenhouse.Department{
 		Name: d.Get("name").(string),
 	}
-	err = greenhouse.UpdateDepartment(meta.(*greenhouse.Client), id, &updateObject)
+	err = greenhouse.UpdateDepartment(meta.(*greenhouse.Client), ctx, id, &updateObject)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}

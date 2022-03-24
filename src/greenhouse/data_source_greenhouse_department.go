@@ -1,64 +1,40 @@
 package greenhouse
 
 import (
+	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
 
 func dataSourceGreenhouseDepartment() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceGreenhouseDepartmentRead,
+		ReadContext: dataSourceGreenhouseDepartmentRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
-				Required: true,
-			},
-			"parent_id": {
-				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"child_ids": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeInt,
-				},
-			},
-			/* Not in our product tier
-			   "parent_department_external_id": {
-			     Type: schema.TypeString,
-			     Optional: true,
-			     Computed: true,
-			   },
-			   "child_department_external_ids": {
-			     Type: schema.TypeSet,
-			     Optional: true,
-			     Computed: true,
-			     Elem: &schema.Schema {
-			       Type: schema.TypeString,
-			     }
-			   },
-			   "external_id": {
-			     Type: schema.TypeString,
-			     Optional: true,
-			   }
-			*/
 		},
 	}
 }
 
-func dataSourceGreenhouseDepartmentRead(d *schema.ResourceData, meta interface{}) error {
-	id, err := strconv.Atoi(d.Id())
+func dataSourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	list, err := greenhouse.GetAllDepartments(meta.(*greenhouse.Client), ctx)
 	if err != nil {
-		return err
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	obj, err := greenhouse.GetDepartment(meta.(*greenhouse.Client), id)
-	if err != nil {
-		return err
+	name := d.Get("name").(string)
+	for _, department := range *list {
+		if department.Name == name {
+			d.SetId(strconv.Itoa(department.Id))
+			d.Set("child_department_external_ids", department.ChildDepartmentExternalIds)
+			d.Set("child_ids", department.ChildIds)
+			d.Set("parent_department_external_id", department.ParentDepartmentExternalId)
+			d.Set("parent_id", department.ParentId)
+			return nil
+		}
 	}
-	d.Set("name", obj.Name)
-	d.Set("parent_id", obj.ParentId)
-	d.Set("child_ids", obj.ChildIds)
 	return nil
 }

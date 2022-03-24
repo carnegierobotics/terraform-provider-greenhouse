@@ -1,0 +1,59 @@
+package greenhouse
+
+import (
+	"context"
+	"fmt"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
+)
+
+func resourceGreenhouseXXX() *schema.Resource {
+	return &schema.Resource{
+		CreateContext: resourceGreenhouseXXXCreate,
+		ReadContext:   resourceGreenhouseXXXRead,
+		UpdateContext: resourceGreenhouseXXXUpdate,
+		DeleteContext: resourceGreenhouseXXXDelete,
+		Exists:        resourceGreenhouseXXXExists,
+		Importer: &schema.ResourceImporter{
+			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
+				return []*schema.ResourceData{d}, nil
+			},
+		},
+		Schema: schemaGreenhouseXXX(),
+	}
+}
+
+func resourceGreenhouseXXXExists(d *schema.ResourceData, meta interface{}) (bool, error) {
+	id, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return false, err
+	}
+	return greenhouse.Exists(meta.(*greenhouse.Client), context.TODO(), fmt.Sprintf("v1/xxx/%d", id))
+}
+
+func resourceGreenhouseXXXCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Create is not supported for xxx."}}
+}
+
+func resourceGreenhouseXXXRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	id, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	obj, err := greenhouse.GetXXX(meta.(*greenhouse.Client), ctx, id)
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	// d.Set("xxx", TODO())
+	return nil
+}
+
+func resourceGreenhouseXXXUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Update is not supported for xxx."}}
+}
+
+func resourceGreenhouseXXXDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for xxx."}}
+}

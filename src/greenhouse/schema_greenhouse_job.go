@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -124,8 +126,8 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			Type:     schema.TypeSet,
 			Optional: true,
 			Elem: &schema.Resource{
-        Schema: schemaGreenhouseHiringTeam(),
-      },
+				Schema: schemaGreenhouseHiringTeam(),
+			},
 		},
 		"number_of_openings": {
 			Type:     schema.TypeInt,
@@ -150,4 +152,37 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func flattenJobs(ctx context.Context, list *[]greenhouse.Job) []interface{} {
+	if list != nil {
+		flatList := make([]interface{}, len(*list), len(*list))
+		for i, item := range *list {
+			flatList[i] = flattenJob(ctx, &item)
+		}
+		return flatList
+	}
+	return make([]interface{}, 0)
+}
+
+func flattenJob(ctx context.Context, item *greenhouse.Job) map[string]interface{} {
+	job := make(map[string]interface{})
+	job["closed_at"] = item.ClosedAt
+	job["confidential"] = item.Confidential
+	job["copied_from_id"] = item.CopiedFromId
+	job["created_at"] = item.CreatedAt
+	job["custom_fields"] = item.CustomFields
+	job["departments"] = flattenDepartments(ctx, &item.Departments)
+	job["hiring_team"] = flattenHiringTeam(ctx, &item.HiringTeam)
+	job["is_template"] = item.IsTemplate
+	job["job_name"] = item.Name
+	job["keyed_custom_fields"] = flattenKeyedCustomFields(ctx, &item.KeyedCustomFields)
+	job["notes"] = item.Notes
+	job["offices"] = flattenOffices(ctx, &item.Offices)
+	job["opened_at"] = item.OpenedAt
+	job["openings"] = flattenJobOpenings(ctx, &item.Openings)
+	job["requisition_id"] = item.RequisitionId
+	job["status"] = item.Status
+	job["updated_at"] = item.UpdatedAt
+	return job
 }
