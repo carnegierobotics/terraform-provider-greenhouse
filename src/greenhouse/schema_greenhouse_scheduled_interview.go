@@ -24,6 +24,10 @@ func schemaGreenhouseScheduledInterview() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
+		"interview_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
 		"interviewers": {
 			Type:     schema.TypeSet,
 			Optional: true,
@@ -53,7 +57,7 @@ func schemaGreenhouseScheduledInterview() map[string]*schema.Schema {
 		},
 		"status": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"video_conferencing_url": {
 			Type:     schema.TypeString,

@@ -19,7 +19,7 @@ func schemaGreenhouseTypeTypeValue() map[string]*schema.Schema {
 	}
 }
 
-func convertToTypeTypeValueList(list []interface{}) *[]greenhouse.TypeTypeValue {
+func inflateTypeTypeValues(list []interface{}) *[]greenhouse.TypeTypeValue {
 	newList := make([]greenhouse.TypeTypeValue, len(list))
 	for i := range list {
 		newList[i] = list[i].(greenhouse.TypeTypeValue)

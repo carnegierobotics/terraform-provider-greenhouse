@@ -188,7 +188,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 	}
 }
 
-func convertToApplicationList(list []interface{}) *[]greenhouse.Application {
+func inflateApplications(list []interface{}) *[]greenhouse.Application {
 	newList := make([]greenhouse.Application, len(list))
 	for i := range list {
 		newList[i] = list[i].(greenhouse.Application)

@@ -43,16 +43,16 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		LastName:             d.Get("last_name").(string),
 		Company:              d.Get("company").(string),
 		Title:                d.Get("title").(string),
-		PhoneNumbers:         *convertToTypeTypeValueList(d.Get("phone_numbers").(*schema.Set).List()),
-		Addresses:            *convertToTypeTypeValueList(d.Get("addresses").(*schema.Set).List()),
-		EmailAddresses:       *convertToTypeTypeValueList(d.Get("email_addresses").(*schema.Set).List()),
-		WebsiteAddresses:     *convertToTypeTypeValueList(d.Get("website_addresses").(*schema.Set).List()),
-		SocialMediaAddresses: *convertToTypeTypeValueList(d.Get("social_media_addresses").(*schema.Set).List()),
-		Educations:           *convertToEducationList(d.Get("educations").([]interface{})),
-		Employments:          *convertToEmploymentList(d.Get("employments").([]interface{})),
+		PhoneNumbers:         *inflateTypeTypeValues(d.Get("phone_numbers").(*schema.Set).List()),
+		Addresses:            *inflateTypeTypeValues(d.Get("addresses").(*schema.Set).List()),
+		EmailAddresses:       *inflateTypeTypeValues(d.Get("email_addresses").(*schema.Set).List()),
+		WebsiteAddresses:     *inflateTypeTypeValues(d.Get("website_addresses").(*schema.Set).List()),
+		SocialMediaAddresses: *inflateTypeTypeValues(d.Get("social_media_addresses").(*schema.Set).List()),
+		Educations:           *inflateEducations(d.Get("educations").([]interface{})),
+		Employments:          *inflateEmployments(d.Get("employments").([]interface{})),
 		Tags:                 *ConvertSliceInterfaceString(d.Get("tags").(*schema.Set).List()),
 		//CustomFields: d.Get("custom_fields").(*schema.Set)(map[string]interface{}),
-		ActivityFeedNotes: *convertToActivityFeedList(d.Get("activity_feed_notes").([]interface{})),
+		ActivityFeedNotes: *inflateActivityFeeds(d.Get("activity_feed_notes").([]interface{})),
 	}
 	tflog.Debug(ctx, fmt.Sprintf("Initial candidate: %+v", createObj))
 	var err error
@@ -94,7 +94,7 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		tflog.Debug(ctx, fmt.Sprintf("JSON will be: %s", string(jsonBody)))
 		id, err = greenhouse.CreateProspect(meta.(*greenhouse.Client), ctx, &createObj)
 	} else {
-		createObj.Applications = *convertToApplicationList(d.Get("applications").(*schema.Set).List())
+		createObj.Applications = *inflateApplications(d.Get("applications").(*schema.Set).List())
 		tflog.Debug(ctx, fmt.Sprintf("Creating candidate: %+v", createObj))
 		id, err = greenhouse.CreateCandidate(meta.(*greenhouse.Client), ctx, &createObj)
 	}
@@ -159,5 +159,6 @@ func resourceGreenhouseCandidateDelete(ctx context.Context, d *schema.ResourceDa
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	tflog.Debug(ctx, "Finished resourceGreenhouseCandidateDelete.")
+	d.SetId("")
 	return nil
 }

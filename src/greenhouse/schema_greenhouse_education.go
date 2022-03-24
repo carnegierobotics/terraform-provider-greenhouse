@@ -54,7 +54,7 @@ func schemaGreenhouseEducation() map[string]*schema.Schema {
 	}
 }
 
-func convertToEducationList(list []interface{}) *[]greenhouse.Education {
+func inflateEducations(list []interface{}) *[]greenhouse.Education {
 	newList := make([]greenhouse.Education, len(list))
 	for i := range list {
 		newList[i] = list[i].(greenhouse.Education)

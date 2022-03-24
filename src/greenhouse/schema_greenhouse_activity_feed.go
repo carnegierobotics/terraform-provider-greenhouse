@@ -35,7 +35,7 @@ func schemaGreenhouseActivityFeed() map[string]*schema.Schema {
 	}
 }
 
-func convertToActivityFeedList(list []interface{}) *[]greenhouse.ActivityFeed {
+func inflateActivityFeeds(list []interface{}) *[]greenhouse.ActivityFeed {
 	newList := make([]greenhouse.ActivityFeed, len(list))
 	for i := range list {
 		newList[i] = list[i].(greenhouse.ActivityFeed)

@@ -26,7 +26,7 @@ func schemaGreenhouseEmployment() map[string]*schema.Schema {
 	}
 }
 
-func convertToEmploymentList(list []interface{}) *[]greenhouse.Employment {
+func inflateEmployments(list []interface{}) *[]greenhouse.Employment {
 	newList := make([]greenhouse.Employment, len(list))
 	for i := range list {
 		newList[i] = list[i].(greenhouse.Employment)

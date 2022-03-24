@@ -36,7 +36,7 @@ func resourceGreenhouseDepartmentExists(d *schema.ResourceData, meta interface{}
 }
 
 func resourceGreenhouseDepartmentCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	createObject := greenhouse.DepartmentCreateInfo{
+	createObject := greenhouse.Department{
 		Name:     d.Get("name").(string),
 		ParentId: d.Get("parent_id").(int),
 	}
@@ -69,7 +69,7 @@ func resourceGreenhouseDepartmentUpdate(ctx context.Context, d *schema.ResourceD
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	updateObject := greenhouse.DepartmentUpdateInfo{
+	updateObject := greenhouse.Department{
 		Name: d.Get("name").(string),
 	}
 	err = greenhouse.UpdateDepartment(meta.(*greenhouse.Client), ctx, id, &updateObject)
