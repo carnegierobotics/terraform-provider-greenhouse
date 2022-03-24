@@ -18,24 +18,21 @@ func schemaGreenhouseEEOC() map[string]*schema.Schema {
 		},
 		"disability_status": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseEEOCAnswer(),
 			},
 		},
 		"gender": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseEEOCAnswer(),
 			},
 		},
 		"race": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseEEOCAnswer(),
 			},
@@ -46,8 +43,7 @@ func schemaGreenhouseEEOC() map[string]*schema.Schema {
 		},
 		"veteran_status": {
 			Type:     schema.TypeSet,
-			MaxItems: 1,
-			Optional: true,
+			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseEEOCAnswer(),
 			},

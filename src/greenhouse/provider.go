@@ -75,7 +75,7 @@ func Provider() *schema.Provider {
 			"greenhouse_education_degree":          dataSourceGreenhouseEducationDegree(),
 			"greenhouse_education_discipline":      dataSourceGreenhouseEducationDiscipline(),
 			"greenhouse_education_school":          dataSourceGreenhouseEducationSchool(),
-			"greenhouse_education_eeoc":            dataSourceGreenhouseEEOC(),
+			"greenhouse_eeoc":                      dataSourceGreenhouseEEOC(),
 			"greenhouse_email_template":            dataSourceGreenhouseEmailTemplate(),
 			"greenhouse_future_job_permissions":    dataSourceGreenhouseFutureJobPermissions(),
 			"greenhouse_job":                       dataSourceGreenhouseJob(),
