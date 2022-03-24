@@ -81,7 +81,7 @@ func Provider() *schema.Provider {
 			"greenhouse_job":                       dataSourceGreenhouseJob(),
 			"greenhouse_job_openings":              dataSourceGreenhouseJobOpenings(),
 			"greenhouse_job_permissions":           dataSourceGreenhouseJobPermissions(),
-			"greenhouse_job_post":                  dataSourceGreenhouseJobPost(),
+			"greenhouse_job_posts":                  dataSourceGreenhouseJobPosts(),
 			"greenhouse_job_stage":                 dataSourceGreenhouseJobStage(),
 			"greenhouse_jobs":                      dataSourceGreenhouseJobs(),
 			"greenhouse_offer":                     dataSourceGreenhouseOffer(),
