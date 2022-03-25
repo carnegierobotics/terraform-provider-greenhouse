@@ -28,7 +28,8 @@ description: |-
 
 ### Read-Only
 
-- **candidates** (Set of Object) (see [below for nested schema](#nestedatt--candidates))
+- **candidates** (List of Object) (see [below for nested schema](#nestedatt--candidates))
+- **names** (List of String)
 
 <a id="nestedatt--candidates"></a>
 ### Nested Schema for `candidates`
@@ -40,9 +41,12 @@ Read-Only:
 - **application** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application))
 - **application_ids** (Set of Number)
 - **applications** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications))
+- **attachments** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--attachments))
 - **can_email** (Boolean)
 - **company** (String)
 - **coordinator** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--coordinator))
+- **created_at** (String)
+- **created_by** (String)
 - **custom_fields** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--custom_fields))
 - **educations** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--educations))
 - **email_addresses** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--email_addresses))
@@ -50,13 +54,16 @@ Read-Only:
 - **first_name** (String)
 - **is_private** (Boolean)
 - **is_prospect** (Boolean)
+- **last_activity** (String)
 - **last_name** (String)
 - **linked_user_ids** (Set of Number)
 - **phone_numbers** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--phone_numbers))
+- **photo_url** (String)
 - **recruiter** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--recruiter))
 - **social_media_addresses** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--social_media_addresses))
 - **tags** (Set of String)
 - **title** (String)
+- **updated_at** (String)
 - **website_addresses** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--website_addresses))
 
 <a id="nestedobjatt--candidates--activity_feed_notes"></a>
@@ -348,9 +355,33 @@ Read-Only:
 
 Read-Only:
 
-- **prospect_owner** (String)
-- **prospect_pool** (String)
-- **prospect_stage** (String)
+- **prospect_owner** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospect_detail--prospect_owner))
+- **prospect_pool** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospect_detail--prospect_pool))
+- **prospect_stage** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospect_detail--prospect_stage))
+
+<a id="nestedobjatt--candidates--application--prospect_detail--prospect_owner"></a>
+### Nested Schema for `candidates.application.prospect_detail.prospect_stage`
+
+Read-Only:
+
+- **name** (String)
+
+
+<a id="nestedobjatt--candidates--application--prospect_detail--prospect_pool"></a>
+### Nested Schema for `candidates.application.prospect_detail.prospect_stage`
+
+Read-Only:
+
+- **name** (String)
+
+
+<a id="nestedobjatt--candidates--application--prospect_detail--prospect_stage"></a>
+### Nested Schema for `candidates.application.prospect_detail.prospect_stage`
+
+Read-Only:
+
+- **name** (String)
+
 
 
 <a id="nestedobjatt--candidates--application--prospective_department"></a>
@@ -605,9 +636,33 @@ Read-Only:
 
 Read-Only:
 
-- **prospect_owner** (String)
-- **prospect_pool** (String)
-- **prospect_stage** (String)
+- **prospect_owner** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospect_detail--prospect_owner))
+- **prospect_pool** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospect_detail--prospect_pool))
+- **prospect_stage** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospect_detail--prospect_stage))
+
+<a id="nestedobjatt--candidates--applications--prospect_detail--prospect_owner"></a>
+### Nested Schema for `candidates.applications.prospect_detail.prospect_stage`
+
+Read-Only:
+
+- **name** (String)
+
+
+<a id="nestedobjatt--candidates--applications--prospect_detail--prospect_pool"></a>
+### Nested Schema for `candidates.applications.prospect_detail.prospect_stage`
+
+Read-Only:
+
+- **name** (String)
+
+
+<a id="nestedobjatt--candidates--applications--prospect_detail--prospect_stage"></a>
+### Nested Schema for `candidates.applications.prospect_detail.prospect_stage`
+
+Read-Only:
+
+- **name** (String)
+
 
 
 <a id="nestedobjatt--candidates--applications--prospective_department"></a>
@@ -662,6 +717,19 @@ Read-Only:
 - **name** (String)
 
 
+
+
+<a id="nestedobjatt--candidates--attachments"></a>
+### Nested Schema for `candidates.attachments`
+
+Read-Only:
+
+- **content** (String)
+- **content_type** (String)
+- **filename** (String)
+- **type** (String)
+- **url** (String)
+- **visibility** (String)
 
 
 <a id="nestedobjatt--candidates--coordinator"></a>

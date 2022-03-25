@@ -37,6 +37,7 @@ description: |-
 - **id** (String) The ID of this resource.
 - **is_private** (Boolean) This candidate is private.
 - **phone_numbers** (Block Set) The candidate's phone number(s). (see [below for nested schema](#nestedblock--phone_numbers))
+- **photo_url** (String)
 - **recruiter** (Block List, Max: 1) The candidate's recruiter. (see [below for nested schema](#nestedblock--recruiter))
 - **social_media_addresses** (Block Set) The candidate's social media address(es). (see [below for nested schema](#nestedblock--social_media_addresses))
 - **tags** (Set of String) Tags for this candidate.
@@ -45,8 +46,13 @@ description: |-
 
 ### Read-Only
 
+- **attachments** (Block Set) (see [below for nested schema](#nestedblock--attachments))
 - **can_email** (Boolean)
+- **created_at** (String)
+- **created_by** (String)
+- **last_activity** (String)
 - **linked_user_ids** (Set of Number)
+- **updated_at** (String)
 
 <a id="nestedblock--activity_feed_notes"></a>
 ### Nested Schema for `activity_feed_notes`
@@ -229,9 +235,33 @@ Optional:
 
 Optional:
 
-- **prospect_owner** (String)
-- **prospect_pool** (String)
-- **prospect_stage** (String)
+- **prospect_owner** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--prospect_detail--prospect_owner))
+- **prospect_pool** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--prospect_detail--prospect_pool))
+- **prospect_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--prospect_detail--prospect_stage))
+
+<a id="nestedblock--application--prospect_detail--prospect_owner"></a>
+### Nested Schema for `application.prospect_detail.prospect_owner`
+
+Required:
+
+- **name** (String)
+
+
+<a id="nestedblock--application--prospect_detail--prospect_pool"></a>
+### Nested Schema for `application.prospect_detail.prospect_pool`
+
+Required:
+
+- **name** (String)
+
+
+<a id="nestedblock--application--prospect_detail--prospect_stage"></a>
+### Nested Schema for `application.prospect_detail.prospect_stage`
+
+Required:
+
+- **name** (String)
+
 
 
 <a id="nestedblock--application--referrer"></a>
@@ -495,9 +525,33 @@ Optional:
 
 Optional:
 
-- **prospect_owner** (String)
-- **prospect_pool** (String)
-- **prospect_stage** (String)
+- **prospect_owner** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--prospect_detail--prospect_owner))
+- **prospect_pool** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--prospect_detail--prospect_pool))
+- **prospect_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--prospect_detail--prospect_stage))
+
+<a id="nestedblock--applications--prospect_detail--prospect_owner"></a>
+### Nested Schema for `applications.prospect_detail.prospect_owner`
+
+Required:
+
+- **name** (String)
+
+
+<a id="nestedblock--applications--prospect_detail--prospect_pool"></a>
+### Nested Schema for `applications.prospect_detail.prospect_pool`
+
+Required:
+
+- **name** (String)
+
+
+<a id="nestedblock--applications--prospect_detail--prospect_stage"></a>
+### Nested Schema for `applications.prospect_detail.prospect_stage`
+
+Required:
+
+- **name** (String)
+
 
 
 <a id="nestedblock--applications--referrer"></a>
@@ -830,5 +884,18 @@ Required:
 
 - **type** (String)
 - **value** (String)
+
+
+<a id="nestedblock--attachments"></a>
+### Nested Schema for `attachments`
+
+Read-Only:
+
+- **content** (String)
+- **content_type** (String)
+- **filename** (String)
+- **type** (String)
+- **url** (String)
+- **visibility** (String)
 
 

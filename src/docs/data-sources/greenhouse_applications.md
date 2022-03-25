@@ -226,9 +226,33 @@ Read-Only:
 
 Read-Only:
 
-- **prospect_owner** (String)
-- **prospect_pool** (String)
-- **prospect_stage** (String)
+- **prospect_owner** (List of Object) (see [below for nested schema](#nestedobjatt--applications--prospect_detail--prospect_owner))
+- **prospect_pool** (List of Object) (see [below for nested schema](#nestedobjatt--applications--prospect_detail--prospect_pool))
+- **prospect_stage** (List of Object) (see [below for nested schema](#nestedobjatt--applications--prospect_detail--prospect_stage))
+
+<a id="nestedobjatt--applications--prospect_detail--prospect_owner"></a>
+### Nested Schema for `applications.prospect_detail.prospect_owner`
+
+Read-Only:
+
+- **name** (String)
+
+
+<a id="nestedobjatt--applications--prospect_detail--prospect_pool"></a>
+### Nested Schema for `applications.prospect_detail.prospect_pool`
+
+Read-Only:
+
+- **name** (String)
+
+
+<a id="nestedobjatt--applications--prospect_detail--prospect_stage"></a>
+### Nested Schema for `applications.prospect_detail.prospect_stage`
+
+Read-Only:
+
+- **name** (String)
+
 
 
 <a id="nestedobjatt--applications--prospective_department"></a>
