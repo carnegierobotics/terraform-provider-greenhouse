@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -48,10 +49,12 @@ func schemaGreenhouseApproval() map[string]*schema.Schema {
 
 func flattenApprovals(ctx context.Context, list *[]greenhouse.Approval) []interface{} {
 	if list != nil {
+		tflog.Debug(ctx, "Flattening approvals.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenApproval(ctx, &item)
 		}
+		tflog.Debug(ctx, "Finished flattening approvals.")
 		return flatList
 	}
 	return make([]interface{}, 0, 0)

@@ -18,16 +18,16 @@ func schemaGreenhouseJobStage() map[string]*schema.Schema {
 			},
 		},
 		"id": {
-			Type:          schema.TypeInt,
-			Optional:      true,
+			Type:     schema.TypeInt,
+			Optional: true,
 		},
 		"job_id": {
-			Type:          schema.TypeInt,
-			Optional:      true,
+			Type:     schema.TypeInt,
+			Optional: true,
 		},
 		"name": {
-			Type:          schema.TypeString,
-			Optional:      true,
+			Type:     schema.TypeString,
+			Optional: true,
 		},
 		"priority": {
 			Type:     schema.TypeInt,

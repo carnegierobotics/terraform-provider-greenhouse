@@ -176,7 +176,7 @@ func flattenJob(ctx context.Context, item *greenhouse.Job) map[string]interface{
 	job["hiring_team"] = flattenHiringTeam(ctx, &item.HiringTeam)
 	job["is_template"] = item.IsTemplate
 	job["job_name"] = item.Name
-	job["keyed_custom_fields"] = flattenKeyedCustomFields(ctx, &item.KeyedCustomFields)
+	//job["keyed_custom_fields"] = flattenKeyedCustomFields(ctx, &item.KeyedCustomFields)
 	job["notes"] = item.Notes
 	job["offices"] = flattenOffices(ctx, &item.Offices)
 	job["opened_at"] = item.OpenedAt

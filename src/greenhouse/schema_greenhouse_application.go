@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -198,16 +199,19 @@ func inflateApplications(list []interface{}) *[]greenhouse.Application {
 
 func flattenApplications(ctx context.Context, list *[]greenhouse.Application) []interface{} {
 	if list != nil {
+		tflog.Debug(ctx, "Flattening applications.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenApplication(ctx, &item)
 		}
+		tflog.Debug(ctx, "Finished flattening applications.")
 		return flatList
 	}
 	return make([]interface{}, 0, 0)
 }
 
 func flattenApplication(ctx context.Context, item *greenhouse.Application) map[string]interface{} {
+	tflog.Debug(ctx, "Flattening one application.")
 	app := make(map[string]interface{})
 	app["answers"] = flattenAnswers(ctx, &item.Answers)
 	app["applied_at"] = item.AppliedAt
@@ -231,5 +235,6 @@ func flattenApplication(ctx context.Context, item *greenhouse.Application) map[s
 	app["rejection_reason"] = item.RejectionReason
 	app["source"] = flattenSource(ctx, item.Source)
 	app["status"] = item.Status
+	tflog.Debug(ctx, "Finished flattening application.")
 	return app
 }

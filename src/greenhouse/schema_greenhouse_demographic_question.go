@@ -38,17 +38,6 @@ func schemaGreenhouseDemographicQuestion() map[string]*schema.Schema {
 	}
 }
 
-func flattenDemographicQuestions(ctx context.Context, list *[]greenhouse.DemographicQuestion) []interface{} {
-	if list != nil {
-		flatList := make([]interface{}, len(*list), len(*list))
-		for i, item := range *list {
-			flatList[i] = flattenDemographicQuestion(ctx, &item)
-		}
-		return flatList
-	}
-	return make([]interface{}, 0, 0)
-}
-
 func flattenDemographicQuestion(ctx context.Context, item *greenhouse.DemographicQuestion) map[string]interface{} {
 	question := make(map[string]interface{})
 	question["active"] = item.Active

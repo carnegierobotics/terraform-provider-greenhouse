@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -21,18 +22,22 @@ func schemaGreenhouseAnswer() map[string]*schema.Schema {
 
 func flattenAnswers(ctx context.Context, list *[]greenhouse.Answer) []interface{} {
 	if list != nil {
+		tflog.Debug(ctx, "Flattening answers.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenAnswer(ctx, &item)
 		}
+		tflog.Debug(ctx, "Finished flattening answers.")
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenAnswer(ctx context.Context, item *greenhouse.Answer) map[string]interface{} {
+	tflog.Debug(ctx, "Flattening one answer.")
 	answer := make(map[string]interface{})
 	answer["question"] = item.Question
 	answer["answer"] = item.Answer
+	tflog.Debug(ctx, "Finished flattening answer.")
 	return answer
 }

@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -32,21 +33,25 @@ func schemaGreenhouseActivity() map[string]*schema.Schema {
 
 func flattenActivities(ctx context.Context, list *[]greenhouse.Activity) []interface{} {
 	if list != nil {
+		tflog.Debug(ctx, "Flattening activities.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, activity := range *list {
-			activity, _ := flattenActivity(ctx, &activity)
+			activity := flattenActivity(ctx, &activity)
 			flatList[i] = activity
 		}
+		tflog.Debug(ctx, "Finished flattening activities.")
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
-func flattenActivity(ctx context.Context, item *greenhouse.Activity) (map[string]interface{}, error) {
+func flattenActivity(ctx context.Context, item *greenhouse.Activity) map[string]interface{} {
+	tflog.Debug(ctx, "Flattening one activity.")
 	activity := make(map[string]interface{})
 	activity["body"] = item.Body
 	activity["created_at"] = item.CreatedAt
 	activity["subject"] = item.Subject
-	activity["user"] = flattenUserBasics(ctx, item.User)
-	return activity, nil
+	activity["user"] = flattenUsersBasics(ctx, &[]greenhouse.User{*item.User})
+	tflog.Debug(ctx, "Finished flattening activity.")
+	return activity
 }

@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -46,23 +47,27 @@ func schemaGreenhouseEmail() map[string]*schema.Schema {
 
 func flattenEmails(ctx context.Context, list *[]greenhouse.Email) []interface{} {
 	if list != nil {
+		tflog.Debug(ctx, "Flattening emails.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, email := range *list {
 			email := flattenEmail(ctx, &email)
 			flatList[i] = email
 		}
+		tflog.Debug(ctx, "Finished flattening emails.")
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenEmail(ctx context.Context, item *greenhouse.Email) map[string]interface{} {
+	tflog.Debug(ctx, "Flattening one email.")
 	email := make(map[string]interface{})
 	email["body"] = item.Body
 	email["cc"] = item.Cc
 	email["created_at"] = item.CreatedAt
 	email["subject"] = item.Subject
 	email["to"] = item.To
-	email["user"] = flattenUserBasics(ctx, item.User)
+	email["user"] = flattenUsersBasics(ctx, &[]greenhouse.User{*item.User})
+	tflog.Debug(ctx, "Finished flattening email.")
 	return email
 }

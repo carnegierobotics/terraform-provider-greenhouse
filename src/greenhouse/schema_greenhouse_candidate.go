@@ -49,6 +49,13 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 				Schema: schemaGreenhouseApplication(),
 			},
 		},
+		"attachments": {
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseAttachment(),
+			},
+		},
 		"can_email": {
 			Type:     schema.TypeBool,
 			Computed: true,
@@ -66,6 +73,14 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseRecruiter(),
 			},
+		},
+		"created_at": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"created_by": {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 		"custom_fields": {
 			Type:        schema.TypeSet,
@@ -114,6 +129,10 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Description: "This candidate is a prospect.",
 			Required:    true,
 		},
+		"last_activity": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 		"last_name": {
 			Type:        schema.TypeString,
 			Description: "The candidate's last name.",
@@ -133,6 +152,10 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeTypeValue(),
 			},
+		},
+		"photo_url": {
+			Type:     schema.TypeString,
+			Optional: true,
 		},
 		"recruiter": {
 			Type:        schema.TypeList,
@@ -163,6 +186,10 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Type:        schema.TypeString,
 			Description: "The candidate's title.",
 			Optional:    true,
+		},
+		"updated_at": {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 		"website_addresses": {
 			Type:        schema.TypeSet,

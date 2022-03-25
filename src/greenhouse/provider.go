@@ -69,6 +69,7 @@ func Provider() *schema.Provider {
 			"greenhouse_demographic_answer":        dataSourceGreenhouseDemographicAnswer(),
 			"greenhouse_demographic_answer_option": dataSourceGreenhouseDemographicAnswerOption(),
 			"greenhouse_demographic_question":      dataSourceGreenhouseDemographicQuestion(),
+			"greenhouse_demographic_questions":     dataSourceGreenhouseDemographicQuestions(),
 			"greenhouse_demographic_question_set":  dataSourceGreenhouseDemographicQuestionSet(),
 			"greenhouse_department":                dataSourceGreenhouseDepartment(),
 			"greenhouse_departments":               dataSourceGreenhouseDepartments(),
