@@ -22,7 +22,7 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"emails": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
@@ -42,7 +42,7 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 			Required: true,
 		},
 		"linked_candidate_ids": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,
@@ -70,6 +70,18 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
+}
+
+func inflateUsers(ctx context.Context, source interface{}) *[]greenhouse.User {
+	var list []greenhouse.User
+	convertType(ctx, source, list)
+	return &list
+}
+
+func inflateUser(ctx context.Context, source map[string]interface{}) *greenhouse.User {
+	var item greenhouse.User
+	convertType(ctx, source, item)
+	return &item
 }
 
 func flattenUser(ctx context.Context, item *greenhouse.User) map[string]interface{} {

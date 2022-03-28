@@ -35,6 +35,24 @@ func schemaGreenhouseAttachment() map[string]*schema.Schema {
 	}
 }
 
+func inflateAttachments(ctx context.Context, source interface{}) *[]greenhouse.Attachment {
+	var list []greenhouse.Attachment
+	/*
+		list := make([]greenhouse.Attachment, len(source))
+		for i, item := range source {
+			list[i] = item.(greenhouse.Attachment)
+		}
+	*/
+	convertType(ctx, source, list)
+	return &list
+}
+
+func inflateAttachment(ctx context.Context, item map[string]interface{}) *greenhouse.Attachment {
+	var attachment greenhouse.Attachment
+	convertType(ctx, item, attachment)
+	return &attachment
+}
+
 func flattenAttachments(ctx context.Context, list *[]greenhouse.Attachment) []interface{} {
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))

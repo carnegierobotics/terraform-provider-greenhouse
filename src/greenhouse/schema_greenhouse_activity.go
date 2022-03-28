@@ -22,7 +22,7 @@ func schemaGreenhouseActivity() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"user": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUserBasics(),

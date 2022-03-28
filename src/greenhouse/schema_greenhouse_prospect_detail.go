@@ -35,6 +35,12 @@ func schemaGreenhouseProspectDetail() map[string]*schema.Schema {
 	}
 }
 
+func inflateProspectDetail(ctx context.Context, source interface{}) *greenhouse.ProspectDetail {
+	var item greenhouse.ProspectDetail
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenProspectDetail(ctx context.Context, item *greenhouse.ProspectDetail) map[string]interface{} {
 	detail := make(map[string]interface{})
 	detail["prospect_owner"] = flattenTypeIdName(ctx, &item.ProspectOwner)

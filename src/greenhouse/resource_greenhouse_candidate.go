@@ -94,7 +94,7 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		tflog.Debug(ctx, fmt.Sprintf("JSON will be: %s", string(jsonBody)))
 		id, err = greenhouse.CreateProspect(meta.(*greenhouse.Client), ctx, &createObj)
 	} else {
-		createObj.Applications = *inflateApplications(d.Get("applications").(*schema.Set).List())
+		createObj.Applications = *inflateApplications(ctx, d.Get("applications").([]interface{}))
 		tflog.Debug(ctx, fmt.Sprintf("Creating candidate: %+v", createObj))
 		id, err = greenhouse.CreateCandidate(meta.(*greenhouse.Client), ctx, &createObj)
 	}

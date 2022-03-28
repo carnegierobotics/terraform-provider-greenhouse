@@ -54,6 +54,18 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 	}
 }
 
+func inflateOffices(ctx context.Context, source interface{}) *[]greenhouse.Office {
+	var list []greenhouse.Office
+	convertType(ctx, source, list)
+	return &list
+}
+
+func inflateOffice(ctx context.Context, source interface{}) *greenhouse.Office {
+	var item greenhouse.Office
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenOffices(ctx context.Context, list *[]greenhouse.Office) []interface{} {
 	tflog.Debug(ctx, "Flattening office list", "officelist", fmt.Sprintf("%+v", list))
 	if list != nil {

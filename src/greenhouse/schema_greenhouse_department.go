@@ -46,6 +46,18 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 	}
 }
 
+func inflateDepartments(ctx context.Context, source interface{}) *[]greenhouse.Department {
+	var list []greenhouse.Department
+	convertType(ctx, source, list)
+	return &list
+}
+
+func inflateDepartment(ctx context.Context, source interface{}) *greenhouse.Department {
+	var item greenhouse.Department
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenDepartments(ctx context.Context, list *[]greenhouse.Department) []interface{} {
 	tflog.Debug(ctx, "Flattening department list", "deptlist", fmt.Sprintf("%+v", list))
 	if list != nil {

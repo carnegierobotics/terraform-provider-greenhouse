@@ -23,6 +23,18 @@ func schemaGreenhouseKeyedCustomField() map[string]*schema.Schema {
 	}
 }
 
+func inflateKeyedCustomFields(ctx context.Context, source interface{}) *map[string]greenhouse.KeyedCustomField {
+	var list map[string]greenhouse.KeyedCustomField
+	convertType(ctx, source, list)
+	return &list
+}
+
+func inflateKeyedCustomField(ctx context.Context, source map[string]interface{}) *greenhouse.KeyedCustomField {
+	var item greenhouse.KeyedCustomField
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenKeyedCustomFields(ctx context.Context, list *map[string]greenhouse.KeyedCustomField) map[string]interface{} {
 	flatMap := make(map[string]interface{})
 	for k, v := range *list {

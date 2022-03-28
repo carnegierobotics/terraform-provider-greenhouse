@@ -20,6 +20,18 @@ func schemaGreenhouseAnswer() map[string]*schema.Schema {
 	}
 }
 
+func inflateAnswers(ctx context.Context, source interface{}) *[]greenhouse.Answer {
+	var list []greenhouse.Answer
+	convertType(ctx, source, list)
+	return &list
+}
+
+func inflateAnswer(ctx context.Context, source map[string]interface{}) *greenhouse.Answer {
+	var item greenhouse.Answer
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenAnswers(ctx context.Context, list *[]greenhouse.Answer) []interface{} {
 	if list != nil {
 		tflog.Debug(ctx, "Flattening answers.")

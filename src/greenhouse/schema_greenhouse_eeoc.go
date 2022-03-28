@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 )
 
 func schemaGreenhouseEEOC() map[string]*schema.Schema {
@@ -54,7 +55,7 @@ func schemaGreenhouseEEOC() map[string]*schema.Schema {
 func flattenEEOCAnswer(ctx context.Context, item *greenhouse.EEOCAnswer) map[string]interface{} {
 	answer := make(map[string]interface{})
 	answer["description"] = item.Description
-	answer["id"] = item.Id
+	answer["id"] = strconv.Itoa(item.Id)
 	answer["message"] = item.Message
 	return answer
 }

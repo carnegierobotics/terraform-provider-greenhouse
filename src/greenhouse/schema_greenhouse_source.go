@@ -28,6 +28,12 @@ func schemaGreenhouseSource() map[string]*schema.Schema {
 	}
 }
 
+func inflateSource(ctx context.Context, source interface{}) *greenhouse.Source {
+	var item greenhouse.Source
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenSource(ctx context.Context, item *greenhouse.Source) map[string]interface{} {
 	source := make(map[string]interface{})
 	source["public_name"] = item.PublicName

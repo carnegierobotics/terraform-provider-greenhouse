@@ -1,6 +1,8 @@
 package greenhouse
 
 import (
+	"context"
+	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -28,4 +30,10 @@ func schemaGreenhouseRejectionReason() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func inflateRejectionReason(ctx context.Context, source interface{}) *greenhouse.RejectionReason {
+	var item greenhouse.RejectionReason
+	convertType(ctx, source, item)
+	return &item
 }

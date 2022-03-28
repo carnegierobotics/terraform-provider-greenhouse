@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 )
 
 func schemaGreenhouseJobBoard() map[string]*schema.Schema {
@@ -22,7 +23,7 @@ func schemaGreenhouseJobBoard() map[string]*schema.Schema {
 func flattenJobBoard(ctx context.Context, item *greenhouse.JobBoard) map[string]interface{} {
 	board := make(map[string]interface{})
 	board["company_name"] = item.CompanyName
-	board["id"] = item.Id
+	board["id"] = strconv.Itoa(item.Id)
 	board["url_token"] = item.UrlToken
 	return board
 }

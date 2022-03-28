@@ -21,6 +21,12 @@ func schemaGreenhouseLocation() map[string]*schema.Schema {
 	}
 }
 
+func inflateLocation(ctx context.Context, source interface{}) *greenhouse.Location {
+	var item greenhouse.Location
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenLocation(ctx context.Context, item *greenhouse.Location) []interface{} {
 	tflog.Debug(ctx, "Flattening location", "location", fmt.Sprintf("%+v", item))
 	location := make([]interface{}, 1, 1)

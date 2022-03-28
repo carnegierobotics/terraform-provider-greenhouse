@@ -154,6 +154,18 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 	}
 }
 
+func inflateJobs(ctx context.Context, source interface{}) *[]greenhouse.Job {
+	var list []greenhouse.Job
+	convertType(ctx, source, list)
+	return &list
+}
+
+func inflateJob(ctx context.Context, source map[string]interface{}) *greenhouse.Job {
+	var item greenhouse.Job
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenJobs(ctx context.Context, list *[]greenhouse.Job) []interface{} {
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))

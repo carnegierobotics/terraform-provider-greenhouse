@@ -27,6 +27,12 @@ func inflateTypeTypeValues(list []interface{}) *[]greenhouse.TypeTypeValue {
 	return &newList
 }
 
+func inflateTypeTypeValue(ctx context.Context, source interface{}) *greenhouse.TypeTypeValue {
+	var item greenhouse.TypeTypeValue
+	convertType(ctx, source, item)
+	return &item
+}
+
 func flattenTypeTypeValues(ctx context.Context, list *[]greenhouse.TypeTypeValue) []interface{} {
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
