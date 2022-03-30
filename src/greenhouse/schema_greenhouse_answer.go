@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -20,16 +21,28 @@ func schemaGreenhouseAnswer() map[string]*schema.Schema {
 	}
 }
 
-func inflateAnswers(ctx context.Context, source interface{}) *[]greenhouse.Answer {
-	var list []greenhouse.Answer
-	convertType(ctx, source, list)
-	return &list
+func inflateAnswers(ctx context.Context, source *[]interface{}) (*[]greenhouse.Answer, diag.Diagnostics) {
+	list := make([]greenhouse.Answer, len(*source), len(*source))
+	for i, item := range *source {
+    itemMap := item.(map[string]interface{})
+    obj, err := inflateAnswer(ctx, &itemMap)
+    if err != nil {
+      return nil, err
+    }
+    list[i] = *obj
+  }
+	return &list, nil
 }
 
-func inflateAnswer(ctx context.Context, source map[string]interface{}) *greenhouse.Answer {
-	var item greenhouse.Answer
-	convertType(ctx, source, item)
-	return &item
+func inflateAnswer(ctx context.Context, source *map[string]interface{}) (*greenhouse.Answer, diag.Diagnostics) {
+	var obj greenhouse.Answer
+  if v, ok := (*source)["answer"].(string); ok && len(v) > 0 {
+    obj.Answer = v
+  }
+  if v, ok := (*source)["question"].(string); ok && len(v) > 0 {
+    obj.Question = v
+  }
+	return &obj, nil
 }
 
 func flattenAnswers(ctx context.Context, list *[]greenhouse.Answer) []interface{} {

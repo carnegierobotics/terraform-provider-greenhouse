@@ -75,7 +75,7 @@ Read-Only:
 - **body** (String)
 - **created_at** (String)
 - **subject** (String)
-- **user** (Set of Object) (see [below for nested schema](#nestedobjatt--activity_feed_notes--activities--user))
+- **user** (List of Object) (see [below for nested schema](#nestedobjatt--activity_feed_notes--activities--user))
 
 <a id="nestedobjatt--activity_feed_notes--activities--user"></a>
 ### Nested Schema for `activity_feed_notes.activities.user`
@@ -153,37 +153,43 @@ Required:
 
 Optional:
 
-- **credited_to** (Block Set, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--application--credited_to))
-- **current_stage** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--application--current_stage))
+- **advance** (Boolean)
+- **credited_to** (Block List, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--application--credited_to))
+- **current_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--current_stage))
 - **custom_fields** (Map of String)
-- **from_stage_id** (Number)
 - **hire** (Boolean)
-- **keyed_custom_fields** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--application--keyed_custom_fields))
+- **initial_stage_id** (Number)
+- **job_id** (Number)
+- **job_ids** (List of Number)
+- **keyed_custom_fields** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--keyed_custom_fields))
 - **location** (Block List, Max: 1) The contents of a location question on a job post. (see [below for nested schema](#nestedblock--application--location))
-- **new_job_id** (Number)
-- **new_stage_id** (Number)
-- **prospect_detail** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--application--prospect_detail))
+- **prospect** (Boolean) The candidate is a prospect and has not yet applied.
+- **prospect_detail** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--prospect_detail))
+- **prospect_owner_id** (Number)
 - **prospect_pool_id** (Number)
 - **prospect_pool_stage_id** (Number)
 - **prospect_stage_id** (Number)
-- **referrer** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--application--referrer))
+- **prospective_department_id** (Number)
+- **prospective_office_id** (Number)
+- **referrer** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--referrer))
 - **reject** (Boolean)
+- **rejection_reason** (Block List) (see [below for nested schema](#nestedblock--application--rejection_reason))
+- **source** (Block List) (see [below for nested schema](#nestedblock--application--source))
 - **source_id** (Number)
 
 Read-Only:
 
-- **answers** (Set of Object) (see [below for nested schema](#nestedatt--application--answers))
+- **answers** (List of Object) (see [below for nested schema](#nestedatt--application--answers))
 - **applied_at** (String) The date of the application.
-- **attachments** (Set of Object) (see [below for nested schema](#nestedatt--application--attachments))
+- **attachments** (Block List) (see [below for nested schema](#nestedblock--application--attachments))
 - **candidate_id** (Number) The ID of the candidate applying for this job.
 - **job_post_id** (Number)
-- **jobs** (Set of Object) (see [below for nested schema](#nestedatt--application--jobs))
+- **jobs** (List of Object) (see [below for nested schema](#nestedatt--application--jobs))
 - **last_activity_at** (String) The date of the application's last activity.
-- **prospect** (Boolean) The candidate is a prospect and has not yet applied.
-- **prospective_department** (Set of Object) (see [below for nested schema](#nestedatt--application--prospective_department))
-- **prospective_office** (Set of Object) (see [below for nested schema](#nestedatt--application--prospective_office))
+- **prospective_department** (List of Object) (see [below for nested schema](#nestedatt--application--prospective_department))
+- **prospective_office** (List of Object) (see [below for nested schema](#nestedatt--application--prospective_office))
 - **rejected_at** (String) The date of the application's rejection.
-- **source** (Set of Object) (see [below for nested schema](#nestedatt--application--source))
+- **rejection_details** (List of Object) (see [below for nested schema](#nestedatt--application--rejection_details))
 - **status** (String)
 
 <a id="nestedblock--application--credited_to"></a>
@@ -206,7 +212,7 @@ Read-Only:
 <a id="nestedblock--application--current_stage"></a>
 ### Nested Schema for `application.current_stage`
 
-Required:
+Optional:
 
 - **name** (String)
 
@@ -242,7 +248,7 @@ Optional:
 <a id="nestedblock--application--prospect_detail--prospect_owner"></a>
 ### Nested Schema for `application.prospect_detail.prospect_owner`
 
-Required:
+Optional:
 
 - **name** (String)
 
@@ -250,7 +256,7 @@ Required:
 <a id="nestedblock--application--prospect_detail--prospect_pool"></a>
 ### Nested Schema for `application.prospect_detail.prospect_pool`
 
-Required:
+Optional:
 
 - **name** (String)
 
@@ -258,7 +264,7 @@ Required:
 <a id="nestedblock--application--prospect_detail--prospect_stage"></a>
 ### Nested Schema for `application.prospect_detail.prospect_stage`
 
-Required:
+Optional:
 
 - **name** (String)
 
@@ -273,6 +279,52 @@ Required:
 - **value** (String)
 
 
+<a id="nestedblock--application--rejection_reason"></a>
+### Nested Schema for `application.rejection_reason`
+
+Required:
+
+- **name** (String)
+
+Optional:
+
+- **include_defaults** (Boolean)
+- **per_page** (Number)
+
+Read-Only:
+
+- **type** (List of Object) (see [below for nested schema](#nestedatt--application--rejection_reason--type))
+
+<a id="nestedatt--application--rejection_reason--type"></a>
+### Nested Schema for `application.rejection_reason.type`
+
+Read-Only:
+
+- **name** (String)
+
+
+
+<a id="nestedblock--application--source"></a>
+### Nested Schema for `application.source`
+
+Optional:
+
+- **type** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--application--source--type))
+
+Read-Only:
+
+- **name** (String)
+- **public_name** (String)
+
+<a id="nestedblock--application--source--type"></a>
+### Nested Schema for `application.source.type`
+
+Optional:
+
+- **name** (String)
+
+
+
 <a id="nestedatt--application--answers"></a>
 ### Nested Schema for `application.answers`
 
@@ -282,7 +334,7 @@ Read-Only:
 - **question** (String)
 
 
-<a id="nestedatt--application--attachments"></a>
+<a id="nestedblock--application--attachments"></a>
 ### Nested Schema for `application.attachments`
 
 Read-Only:
@@ -419,21 +471,22 @@ Read-Only:
 - **primary_contact_user_id** (Number)
 
 
-<a id="nestedatt--application--source"></a>
-### Nested Schema for `application.source`
+<a id="nestedatt--application--rejection_details"></a>
+### Nested Schema for `application.rejection_details`
+
+Read-Only:
+
+- **custom_fields** (Map of String)
+- **keyed_custom_fields** (List of Object) (see [below for nested schema](#nestedobjatt--application--rejection_details--keyed_custom_fields))
+
+<a id="nestedobjatt--application--rejection_details--keyed_custom_fields"></a>
+### Nested Schema for `application.rejection_details.keyed_custom_fields`
 
 Read-Only:
 
 - **name** (String)
-- **public_name** (String)
-- **type** (Set of Object) (see [below for nested schema](#nestedobjatt--application--source--type))
-
-<a id="nestedobjatt--application--source--type"></a>
-### Nested Schema for `application.source.type`
-
-Read-Only:
-
-- **name** (String)
+- **type** (String)
+- **value** (String)
 
 
 
@@ -443,37 +496,43 @@ Read-Only:
 
 Optional:
 
-- **credited_to** (Block Set, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--applications--credited_to))
-- **current_stage** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--applications--current_stage))
+- **advance** (Boolean)
+- **credited_to** (Block List, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--applications--credited_to))
+- **current_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--current_stage))
 - **custom_fields** (Map of String)
-- **from_stage_id** (Number)
 - **hire** (Boolean)
-- **keyed_custom_fields** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--applications--keyed_custom_fields))
+- **initial_stage_id** (Number)
+- **job_id** (Number)
+- **job_ids** (List of Number)
+- **keyed_custom_fields** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--keyed_custom_fields))
 - **location** (Block List, Max: 1) The contents of a location question on a job post. (see [below for nested schema](#nestedblock--applications--location))
-- **new_job_id** (Number)
-- **new_stage_id** (Number)
-- **prospect_detail** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--applications--prospect_detail))
+- **prospect** (Boolean) The candidate is a prospect and has not yet applied.
+- **prospect_detail** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--prospect_detail))
+- **prospect_owner_id** (Number)
 - **prospect_pool_id** (Number)
 - **prospect_pool_stage_id** (Number)
 - **prospect_stage_id** (Number)
-- **referrer** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--applications--referrer))
+- **prospective_department_id** (Number)
+- **prospective_office_id** (Number)
+- **referrer** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--referrer))
 - **reject** (Boolean)
+- **rejection_reason** (Block List) (see [below for nested schema](#nestedblock--applications--rejection_reason))
+- **source** (Block List) (see [below for nested schema](#nestedblock--applications--source))
 - **source_id** (Number)
 
 Read-Only:
 
-- **answers** (Set of Object) (see [below for nested schema](#nestedatt--applications--answers))
+- **answers** (List of Object) (see [below for nested schema](#nestedatt--applications--answers))
 - **applied_at** (String) The date of the application.
-- **attachments** (Set of Object) (see [below for nested schema](#nestedatt--applications--attachments))
+- **attachments** (Block List) (see [below for nested schema](#nestedblock--applications--attachments))
 - **candidate_id** (Number) The ID of the candidate applying for this job.
 - **job_post_id** (Number)
-- **jobs** (Set of Object) (see [below for nested schema](#nestedatt--applications--jobs))
+- **jobs** (List of Object) (see [below for nested schema](#nestedatt--applications--jobs))
 - **last_activity_at** (String) The date of the application's last activity.
-- **prospect** (Boolean) The candidate is a prospect and has not yet applied.
-- **prospective_department** (Set of Object) (see [below for nested schema](#nestedatt--applications--prospective_department))
-- **prospective_office** (Set of Object) (see [below for nested schema](#nestedatt--applications--prospective_office))
+- **prospective_department** (List of Object) (see [below for nested schema](#nestedatt--applications--prospective_department))
+- **prospective_office** (List of Object) (see [below for nested schema](#nestedatt--applications--prospective_office))
 - **rejected_at** (String) The date of the application's rejection.
-- **source** (Set of Object) (see [below for nested schema](#nestedatt--applications--source))
+- **rejection_details** (List of Object) (see [below for nested schema](#nestedatt--applications--rejection_details))
 - **status** (String)
 
 <a id="nestedblock--applications--credited_to"></a>
@@ -496,7 +555,7 @@ Read-Only:
 <a id="nestedblock--applications--current_stage"></a>
 ### Nested Schema for `applications.current_stage`
 
-Required:
+Optional:
 
 - **name** (String)
 
@@ -532,7 +591,7 @@ Optional:
 <a id="nestedblock--applications--prospect_detail--prospect_owner"></a>
 ### Nested Schema for `applications.prospect_detail.prospect_owner`
 
-Required:
+Optional:
 
 - **name** (String)
 
@@ -540,7 +599,7 @@ Required:
 <a id="nestedblock--applications--prospect_detail--prospect_pool"></a>
 ### Nested Schema for `applications.prospect_detail.prospect_pool`
 
-Required:
+Optional:
 
 - **name** (String)
 
@@ -548,7 +607,7 @@ Required:
 <a id="nestedblock--applications--prospect_detail--prospect_stage"></a>
 ### Nested Schema for `applications.prospect_detail.prospect_stage`
 
-Required:
+Optional:
 
 - **name** (String)
 
@@ -563,6 +622,52 @@ Required:
 - **value** (String)
 
 
+<a id="nestedblock--applications--rejection_reason"></a>
+### Nested Schema for `applications.rejection_reason`
+
+Required:
+
+- **name** (String)
+
+Optional:
+
+- **include_defaults** (Boolean)
+- **per_page** (Number)
+
+Read-Only:
+
+- **type** (List of Object) (see [below for nested schema](#nestedatt--applications--rejection_reason--type))
+
+<a id="nestedatt--applications--rejection_reason--type"></a>
+### Nested Schema for `applications.rejection_reason.type`
+
+Read-Only:
+
+- **name** (String)
+
+
+
+<a id="nestedblock--applications--source"></a>
+### Nested Schema for `applications.source`
+
+Optional:
+
+- **type** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--applications--source--type))
+
+Read-Only:
+
+- **name** (String)
+- **public_name** (String)
+
+<a id="nestedblock--applications--source--type"></a>
+### Nested Schema for `applications.source.type`
+
+Optional:
+
+- **name** (String)
+
+
+
 <a id="nestedatt--applications--answers"></a>
 ### Nested Schema for `applications.answers`
 
@@ -572,7 +677,7 @@ Read-Only:
 - **question** (String)
 
 
-<a id="nestedatt--applications--attachments"></a>
+<a id="nestedblock--applications--attachments"></a>
 ### Nested Schema for `applications.attachments`
 
 Read-Only:
@@ -709,21 +814,22 @@ Read-Only:
 - **primary_contact_user_id** (Number)
 
 
-<a id="nestedatt--applications--source"></a>
-### Nested Schema for `applications.source`
+<a id="nestedatt--applications--rejection_details"></a>
+### Nested Schema for `applications.rejection_details`
+
+Read-Only:
+
+- **custom_fields** (Map of String)
+- **keyed_custom_fields** (List of Object) (see [below for nested schema](#nestedobjatt--applications--rejection_details--keyed_custom_fields))
+
+<a id="nestedobjatt--applications--rejection_details--keyed_custom_fields"></a>
+### Nested Schema for `applications.rejection_details.keyed_custom_fields`
 
 Read-Only:
 
 - **name** (String)
-- **public_name** (String)
-- **type** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--source--type))
-
-<a id="nestedobjatt--applications--source--type"></a>
-### Nested Schema for `applications.source.type`
-
-Read-Only:
-
-- **name** (String)
+- **type** (String)
+- **value** (String)
 
 
 

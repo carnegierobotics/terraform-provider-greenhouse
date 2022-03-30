@@ -9,7 +9,7 @@ import (
 func schemaGreenhouseInterview() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"default_interviewer_users": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Optional: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseInterviewer(),
@@ -20,7 +20,7 @@ func schemaGreenhouseInterview() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"interview_kit": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			MaxItems: 1,
 			Optional: true,
 			Elem: &schema.Resource{

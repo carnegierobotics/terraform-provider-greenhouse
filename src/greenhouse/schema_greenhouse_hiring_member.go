@@ -14,12 +14,12 @@ func schemaGreenhouseHiringMember() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Required: true,
 		},
-		/*
-			"active": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-		*/
+    /*
+		"active": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+    */
 		"responsible": {
 			Type:     schema.TypeBool,
 			Computed: true,

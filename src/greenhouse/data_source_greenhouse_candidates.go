@@ -13,7 +13,7 @@ func dataSourceGreenhouseCandidates() *schema.Resource {
 		ReadContext: dataSourceGreenhouseCandidatesRead,
 		Schema: map[string]*schema.Schema{
 			"candidate_ids": {
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeInt,

@@ -11,7 +11,7 @@ func schemaGreenhouseTrackingLink() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"credited_to": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
@@ -19,7 +19,7 @@ func schemaGreenhouseTrackingLink() map[string]*schema.Schema {
 			},
 		},
 		"job_board": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{
@@ -43,7 +43,7 @@ func schemaGreenhouseTrackingLink() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"source": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{

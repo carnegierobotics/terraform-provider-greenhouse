@@ -32,9 +32,9 @@ func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, me
 		JobPostName:    d.Get("job_post_name").(string),
 		JobName:        d.Get("job_name").(string),
 		DepartmentId:   d.Get("department_id").(int),
-		OfficeIds:      convertListIToListD(d.Get("office_ids").(*schema.Set).List()),
+		OfficeIds:      convertListIToListD(d.Get("office_ids").([]interface{})),
 		RequisitionId:  d.Get("requisition_id").(string),
-		OpeningIds:     convertListIToListA(d.Get("opening_ids").(*schema.Set).List()),
+		OpeningIds:     convertListIToListA(d.Get("opening_ids").([]interface{})),
 	}
 	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {
@@ -109,7 +109,7 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 		RequisitionId:           d.Get("requisition_id").(string),
 		TeamandResponsibilities: d.Get("team_and_responsibilities").(string),
 		HowToSellThisJob:        d.Get("how_to_sell_this_job").(string),
-		OfficeIds:               convertListIToListD(d.Get("office_ids").(*schema.Set).List()),
+		OfficeIds:               convertListIToListD(d.Get("office_ids").([]interface{})),
 		DepartmentId:            d.Get("department_id").(int),
 	}
 	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), ctx, id, &updateObject)
@@ -122,10 +122,10 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 
 func transformHiringTeam(ctx context.Context, hiringTeam interface{}) (map[string][]greenhouse.HiringMemberUpdateInfo, error) {
 	update := make(map[string][]greenhouse.HiringMemberUpdateInfo)
-	for _, team := range hiringTeam.(*schema.Set).List() {
+	for _, team := range hiringTeam.([]interface{}) {
 		teamItem := team.(map[string]interface{})
 		teamName := teamItem["name"].(string)
-		members := teamItem["members"].(*schema.Set).List()
+		members := teamItem["members"].([]interface{})
 		update[teamName] = make([]greenhouse.HiringMemberUpdateInfo, len(members), len(members))
 		for j, member := range members {
 			var obj greenhouse.HiringMemberUpdateInfo

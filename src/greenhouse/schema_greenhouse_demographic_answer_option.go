@@ -27,7 +27,7 @@ func schemaGreenhouseDemographicAnswerOption() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"translations": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTranslation(),

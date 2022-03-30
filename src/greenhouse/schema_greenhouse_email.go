@@ -4,28 +4,13 @@ import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func schemaGreenhouseEmail() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"created_at": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"subject": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
 		"body": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"to": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"from": {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
@@ -33,8 +18,24 @@ func schemaGreenhouseEmail() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
+		"created_at": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"from": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"subject": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"to": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 		"user": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			MaxItems: 1,
 			Optional: true,
 			Computed: true,
@@ -43,6 +44,49 @@ func schemaGreenhouseEmail() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func inflateEmails(ctx context.Context, source *[]interface{}) (*[]greenhouse.Email, diag.Diagnostics) {
+  list := make([]greenhouse.Email, len(*source), len(*source))
+  for i, item := range *source {
+    itemMap := item.(map[string]interface{})
+    obj, err := inflateEmail(ctx, &itemMap)
+    if err != nil {
+      return nil, err
+    }
+    list[i] = *obj
+  }
+  return &list, nil
+}
+
+func inflateEmail(ctx context.Context, source *map[string]interface{}) (*greenhouse.Email, diag.Diagnostics) {
+  var obj greenhouse.Email
+  if v, ok := (*source)["body"].(string); ok && len(v) > 0 {
+    obj.Body = v
+  }
+  if v, ok := (*source)["cc"].(string); ok && len(v) > 0 {
+    obj.Cc = v
+  }
+  if v, ok := (*source)["created_at"].(string); ok && len(v) > 0 {
+    obj.CreatedAt = v
+  }
+  if v, ok := (*source)["from"].(string); ok && len(v) > 0 {
+    obj.From = v
+  }
+  if v, ok := (*source)["subject"].(string); ok && len(v) > 0 {
+    obj.Subject = v
+  }
+  if v, ok := (*source)["to"].(string); ok && len(v) > 0 {
+    obj.To = v
+  }
+  if v, ok := (*source)["user"].([]interface{}); ok && len(v) > 0 {
+    item, err := inflateUser(ctx, &(v[0]))
+    if err != nil {
+      return nil, err
+    }
+    obj.User = item
+  }
+  return &obj, nil
 }
 
 func flattenEmails(ctx context.Context, list *[]greenhouse.Email) []interface{} {

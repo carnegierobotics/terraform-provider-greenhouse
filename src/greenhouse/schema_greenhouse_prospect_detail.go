@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -35,10 +36,13 @@ func schemaGreenhouseProspectDetail() map[string]*schema.Schema {
 	}
 }
 
-func inflateProspectDetail(ctx context.Context, source interface{}) *greenhouse.ProspectDetail {
+func inflateProspectDetail(ctx context.Context, source interface{}) (*greenhouse.ProspectDetail, diag.Diagnostics) {
 	var item greenhouse.ProspectDetail
-	convertType(ctx, source, item)
-	return &item
+	err := convertType(ctx, source, item)
+  if err != nil {
+    return nil, err
+  }
+	return &item, nil
 }
 
 func flattenProspectDetail(ctx context.Context, item *greenhouse.ProspectDetail) map[string]interface{} {

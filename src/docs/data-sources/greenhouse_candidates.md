@@ -84,7 +84,7 @@ Read-Only:
 - **body** (String)
 - **created_at** (String)
 - **subject** (String)
-- **user** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--activity_feed_notes--activities--user))
+- **user** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--activity_feed_notes--activities--user))
 
 <a id="nestedobjatt--candidates--activity_feed_notes--activities--user"></a>
 ### Nested Schema for `candidates.activity_feed_notes.activities.user`
@@ -162,33 +162,39 @@ Read-Only:
 
 Read-Only:
 
-- **answers** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--answers))
+- **advance** (Boolean)
+- **answers** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--answers))
 - **applied_at** (String)
-- **attachments** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--attachments))
+- **attachments** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--attachments))
 - **candidate_id** (Number)
-- **credited_to** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--credited_to))
-- **current_stage** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--current_stage))
+- **credited_to** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--credited_to))
+- **current_stage** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--current_stage))
 - **custom_fields** (Map of String)
-- **from_stage_id** (Number)
 - **hire** (Boolean)
+- **initial_stage_id** (Number)
+- **job_id** (Number)
+- **job_ids** (List of Number)
 - **job_post_id** (Number)
-- **jobs** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--jobs))
-- **keyed_custom_fields** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--keyed_custom_fields))
+- **jobs** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--jobs))
+- **keyed_custom_fields** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--keyed_custom_fields))
 - **last_activity_at** (String)
 - **location** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--location))
-- **new_job_id** (Number)
-- **new_stage_id** (Number)
 - **prospect** (Boolean)
-- **prospect_detail** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospect_detail))
+- **prospect_detail** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospect_detail))
+- **prospect_owner_id** (Number)
 - **prospect_pool_id** (Number)
 - **prospect_pool_stage_id** (Number)
 - **prospect_stage_id** (Number)
-- **prospective_department** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospective_department))
-- **prospective_office** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospective_office))
-- **referrer** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--referrer))
+- **prospective_department** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospective_department))
+- **prospective_department_id** (Number)
+- **prospective_office** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--prospective_office))
+- **prospective_office_id** (Number)
+- **referrer** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--referrer))
 - **reject** (Boolean)
 - **rejected_at** (String)
-- **source** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--source))
+- **rejection_details** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--rejection_details))
+- **rejection_reason** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--rejection_reason))
+- **source** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--source))
 - **source_id** (Number)
 - **status** (String)
 
@@ -419,6 +425,44 @@ Read-Only:
 - **value** (String)
 
 
+<a id="nestedobjatt--candidates--application--rejection_details"></a>
+### Nested Schema for `candidates.application.rejection_details`
+
+Read-Only:
+
+- **custom_fields** (Map of String)
+- **keyed_custom_fields** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--rejection_details--keyed_custom_fields))
+
+<a id="nestedobjatt--candidates--application--rejection_details--keyed_custom_fields"></a>
+### Nested Schema for `candidates.application.rejection_details.keyed_custom_fields`
+
+Read-Only:
+
+- **name** (String)
+- **type** (String)
+- **value** (String)
+
+
+
+<a id="nestedobjatt--candidates--application--rejection_reason"></a>
+### Nested Schema for `candidates.application.rejection_reason`
+
+Read-Only:
+
+- **include_defaults** (Boolean)
+- **name** (String)
+- **per_page** (Number)
+- **type** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--rejection_reason--type))
+
+<a id="nestedobjatt--candidates--application--rejection_reason--type"></a>
+### Nested Schema for `candidates.application.rejection_reason.type`
+
+Read-Only:
+
+- **name** (String)
+
+
+
 <a id="nestedobjatt--candidates--application--source"></a>
 ### Nested Schema for `candidates.application.source`
 
@@ -443,33 +487,39 @@ Read-Only:
 
 Read-Only:
 
-- **answers** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--answers))
+- **advance** (Boolean)
+- **answers** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--answers))
 - **applied_at** (String)
-- **attachments** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--attachments))
+- **attachments** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--attachments))
 - **candidate_id** (Number)
-- **credited_to** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--credited_to))
-- **current_stage** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--current_stage))
+- **credited_to** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--credited_to))
+- **current_stage** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--current_stage))
 - **custom_fields** (Map of String)
-- **from_stage_id** (Number)
 - **hire** (Boolean)
+- **initial_stage_id** (Number)
+- **job_id** (Number)
+- **job_ids** (List of Number)
 - **job_post_id** (Number)
-- **jobs** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--jobs))
-- **keyed_custom_fields** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--keyed_custom_fields))
+- **jobs** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--jobs))
+- **keyed_custom_fields** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--keyed_custom_fields))
 - **last_activity_at** (String)
 - **location** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--location))
-- **new_job_id** (Number)
-- **new_stage_id** (Number)
 - **prospect** (Boolean)
-- **prospect_detail** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospect_detail))
+- **prospect_detail** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospect_detail))
+- **prospect_owner_id** (Number)
 - **prospect_pool_id** (Number)
 - **prospect_pool_stage_id** (Number)
 - **prospect_stage_id** (Number)
-- **prospective_department** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospective_department))
-- **prospective_office** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospective_office))
-- **referrer** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--referrer))
+- **prospective_department** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospective_department))
+- **prospective_department_id** (Number)
+- **prospective_office** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--prospective_office))
+- **prospective_office_id** (Number)
+- **referrer** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--referrer))
 - **reject** (Boolean)
 - **rejected_at** (String)
-- **source** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--source))
+- **rejection_details** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--rejection_details))
+- **rejection_reason** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--rejection_reason))
+- **source** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--source))
 - **source_id** (Number)
 - **status** (String)
 
@@ -698,6 +748,44 @@ Read-Only:
 
 - **type** (String)
 - **value** (String)
+
+
+<a id="nestedobjatt--candidates--applications--rejection_details"></a>
+### Nested Schema for `candidates.applications.rejection_details`
+
+Read-Only:
+
+- **custom_fields** (Map of String)
+- **keyed_custom_fields** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--rejection_details--keyed_custom_fields))
+
+<a id="nestedobjatt--candidates--applications--rejection_details--keyed_custom_fields"></a>
+### Nested Schema for `candidates.applications.rejection_details.keyed_custom_fields`
+
+Read-Only:
+
+- **name** (String)
+- **type** (String)
+- **value** (String)
+
+
+
+<a id="nestedobjatt--candidates--applications--rejection_reason"></a>
+### Nested Schema for `candidates.applications.rejection_reason`
+
+Read-Only:
+
+- **include_defaults** (Boolean)
+- **name** (String)
+- **per_page** (Number)
+- **type** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--rejection_reason--type))
+
+<a id="nestedobjatt--candidates--applications--rejection_reason--type"></a>
+### Nested Schema for `candidates.applications.rejection_reason.type`
+
+Read-Only:
+
+- **name** (String)
+
 
 
 <a id="nestedobjatt--candidates--applications--source"></a>

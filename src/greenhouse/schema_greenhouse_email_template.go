@@ -11,7 +11,7 @@ func schemaGreenhouseEmailTemplate() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"cc": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
@@ -50,7 +50,7 @@ func schemaGreenhouseEmailTemplate() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"user": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			MaxItems: 1,
 			Computed: true,
 			Elem: &schema.Resource{

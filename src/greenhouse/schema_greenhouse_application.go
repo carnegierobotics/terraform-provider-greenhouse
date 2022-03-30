@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -227,53 +228,164 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 	}
 }
 
-func inflateApplications(ctx context.Context, list []interface{}) *[]greenhouse.Application {
-	var newList []greenhouse.Application
-	for i, item := range list {
+func inflateApplications(ctx context.Context, source *[]interface{}) (*[]greenhouse.Application, diag.Diagnostics) {
+	list := make([]greenhouse.Application, len(*source), len(*source))
+	for i, item := range *source {
 		itemMap := item.(map[string]interface{})
-		newList[i] = *inflateApplication(ctx, itemMap)
+    app, err := inflateApplication(ctx, &itemMap)
+    if err != nil {
+      return nil, err
+    }
+		list[i] = *app
 	}
-	return &newList
+	return &list, nil
 }
 
-func inflateApplication(ctx context.Context, item map[string]interface{}) *greenhouse.Application {
+func inflateApplication(ctx context.Context, item *map[string]interface{}) (*greenhouse.Application, diag.Diagnostics) {
 	var app greenhouse.Application
-	app.Answers = *inflateAnswers(ctx, item["answers"])
-	app.AppliedAt = item["applied_at"].(string)
-	app.Attachments = *inflateAttachments(ctx, item["attachments"])
-	app.CandidateId = item["candidate_id"].(int)
-	inflatedCreditedTo := *inflateUsers(ctx, item["credited_to"])
-	app.CreditedTo = &inflatedCreditedTo[0]
-	inflatedCurrentStage := greenhouse.Stage(*inflateTypeIdName(ctx, item["current_stage"]))
-	app.CurrentStage = &inflatedCurrentStage
-	app.CustomFields = item["custom_fields"].(map[string]string)
-	app.Id = item["id"].(int)
-	app.InitialStageId = item["initial_stage_id"].(int)
-	app.JobId = item["job_id"].(int)
-	app.JobIds = item["job_ids"].([]int)
-	app.Jobs = *inflateJobs(ctx, item["jobs"])
-	app.JobPostId = item["job_post_id"].(int)
-	app.KeyedCustomFields = *inflateKeyedCustomFields(ctx, item["keyed_custom_fields"])
-	app.LastActivityAt = item["last_activity_at"].(string)
-	app.Location = inflateLocation(ctx, item["location"])
-	app.Prospect = item["prospect"].(bool)
-	app.ProspectDetail = inflateProspectDetail(ctx, item["prospect_detail"])
-	app.ProspectOwnerId = item["prospect_owner_id"].(int)
-	app.ProspectPoolId = item["prospect_pool_id"].(int)
-	app.ProspectPoolStageId = item["prospect_pool_stage_id"].(int)
-	app.ProspectStageId = item["prospect_stage_id"].(int)
-	app.ProspectiveDepartment = inflateDepartment(ctx, item["prospective_department"])
-	app.ProspectiveDepartmentId = item["prospective_department_id"].(int)
-	app.ProspectiveOffice = inflateOffice(ctx, item["prospective_office"])
-	app.ProspectiveOfficeId = item["prospective_office_id"].(int)
-	app.Referrer = inflateTypeTypeValue(ctx, item["referrer"])
-	app.RejectedAt = item["rejected_at"].(string)
-	app.RejectionDetails = inflateRejectionDetails(ctx, item["rejection_details"])
-	app.RejectionReason = inflateRejectionReason(ctx, item["rejection_reason"])
-	app.Source = inflateSource(ctx, item["source"])
-	app.SourceId = item["source_id"].(int)
-	app.Status = item["status"].(string)
-	return &app
+  tflog.Debug(ctx, "Inflating application.")
+  if v, ok := (*item)["answers"].([]interface{}); ok && len(v) > 0 {
+    list, err := inflateAnswers(ctx, &v)
+    if err != nil {
+      return nil, err
+    }
+	  app.Answers = *list
+  }
+  if v, ok := (*item)["applied_at"].(string); ok && len(v) > 0 {
+	  app.AppliedAt = v
+  }
+  if v, ok := (*item)["attachments"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating attachments.")
+    list, err := inflateAttachments(ctx, &v)
+    if err != nil {
+      return nil, err
+    }
+	  app.Attachments = *list
+  }
+  if v, ok := (*item)["candidate_id"].(int); ok {
+	  app.CandidateId = v
+  }
+  if v, ok := (*item)["credited_to"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating credited to.")
+    inflatedCreditedTo, err := inflateUser(ctx, &v[0])
+    if err != nil {
+      return nil, err
+    }
+    if inflatedCreditedTo != nil {
+	    app.CreditedTo = inflatedCreditedTo
+    }
+  }
+  if v, ok := (*item)["current_stage"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating current stage.")
+    inflatedStage, err := inflateTypesIdName(ctx, &v)
+    if err != nil {
+      return nil, err
+    }
+	  convertedStage := greenhouse.Stage((*inflatedStage)[0])
+	  app.CurrentStage = &convertedStage
+  }
+  if v, ok := (*item)["custom_fields"].(map[string]interface{}); ok && len(v) > 0 {
+	  app.CustomFields = *mapAItoMapAA(ctx, v)
+  }
+  if v, ok := (*item)["id"].(int); ok {
+	  app.Id = v
+  }
+  if v, ok := (*item)["initial_stage_id"].(int); ok {
+	  app.InitialStageId = v
+  }
+  if v, ok := (*item)["job_id"].(int); ok {
+	  app.JobId = v
+  }
+  if v, ok := (*item)["job_ids"].([]interface{}); ok && len(v) > 0 {
+    jobIds := v
+	  app.JobIds = *sliceItoSliceD(jobIds)
+  }
+  if v, ok := (*item)["jobs"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating jobs.")
+	  app.Jobs = *inflateJobs(ctx, v)
+  }
+  if v, ok := (*item)["job_post_id"].(int); ok {
+	  app.JobPostId = v
+  }
+  if v, ok := (*item)["keyed_custom_fields"].(map[string]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating keyed custom fields.")
+	  app.KeyedCustomFields = *inflateKeyedCustomFields(ctx, v)
+  }
+  if v, ok := (*item)["last_activity_at"].(string); ok && len(v) > 0 {
+	  app.LastActivityAt = v
+  }
+  if v, ok := (*item)["location"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating location.")
+	  app.Location = inflateLocation(ctx, v[0])
+  }
+  if v, ok := (*item)["prospect"].(bool); ok {
+	  app.Prospect = v
+  }
+  if v, ok := (*item)["prospect_detail"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating prospect detail.")
+	  inflatedDetail, err := inflateProspectDetail(ctx, v[0])
+    if err != nil {
+      return nil, err
+    }
+    if inflatedDetail != nil {
+      app.ProspectDetail = inflatedDetail
+    }
+  }
+  if v, ok := (*item)["prospect_owner_id"].(int); ok {
+	  app.ProspectOwnerId = v
+  }
+  if v, ok := (*item)["prospect_pool_id"].(int); ok {
+	  app.ProspectPoolId = v
+  }
+  if v, ok := (*item)["prospect_pool_stage_id"].(int); ok {
+	  app.ProspectPoolStageId = v
+  }
+  if v, ok := (*item)["prospect_stage_id"].(int); ok {
+	  app.ProspectStageId = v
+  }
+  if v, ok := (*item)["prospective_department"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating department.")
+	  app.ProspectiveDepartment = inflateDepartment(ctx, v[0])
+  }
+  if v, ok := (*item)["prospective_department_id"].(int); ok {
+	  app.ProspectiveDepartmentId = v
+  }
+  if v, ok := (*item)["prospective_office"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating office.")
+	  app.ProspectiveOffice = inflateOffice(ctx, v[0])
+  }
+  if v, ok := (*item)["prospective_office_id"].(int); ok {
+	  app.ProspectiveOfficeId = v
+  }
+  if v, ok := (*item)["referrer"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating referrer.")
+	  inflatedReferrer, err := inflateTypeTypeValue(ctx, v[0])
+    if err != nil {
+      return nil, err
+    }
+    app.Referrer = inflatedReferrer
+  }
+  if v, ok := (*item)["rejected_at"].(string); ok && len(v) > 0 {
+	  app.RejectedAt = v
+  }
+  if v, ok := (*item)["rejection_details"].([]interface{}); ok && len(v) > 0 {
+    tflog.Debug(ctx, "Inflating rejection details.")
+	  app.RejectionDetails = inflateRejectionDetails(ctx, v[0])
+  }
+  if v, ok := (*item)["rejection_reason"].([]interface{}); ok && len(v) > 0 {
+	  app.RejectionReason = inflateRejectionReason(ctx, v[0])
+  }
+  if v, ok := (*item)["source"].([]interface{}); ok && len(v) > 0 {
+	  app.Source = inflateSource(ctx, v)
+  }
+  if v, ok := (*item)["source_id"].(int); ok {
+	  app.SourceId = v
+  }
+  if v, ok := (*item)["status"].(string); ok && len(v) > 0 {
+	  app.Status = v
+  }
+  tflog.Debug(ctx, "Done inflating application.")
+	return &app, nil
 }
 
 func flattenApplications(ctx context.Context, list *[]greenhouse.Application) []interface{} {

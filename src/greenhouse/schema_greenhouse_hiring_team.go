@@ -15,7 +15,7 @@ func schemaGreenhouseHiringTeam() map[string]*schema.Schema {
 			Required: true,
 		},
 		"members": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Required: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseHiringMember(),

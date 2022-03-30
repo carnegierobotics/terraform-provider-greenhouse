@@ -36,7 +36,7 @@ func schemaGreenhouseOffer() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"keyed_custom_fields": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Optional: true,
 			MaxItems: 1,
 			Elem: &schema.Schema{
@@ -47,7 +47,7 @@ func schemaGreenhouseOffer() map[string]*schema.Schema {
 			},
 		},
 		"opening": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Optional: true,
 			MaxItems: 1,
 			Elem: &schema.Resource{

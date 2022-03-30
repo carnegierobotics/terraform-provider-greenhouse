@@ -49,7 +49,7 @@ func schemaGreenhouseJobPost() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"questions": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Optional: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseDemographicQuestion(),

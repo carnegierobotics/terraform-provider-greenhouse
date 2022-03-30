@@ -11,7 +11,7 @@ func schemaGreenhouseScorecard() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"attributes": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseScorecardAttribute(),
@@ -50,14 +50,14 @@ func schemaGreenhouseScorecard() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"questions": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseScorecardQuestion(),
 			},
 		},
 		"ratings": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeSet,
@@ -71,7 +71,7 @@ func schemaGreenhouseScorecard() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"submitted_by": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseUser(),

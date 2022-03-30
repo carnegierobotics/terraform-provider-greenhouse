@@ -17,7 +17,6 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			Type:        schema.TypeBool,
 			Description: "Updates to this field may only be made via Harvest.",
 			Optional:    true,
-			Default:     false,
 		},
 		"custom_field_options": {
 			Type:        schema.TypeList,
@@ -28,7 +27,7 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			},
 		},
 		"department_ids": {
-			Type:        schema.TypeSet,
+			Type:        schema.TypeList,
 			Description: "The custom field is only displayed for objects in these departments.",
 			Optional:    true,
 			Elem: &schema.Schema{
@@ -51,7 +50,6 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			Type:        schema.TypeBool,
 			Description: "This field and its value are provided in the Job Board API response.",
 			Optional:    true,
-			Default:     false,
 		},
 		"field_type": {
 			Type:         schema.TypeString,
@@ -74,7 +72,7 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"office_ids": {
-			Type:        schema.TypeSet,
+			Type:        schema.TypeList,
 			Description: "The custom field is only displayed for objects in these offices.",
 			Optional:    true,
 			Elem: &schema.Schema{
@@ -82,7 +80,7 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			},
 		},
 		"offices": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseOffice(),
@@ -96,19 +94,16 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			Type:        schema.TypeBool,
 			Description: "Denotes a private field in Greenhouse.",
 			Optional:    true,
-			Default:     false,
 		},
 		"require_approval": {
 			Type:        schema.TypeBool,
 			Description: "Changes to this field trigger re-approval.",
 			Optional:    true,
-			Default:     false,
 		},
 		"required": {
 			Type:        schema.TypeBool,
 			Description: "Denotes a required field in Greenhouse.",
 			Optional:    true,
-			Default:     false,
 		},
 		"template_token_string": {
 			Type:        schema.TypeString,
@@ -120,7 +115,6 @@ func schemaGreenhouseCustomField() map[string]*schema.Schema {
 			Type:        schema.TypeBool,
 			Description: "Changes to this field trigger creation of a new offer version.",
 			Optional:    true,
-			Default:     false,
 		},
 		"value_type": {
 			Type:         schema.TypeString,

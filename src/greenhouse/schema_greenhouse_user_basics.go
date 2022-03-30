@@ -24,7 +24,6 @@ func schemaGreenhouseUserBasics() map[string]*schema.Schema {
 		"employee_id": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Default:  "",
 		},
 	}
 }

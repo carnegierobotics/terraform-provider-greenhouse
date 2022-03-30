@@ -37,7 +37,7 @@ Read-Only:
 - **body** (String)
 - **created_at** (String)
 - **subject** (String)
-- **user** (Set of Object) (see [below for nested schema](#nestedobjatt--activities--user))
+- **user** (List of Object) (see [below for nested schema](#nestedobjatt--activities--user))
 
 <a id="nestedobjatt--activities--user"></a>
 ### Nested Schema for `activities.user`

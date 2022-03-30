@@ -17,7 +17,7 @@ func schemaGreenhouseSource() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"type": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			MaxItems: 1,
 			Optional: true,
 			Computed: true,

@@ -18,7 +18,7 @@ func dataSourceGreenhouseJobOpenings() *schema.Resource {
 				Required: true,
 			},
 			"openings": {
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: schemaGreenhouseJobOpening(),

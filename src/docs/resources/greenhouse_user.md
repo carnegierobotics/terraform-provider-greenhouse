@@ -32,8 +32,8 @@ description: |-
 
 - **created_at** (String)
 - **disabled** (Boolean)
-- **emails** (Set of String)
-- **linked_candidate_ids** (Set of Number)
+- **emails** (List of String)
+- **linked_candidate_ids** (List of Number)
 - **name** (String)
 - **site_admin** (Boolean)
 - **updated_at** (String)

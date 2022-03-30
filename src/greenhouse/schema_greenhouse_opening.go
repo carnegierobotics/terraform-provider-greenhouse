@@ -9,7 +9,7 @@ import (
 func schemaGreenhouseOpening() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"custom_fields": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Optional: true,
 			Elem: schema.Schema{
 				Type: schema.TypeMap,

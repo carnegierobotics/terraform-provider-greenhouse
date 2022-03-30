@@ -11,7 +11,7 @@ import (
 func schemaGreenhouseDepartment() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"child_department_external_ids": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Optional: true,
 			Computed: true,
 			Elem: &schema.Schema{
@@ -19,7 +19,7 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 			},
 		},
 		"child_ids": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeInt,
@@ -41,7 +41,6 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 		"parent_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
-			Default:  0,
 		},
 	}
 }
