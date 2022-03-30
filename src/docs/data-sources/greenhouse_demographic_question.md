@@ -29,7 +29,7 @@ description: |-
 - **answer_type** (String)
 - **demographic_question_set_id** (Number)
 - **required** (Boolean)
-- **translations** (Set of Object) (see [below for nested schema](#nestedatt--translations))
+- **translations** (List of Object) (see [below for nested schema](#nestedatt--translations))
 
 <a id="nestedatt--translations"></a>
 ### Nested Schema for `translations`

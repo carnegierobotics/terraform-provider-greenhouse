@@ -26,11 +26,11 @@ description: |-
 
 ### Read-Only
 
-- **disability_status** (Set of Object) (see [below for nested schema](#nestedatt--disability_status))
-- **gender** (Set of Object) (see [below for nested schema](#nestedatt--gender))
-- **race** (Set of Object) (see [below for nested schema](#nestedatt--race))
+- **disability_status** (List of Object) (see [below for nested schema](#nestedatt--disability_status))
+- **gender** (List of Object) (see [below for nested schema](#nestedatt--gender))
+- **race** (List of Object) (see [below for nested schema](#nestedatt--race))
 - **submitted_at** (String)
-- **veteran_status** (Set of Object) (see [below for nested schema](#nestedatt--veteran_status))
+- **veteran_status** (List of Object) (see [below for nested schema](#nestedatt--veteran_status))
 
 <a id="nestedatt--disability_status"></a>
 ### Nested Schema for `disability_status`

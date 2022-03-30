@@ -21,7 +21,7 @@ description: |-
 
 ### Optional
 
-- **child_department_external_ids** (Set of String)
+- **child_department_external_ids** (List of String)
 - **external_id** (String)
 - **id** (String) The ID of this resource.
 - **parent_department_external_id** (String)
@@ -29,6 +29,6 @@ description: |-
 
 ### Read-Only
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 
 

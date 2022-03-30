@@ -26,7 +26,7 @@ description: |-
 
 ### Read-Only
 
-- **openings** (Set of Object) (see [below for nested schema](#nestedatt--openings))
+- **openings** (List of Object) (see [below for nested schema](#nestedatt--openings))
 
 <a id="nestedatt--openings"></a>
 ### Nested Schema for `openings`

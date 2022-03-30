@@ -62,7 +62,7 @@ Read-Only:
 - **from** (String)
 - **subject** (String)
 - **to** (String)
-- **user** (Set of Object) (see [below for nested schema](#nestedobjatt--emails--user))
+- **user** (List of Object) (see [below for nested schema](#nestedobjatt--emails--user))
 
 <a id="nestedobjatt--emails--user"></a>
 ### Nested Schema for `emails.user`
@@ -84,7 +84,7 @@ Read-Only:
 - **body** (String)
 - **created_at** (String)
 - **private** (Boolean)
-- **user** (Set of Object) (see [below for nested schema](#nestedobjatt--notes--user))
+- **user** (List of Object) (see [below for nested schema](#nestedobjatt--notes--user))
 - **visibility** (String)
 - **visiblity** (String)
 

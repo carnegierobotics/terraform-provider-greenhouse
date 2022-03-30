@@ -3,7 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -28,30 +28,30 @@ func schemaGreenhouseApprover() map[string]*schema.Schema {
 }
 
 func inflateApprovers(ctx context.Context, source *[]interface{}) (*[]greenhouse.Approver, diag.Diagnostics) {
-  list := make([]greenhouse.Approver, len(*source), len(*source))
-  for i, item := range *source {
-    itemMap := item.(map[string]interface{})
-    obj, err := inflateApprover(ctx, &itemMap)
-    if err != nil {
-      return nil, err
-    }
-    list[i] = *obj
-  }
-  return &list, nil
+	list := make([]greenhouse.Approver, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateApprover(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
 }
 
 func inflateApprover(ctx context.Context, source *map[string]interface{}) (*greenhouse.Approver, diag.Diagnostics) {
-  var obj greenhouse.Approver
-  if v, ok := (*source)["email_addresses"].([]string); ok && len(v) > 0 {
-    obj.EmailAddresses = v
-  }
-  if v, ok := (*source)["employee_id"].(string); ok && len(v) > 0 {
-    obj.EmployeeId = v
-  }
-  if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-    obj.Name = v
-  }
-  return &obj, nil
+	var obj greenhouse.Approver
+	if v, ok := (*source)["email_addresses"].([]string); ok && len(v) > 0 {
+		obj.EmailAddresses = v
+	}
+	if v, ok := (*source)["employee_id"].(string); ok && len(v) > 0 {
+		obj.EmployeeId = v
+	}
+	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
+		obj.Name = v
+	}
+	return &obj, nil
 }
 
 func flattenApprovers(ctx context.Context, list *[]greenhouse.Approver) []interface{} {

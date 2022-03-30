@@ -41,7 +41,7 @@ Read-Only:
 - **internal_content** (String)
 - **job_id** (Number)
 - **live** (Boolean)
-- **questions** (Set of Object) (see [below for nested schema](#nestedobjatt--posts--questions))
+- **questions** (List of Object) (see [below for nested schema](#nestedobjatt--posts--questions))
 - **updated_at** (String)
 
 <a id="nestedobjatt--posts--questions"></a>
@@ -54,7 +54,7 @@ Read-Only:
 - **demographic_question_set_id** (Number)
 - **name** (String)
 - **required** (Boolean)
-- **translations** (Set of Object) (see [below for nested schema](#nestedobjatt--posts--questions--translations))
+- **translations** (List of Object) (see [below for nested schema](#nestedobjatt--posts--questions--translations))
 
 <a id="nestedobjatt--posts--questions--translations"></a>
 ### Nested Schema for `posts.questions.translations`

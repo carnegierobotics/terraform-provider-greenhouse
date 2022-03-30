@@ -33,7 +33,7 @@ Read-Only:
 - **active** (Boolean)
 - **api_only** (Boolean)
 - **custom_field_options** (List of Object) (see [below for nested schema](#nestedobjatt--fields--custom_field_options))
-- **department_ids** (Set of Number)
+- **department_ids** (List of Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--fields--departments))
 - **description** (String)
 - **expose_in_job_board_api** (Boolean)
@@ -41,8 +41,8 @@ Read-Only:
 - **generate_email_token** (Boolean)
 - **name** (String)
 - **name_key** (String)
-- **office_ids** (Set of Number)
-- **offices** (Set of Object) (see [below for nested schema](#nestedobjatt--fields--offices))
+- **office_ids** (List of Number)
+- **offices** (List of Object) (see [below for nested schema](#nestedobjatt--fields--offices))
 - **priority** (Number)
 - **private** (Boolean)
 - **require_approval** (Boolean)
@@ -66,8 +66,8 @@ Read-Only:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -79,7 +79,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)

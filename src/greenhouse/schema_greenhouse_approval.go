@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -49,49 +49,49 @@ func schemaGreenhouseApproval() map[string]*schema.Schema {
 }
 
 func inflateApprovals(ctx context.Context, source *[]interface{}) (*[]greenhouse.Approval, diag.Diagnostics) {
-  list := make([]greenhouse.Approval, len(*source), len(*source))
-  for i, item := range *source {
-    itemMap := item.(map[string]interface{})
-    obj, err := inflateApproval(ctx, &itemMap)
-    if err != nil {
-      return nil, err
-    }
-    list[i] = *obj
-  }
-  return &list, nil
+	list := make([]greenhouse.Approval, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateApproval(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
 }
 
 func inflateApproval(ctx context.Context, source *map[string]interface{}) (*greenhouse.Approval, diag.Diagnostics) {
-  var obj greenhouse.Approval
-  if v, ok := (*source)["approval_status"].(string); ok && len(v) > 0 {
-    obj.ApprovalStatus = v
-  }
-  if v, ok := (*source)["approval_type"].(string); ok && len(v) > 0 {
-    obj.ApprovalType = v
-  }
-  if v, ok := (*source)["approver_groups"].([]interface{}); ok && len(v) > 0 {
-    list, diagErr := inflateApproverGroups(ctx, &v)
-    if diagErr != nil {
-      return nil, diagErr
-    }
-    obj.ApproverGroups = *list
-  }
-  if v, ok := (*source)["job_id"].(int); ok {
-    obj.JobId = v
-  }
-  if v, ok := (*source)["offer_id"].(int); ok {
-    obj.OfferId = v
-  }
-  if v, ok := (*source)["requested_by_user_id"].(int); ok {
-    obj.RequestedByUserId = v
-  }
-  if v, ok := (*source)["sequential"].(bool); ok {
-    obj.Sequential = v
-  }
-  if v, ok := (*source)["version"].(int); ok {
-    obj.Version = v
-  }
-  return &obj, nil
+	var obj greenhouse.Approval
+	if v, ok := (*source)["approval_status"].(string); ok && len(v) > 0 {
+		obj.ApprovalStatus = v
+	}
+	if v, ok := (*source)["approval_type"].(string); ok && len(v) > 0 {
+		obj.ApprovalType = v
+	}
+	if v, ok := (*source)["approver_groups"].([]interface{}); ok && len(v) > 0 {
+		list, diagErr := inflateApproverGroups(ctx, &v)
+		if diagErr != nil {
+			return nil, diagErr
+		}
+		obj.ApproverGroups = *list
+	}
+	if v, ok := (*source)["job_id"].(int); ok {
+		obj.JobId = v
+	}
+	if v, ok := (*source)["offer_id"].(int); ok {
+		obj.OfferId = v
+	}
+	if v, ok := (*source)["requested_by_user_id"].(int); ok {
+		obj.RequestedByUserId = v
+	}
+	if v, ok := (*source)["sequential"].(bool); ok {
+		obj.Sequential = v
+	}
+	if v, ok := (*source)["version"].(int); ok {
+		obj.Version = v
+	}
+	return &obj, nil
 }
 
 func flattenApprovals(ctx context.Context, list *[]greenhouse.Approval) []interface{} {

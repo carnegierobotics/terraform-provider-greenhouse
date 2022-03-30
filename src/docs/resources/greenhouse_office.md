@@ -28,7 +28,7 @@ description: |-
 
 ### Read-Only
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 
 

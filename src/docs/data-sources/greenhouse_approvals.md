@@ -34,7 +34,7 @@ Read-Only:
 
 - **approval_status** (String)
 - **approval_type** (String)
-- **approver_groups** (Set of Object) (see [below for nested schema](#nestedobjatt--approvals--approver_groups))
+- **approver_groups** (List of Object) (see [below for nested schema](#nestedobjatt--approvals--approver_groups))
 - **job_id** (Number)
 - **offer_id** (Number)
 - **requested_by_user_id** (Number)
@@ -47,7 +47,7 @@ Read-Only:
 Read-Only:
 
 - **approvals_required** (Number)
-- **approvers** (Set of Object) (see [below for nested schema](#nestedobjatt--approvals--approver_groups--approvers))
+- **approvers** (List of Object) (see [below for nested schema](#nestedobjatt--approvals--approver_groups--approvers))
 - **created_at** (String)
 - **job_id** (Number)
 - **offer_id** (Number)
@@ -59,7 +59,7 @@ Read-Only:
 
 Read-Only:
 
-- **email_addresses** (Set of String)
+- **email_addresses** (List of String)
 - **employee_id** (String)
 - **name** (String)
 

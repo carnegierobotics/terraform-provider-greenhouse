@@ -35,16 +35,16 @@ func resourceGreenhouseApplicationExists(d *schema.ResourceData, meta interface{
 
 func resourceGreenhouseApplicationCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var createObj greenhouse.Application
-  referrer := d.Get("referrer").([]interface{})
-  if len(referrer) == 1 {
-    referrerObj, err := inflateTypeTypeValues(ctx, &referrer)
-    if err != nil {
-      return err
-    }
-    if referrerObj != nil && len(*referrerObj) > 0 {
-      createObj.Referrer = &(*referrerObj)[0]
-    }
-  }
+	referrer := d.Get("referrer").([]interface{})
+	if len(referrer) == 1 {
+		referrerObj, err := inflateTypeTypeValues(ctx, &referrer)
+		if err != nil {
+			return err
+		}
+		if referrerObj != nil && len(*referrerObj) > 0 {
+			createObj.Referrer = &(*referrerObj)[0]
+		}
+	}
 	if d.Get("prospect").(bool) {
 		createObj.Prospect = d.Get("prospect").(bool)
 		createObj.JobIds = d.Get("job_ids").([]int)
@@ -58,11 +58,11 @@ func resourceGreenhouseApplicationCreate(ctx context.Context, d *schema.Resource
 		createObj.JobId = d.Get("job_id").(int)
 		createObj.SourceId = d.Get("source_id").(int)
 		createObj.InitialStageId = d.Get("initial_stage_id").(int)
-    attachments := d.Get("attachments").([]interface{})
-    obj, err := inflateAttachments(ctx, &attachments)
-    if err != nil {
-      return err
-    }
+		attachments := d.Get("attachments").([]interface{})
+		obj, err := inflateAttachments(ctx, &attachments)
+		if err != nil {
+			return err
+		}
 		createObj.Attachments = *obj
 	}
 	return resourceGreenhouseApplicationUpdate(ctx, d, meta)

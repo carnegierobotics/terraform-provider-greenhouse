@@ -2,10 +2,10 @@ package greenhouse
 
 import (
 	"context"
-  "fmt"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-  "github.com/hashicorp/terraform-plugin-log/tflog"
-  "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -73,24 +73,24 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 }
 
 func inflateUsers(ctx context.Context, source *[]interface{}) (*[]greenhouse.User, diag.Diagnostics) {
-  tflog.Debug(ctx, fmt.Sprintf("Inflating users: %+v", source))
-  if source != nil && len(*source) > 0 {
-	  var list []greenhouse.User
-	  err := convertType(ctx, *source, list)
-    if err != nil {
-      return nil, err
-    }
-    return &list, nil
-  }
+	tflog.Debug(ctx, fmt.Sprintf("Inflating users: %+v", source))
+	if source != nil && len(*source) > 0 {
+		var list []greenhouse.User
+		err := convertType(ctx, *source, list)
+		if err != nil {
+			return nil, err
+		}
+		return &list, nil
+	}
 	return nil, nil
 }
 
 func inflateUser(ctx context.Context, source interface{}) (*greenhouse.User, diag.Diagnostics) {
 	var item greenhouse.User
 	err := convertType(ctx, source, item)
-  if err != nil {
-    return nil, err
-  }
+	if err != nil {
+		return nil, err
+	}
 	return &item, nil
 }
 

@@ -25,7 +25,7 @@ description: |-
 - **demographic_question_id** (Number)
 - **free_form** (Boolean)
 - **name** (String)
-- **translations** (Set of Object) (see [below for nested schema](#nestedatt--translations))
+- **translations** (List of Object) (see [below for nested schema](#nestedatt--translations))
 
 <a id="nestedatt--translations"></a>
 ### Nested Schema for `translations`

@@ -123,18 +123,18 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--departments))
-- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
+- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
 - **job_post_name** (String)
 - **notes** (String)
 - **number_of_openings** (Number)
-- **office_ids** (Set of Number)
-- **offices** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--offices))
+- **office_ids** (List of Number)
+- **offices** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--offices))
 - **opened_at** (String)
-- **opening_ids** (Set of Number)
-- **openings** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--openings))
+- **opening_ids** (List of Number)
+- **openings** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--openings))
 - **requisition_id** (String)
 - **status** (String)
 - **team_and_responsibilities** (String)
@@ -146,8 +146,8 @@ Read-Only:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -159,7 +159,7 @@ Read-Only:
 
 Read-Only:
 
-- **members** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team--members))
+- **members** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team--members))
 - **name** (String)
 
 <a id="nestedobjatt--applications--jobs--hiring_team--members"></a>
@@ -184,7 +184,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)
@@ -266,8 +266,8 @@ Read-Only:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -279,7 +279,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)
@@ -341,7 +341,7 @@ Read-Only:
 
 - **name** (String)
 - **public_name** (String)
-- **type** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--source--type))
+- **type** (List of Object) (see [below for nested schema](#nestedobjatt--applications--source--type))
 
 <a id="nestedobjatt--applications--source--type"></a>
 ### Nested Schema for `applications.source.type`

@@ -26,14 +26,14 @@ description: |-
 - **confidential** (Boolean)
 - **custom_fields** (Map of String)
 - **department_id** (Number)
-- **hiring_team** (Block Set) (see [below for nested schema](#nestedblock--hiring_team))
+- **hiring_team** (Block List) (see [below for nested schema](#nestedblock--hiring_team))
 - **how_to_sell_this_job** (String)
 - **id** (String) The ID of this resource.
 - **job_name** (String)
 - **job_post_name** (String)
 - **notes** (String)
-- **office_ids** (Set of Number)
-- **opening_ids** (Set of Number)
+- **office_ids** (List of Number)
+- **opening_ids** (List of Number)
 - **requisition_id** (String)
 - **team_and_responsibilities** (String)
 
@@ -44,9 +44,9 @@ description: |-
 - **created_at** (String)
 - **departments** (List of Object) (see [below for nested schema](#nestedatt--departments))
 - **is_template** (Boolean)
-- **offices** (Set of Object) (see [below for nested schema](#nestedatt--offices))
+- **offices** (List of Object) (see [below for nested schema](#nestedatt--offices))
 - **opened_at** (String)
-- **openings** (Set of Object) (see [below for nested schema](#nestedatt--openings))
+- **openings** (List of Object) (see [below for nested schema](#nestedatt--openings))
 - **status** (String)
 - **updated_at** (String)
 
@@ -55,7 +55,7 @@ description: |-
 
 Required:
 
-- **members** (Block Set, Min: 1) (see [below for nested schema](#nestedblock--hiring_team--members))
+- **members** (Block List, Min: 1) (see [below for nested schema](#nestedblock--hiring_team--members))
 - **name** (String)
 
 <a id="nestedblock--hiring_team--members"></a>
@@ -86,8 +86,8 @@ Read-Only:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -99,7 +99,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)

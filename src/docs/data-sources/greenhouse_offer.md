@@ -22,8 +22,8 @@ description: |-
 - **custom_fields** (Map of String)
 - **id** (Number) The ID of this resource.
 - **job_id** (Number)
-- **keyed_custom_fields** (Set of Map of Object)
-- **opening** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--opening))
+- **keyed_custom_fields** (List of Map of Object)
+- **opening** (Block List, Max: 1) (see [below for nested schema](#nestedblock--opening))
 - **status** (String)
 
 ### Read-Only

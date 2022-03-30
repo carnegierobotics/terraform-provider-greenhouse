@@ -24,34 +24,34 @@ description: |-
 ### Optional
 
 - **activity_feed_notes** (Block List) The candidate's activity feed. (see [below for nested schema](#nestedblock--activity_feed_notes))
-- **addresses** (Block Set) The candidate's address(es). (see [below for nested schema](#nestedblock--addresses))
+- **addresses** (Block List) The candidate's address(es). (see [below for nested schema](#nestedblock--addresses))
 - **application** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application))
-- **application_ids** (Set of Number)
-- **applications** (Block Set) Applications the candidate has submitted. (see [below for nested schema](#nestedblock--applications))
+- **application_ids** (List of Number)
+- **applications** (Block List) Applications the candidate has submitted. (see [below for nested schema](#nestedblock--applications))
 - **company** (String) The candidate's company.
 - **coordinator** (Block List, Max: 1) The candidate's coordinator. (see [below for nested schema](#nestedblock--coordinator))
-- **custom_fields** (Block Set) Custom fields for this candidate. (see [below for nested schema](#nestedblock--custom_fields))
+- **custom_fields** (Block List) Custom fields for this candidate. (see [below for nested schema](#nestedblock--custom_fields))
 - **educations** (Block List) The candidate's educational background. (see [below for nested schema](#nestedblock--educations))
-- **email_addresses** (Block Set) The candidate's email address(es). (see [below for nested schema](#nestedblock--email_addresses))
+- **email_addresses** (Block List) The candidate's email address(es). (see [below for nested schema](#nestedblock--email_addresses))
 - **employments** (Block List) The candidate's employment background. (see [below for nested schema](#nestedblock--employments))
 - **id** (String) The ID of this resource.
 - **is_private** (Boolean) This candidate is private.
-- **phone_numbers** (Block Set) The candidate's phone number(s). (see [below for nested schema](#nestedblock--phone_numbers))
+- **phone_numbers** (Block List) The candidate's phone number(s). (see [below for nested schema](#nestedblock--phone_numbers))
 - **photo_url** (String)
 - **recruiter** (Block List, Max: 1) The candidate's recruiter. (see [below for nested schema](#nestedblock--recruiter))
-- **social_media_addresses** (Block Set) The candidate's social media address(es). (see [below for nested schema](#nestedblock--social_media_addresses))
-- **tags** (Set of String) Tags for this candidate.
+- **social_media_addresses** (Block List) The candidate's social media address(es). (see [below for nested schema](#nestedblock--social_media_addresses))
+- **tags** (List of String) Tags for this candidate.
 - **title** (String) The candidate's title.
-- **website_addresses** (Block Set) The candidate's website(s). (see [below for nested schema](#nestedblock--website_addresses))
+- **website_addresses** (Block List) The candidate's website(s). (see [below for nested schema](#nestedblock--website_addresses))
 
 ### Read-Only
 
-- **attachments** (Block Set) (see [below for nested schema](#nestedblock--attachments))
+- **attachments** (Block List) (see [below for nested schema](#nestedblock--attachments))
 - **can_email** (Boolean)
 - **created_at** (String)
 - **created_by** (String)
 - **last_activity** (String)
-- **linked_user_ids** (Set of Number)
+- **linked_user_ids** (List of Number)
 - **updated_at** (String)
 
 <a id="nestedblock--activity_feed_notes"></a>
@@ -100,7 +100,7 @@ Read-Only:
 - **from** (String)
 - **subject** (String)
 - **to** (String)
-- **user** (Set of Object) (see [below for nested schema](#nestedobjatt--activity_feed_notes--emails--user))
+- **user** (List of Object) (see [below for nested schema](#nestedobjatt--activity_feed_notes--emails--user))
 
 <a id="nestedobjatt--activity_feed_notes--emails--user"></a>
 ### Nested Schema for `activity_feed_notes.emails.user`
@@ -122,7 +122,7 @@ Read-Only:
 - **body** (String)
 - **created_at** (String)
 - **private** (Boolean)
-- **user** (Set of Object) (see [below for nested schema](#nestedobjatt--activity_feed_notes--notes--user))
+- **user** (List of Object) (see [below for nested schema](#nestedobjatt--activity_feed_notes--notes--user))
 - **visibility** (String)
 - **visiblity** (String)
 
@@ -309,7 +309,7 @@ Read-Only:
 
 Optional:
 
-- **type** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--application--source--type))
+- **type** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--source--type))
 
 Read-Only:
 
@@ -360,18 +360,18 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--departments))
-- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--application--jobs--hiring_team))
+- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
 - **job_post_name** (String)
 - **notes** (String)
 - **number_of_openings** (Number)
-- **office_ids** (Set of Number)
-- **offices** (Set of Object) (see [below for nested schema](#nestedobjatt--application--jobs--offices))
+- **office_ids** (List of Number)
+- **offices** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--offices))
 - **opened_at** (String)
-- **opening_ids** (Set of Number)
-- **openings** (Set of Object) (see [below for nested schema](#nestedobjatt--application--jobs--openings))
+- **opening_ids** (List of Number)
+- **openings** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--openings))
 - **requisition_id** (String)
 - **status** (String)
 - **team_and_responsibilities** (String)
@@ -383,8 +383,8 @@ Read-Only:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -396,7 +396,7 @@ Read-Only:
 
 Read-Only:
 
-- **members** (Set of Object) (see [below for nested schema](#nestedobjatt--application--jobs--hiring_team--members))
+- **members** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--hiring_team--members))
 - **name** (String)
 
 <a id="nestedobjatt--application--jobs--hiring_team--members"></a>
@@ -421,7 +421,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)
@@ -450,8 +450,8 @@ Read-Only:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -463,7 +463,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)
@@ -652,7 +652,7 @@ Read-Only:
 
 Optional:
 
-- **type** (Block Set, Max: 1) (see [below for nested schema](#nestedblock--applications--source--type))
+- **type** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--source--type))
 
 Read-Only:
 
@@ -703,18 +703,18 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--departments))
-- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
+- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
 - **job_post_name** (String)
 - **notes** (String)
 - **number_of_openings** (Number)
-- **office_ids** (Set of Number)
-- **offices** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--offices))
+- **office_ids** (List of Number)
+- **offices** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--offices))
 - **opened_at** (String)
-- **opening_ids** (Set of Number)
-- **openings** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--openings))
+- **opening_ids** (List of Number)
+- **openings** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--openings))
 - **requisition_id** (String)
 - **status** (String)
 - **team_and_responsibilities** (String)
@@ -726,8 +726,8 @@ Read-Only:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -739,7 +739,7 @@ Read-Only:
 
 Read-Only:
 
-- **members** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team--members))
+- **members** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team--members))
 - **name** (String)
 
 <a id="nestedobjatt--applications--jobs--hiring_team--members"></a>
@@ -764,7 +764,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)
@@ -793,8 +793,8 @@ Read-Only:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -806,7 +806,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)
@@ -856,11 +856,11 @@ Optional:
 
 - **api_only** (Boolean) Updates to this field may only be made via Harvest.
 - **custom_field_options** (Block List) For single_select and multi_select field_types, this is the list of options for that select. (see [below for nested schema](#nestedblock--custom_fields--custom_field_options))
-- **department_ids** (Set of Number) The custom field is only displayed for objects in these departments.
+- **department_ids** (List of Number) The custom field is only displayed for objects in these departments.
 - **description** (String) The field's description in Greenhouse
 - **expose_in_job_board_api** (Boolean) This field and its value are provided in the Job Board API response.
 - **generate_email_token** (Boolean) Generate a default template_token_string for the new Custom Field.
-- **office_ids** (Set of Number) The custom field is only displayed for objects in these offices.
+- **office_ids** (List of Number) The custom field is only displayed for objects in these offices.
 - **private** (Boolean) Denotes a private field in Greenhouse.
 - **require_approval** (Boolean) Changes to this field trigger re-approval.
 - **required** (Boolean) Denotes a required field in Greenhouse.
@@ -872,7 +872,7 @@ Read-Only:
 - **active** (Boolean)
 - **departments** (List of Object) (see [below for nested schema](#nestedatt--custom_fields--departments))
 - **name_key** (String)
-- **offices** (Set of Object) (see [below for nested schema](#nestedatt--custom_fields--offices))
+- **offices** (List of Object) (see [below for nested schema](#nestedatt--custom_fields--offices))
 - **priority** (Number)
 
 <a id="nestedblock--custom_fields--custom_field_options"></a>
@@ -893,8 +893,8 @@ Optional:
 
 Read-Only:
 
-- **child_department_external_ids** (Set of String)
-- **child_ids** (Set of Number)
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
 - **external_id** (String)
 - **name** (String)
 - **parent_department_external_id** (String)
@@ -906,7 +906,7 @@ Read-Only:
 
 Read-Only:
 
-- **child_ids** (Set of Number)
+- **child_ids** (List of Number)
 - **location** (Map of String)
 - **location_name** (String)
 - **name** (String)
@@ -926,6 +926,7 @@ Optional:
 - **end_month** (Number)
 - **end_year** (Number)
 - **school_id** (Number)
+- **school_name** (String)
 - **start_date** (String)
 - **start_month** (Number)
 - **start_year** (Number)

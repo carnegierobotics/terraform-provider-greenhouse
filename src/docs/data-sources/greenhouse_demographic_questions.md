@@ -33,7 +33,7 @@ Read-Only:
 - **demographic_question_set_id** (Number)
 - **name** (String)
 - **required** (Boolean)
-- **translations** (Set of Object) (see [below for nested schema](#nestedobjatt--questions--translations))
+- **translations** (List of Object) (see [below for nested schema](#nestedobjatt--questions--translations))
 
 <a id="nestedobjatt--questions--translations"></a>
 ### Nested Schema for `questions.translations`
