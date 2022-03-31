@@ -33,6 +33,7 @@ description: |-
 Read-Only:
 
 - **job_id** (Number)
+- **user_id** (Number)
 - **user_role_id** (Number)
 
 

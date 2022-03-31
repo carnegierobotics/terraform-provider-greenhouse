@@ -37,6 +37,7 @@ Read-Only:
 - **approver_groups** (List of Object) (see [below for nested schema](#nestedobjatt--approvals--approver_groups))
 - **job_id** (Number)
 - **offer_id** (Number)
+- **request_approval** (Boolean)
 - **requested_by_user_id** (Number)
 - **sequential** (Boolean)
 - **version** (Number)

@@ -439,6 +439,7 @@ Read-Only:
 - **close_reason_id** (Number)
 - **closed_at** (String)
 - **custom_fields** (Map of String)
+- **job_id** (Number)
 - **opened_at** (String)
 - **opening_id** (String)
 - **status** (String)
@@ -790,6 +791,7 @@ Read-Only:
 - **close_reason_id** (Number)
 - **closed_at** (String)
 - **custom_fields** (Map of String)
+- **job_id** (Number)
 - **opened_at** (String)
 - **opening_id** (String)
 - **status** (String)
@@ -944,8 +946,8 @@ Optional:
 - **school_id** (Number)
 - **school_name** (String)
 - **start_date** (String)
-- **start_month** (Number)
-- **start_year** (Number)
+- **start_month** (String)
+- **start_year** (String)
 
 Read-Only:
 

@@ -41,6 +41,7 @@ Read-Only:
 - **internal_content** (String)
 - **job_id** (Number)
 - **live** (Boolean)
+- **location** (String)
 - **questions** (List of Object) (see [below for nested schema](#nestedobjatt--posts--questions))
 - **updated_at** (String)
 

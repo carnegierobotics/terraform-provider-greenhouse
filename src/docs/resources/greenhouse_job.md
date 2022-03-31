@@ -34,6 +34,7 @@ description: |-
 - **notes** (String)
 - **office_ids** (List of Number)
 - **opening_ids** (List of Number)
+- **openings** (Block List) (see [below for nested schema](#nestedblock--openings))
 - **requisition_id** (String)
 - **team_and_responsibilities** (String)
 
@@ -46,7 +47,6 @@ description: |-
 - **is_template** (Boolean)
 - **offices** (List of Object) (see [below for nested schema](#nestedatt--offices))
 - **opened_at** (String)
-- **openings** (List of Object) (see [below for nested schema](#nestedatt--openings))
 - **status** (String)
 - **updated_at** (String)
 
@@ -81,6 +81,36 @@ Read-Only:
 
 
 
+<a id="nestedblock--openings"></a>
+### Nested Schema for `openings`
+
+Required:
+
+- **job_id** (Number)
+- **opening_id** (String)
+
+Optional:
+
+- **application_id** (Number)
+- **close_reason_id** (Number)
+- **custom_fields** (Map of String)
+- **status** (String)
+
+Read-Only:
+
+- **close_reason** (List of Object) (see [below for nested schema](#nestedatt--openings--close_reason))
+- **closed_at** (String)
+- **opened_at** (String)
+
+<a id="nestedatt--openings--close_reason"></a>
+### Nested Schema for `openings.close_reason`
+
+Read-Only:
+
+- **name** (String)
+
+
+
 <a id="nestedatt--departments"></a>
 ### Nested Schema for `departments`
 
@@ -105,27 +135,5 @@ Read-Only:
 - **name** (String)
 - **parent_id** (Number)
 - **primary_contact_user_id** (Number)
-
-
-<a id="nestedatt--openings"></a>
-### Nested Schema for `openings`
-
-Read-Only:
-
-- **application_id** (Number)
-- **close_reason** (List of Object) (see [below for nested schema](#nestedobjatt--openings--close_reason))
-- **close_reason_id** (Number)
-- **closed_at** (String)
-- **custom_fields** (Map of String)
-- **opened_at** (String)
-- **opening_id** (String)
-- **status** (String)
-
-<a id="nestedobjatt--openings--close_reason"></a>
-### Nested Schema for `openings.close_reason`
-
-Read-Only:
-
-- **name** (String)
 
 

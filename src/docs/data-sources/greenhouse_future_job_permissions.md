@@ -36,6 +36,7 @@ Read-Only:
 - **external_department_id** (String)
 - **external_office_id** (String)
 - **office_id** (Number)
+- **user_id** (Number)
 - **user_role_id** (Number)
 
 
