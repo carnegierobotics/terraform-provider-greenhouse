@@ -10,7 +10,7 @@ import (
 func schemaGreenhouseScheduledInterview() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"application_id": {
-			Type:     schema.TypeString,
+			Type:     schema.TypeInt,
 			Optional: true,
 		},
 		"end": {

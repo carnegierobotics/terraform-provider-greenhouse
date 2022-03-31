@@ -34,7 +34,43 @@ func resourceGreenhouseScheduledInterviewExists(d *schema.ResourceData, meta int
 }
 
 func resourceGreenhouseScheduledInterviewCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return diag.Diagnostics{{Severity: diag.Error, Summary: "Create is not supported for xxx."}}
+  var obj greenhouse.ScheduledInterviewCreateInfo
+  if v, ok := d.Get("application_id").(int); ok {
+    obj.ApplicationId = v
+  }
+  if v, ok := d.Get("end").([]interface{}); ok && len(v) > 0 {
+    list, err := inflateScheduledInterviewDate(ctx, &v)
+    if err != nil {
+      return err
+    }
+    obj.End = (*list)[0].DateTime
+  }
+  if v, ok := d.Get("external_event_id").(string); ok && len(v) > 0 {
+    obj.ExternalEventId = v
+  }
+  if v, ok := d.Get("interview_id").(int); ok {
+    obj.InterviewId = v
+  }
+  if v, ok := d.Get("interviewers").([]interface{}); ok && len(v) > 0 {
+    list, err := inflateInterviewers(ctx, &v)
+    if err != nil {
+      return err
+    }
+    obj.Interviewers = *list
+  }
+  if v, ok := d.Get("start").([]interface{}); ok && len(v) > 0 {
+    list, err := inflateScheduledInterviewDate(ctx, &v)
+    if err != nil {
+      return err
+    }
+    obj.Start = (*list)[0].DateTime
+  }
+  id, err := greenhouse.CreateScheduledInterview(meta.(*greenhouse.Client), ctx, &obj)
+  if err != nil {
+    return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+  }
+  d.SetId(strconv.Itoa(id))
+  return resourceGreenhouseScheduledInterviewUpdate(ctx, d, meta)
 }
 
 func resourceGreenhouseScheduledInterviewRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -57,12 +93,49 @@ func resourceGreenhouseScheduledInterviewUpdate(ctx context.Context, d *schema.R
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	updateObj := greenhouse.ScheduledInterviewUpdateInfo{End: d.Get("end").(string), ExternalEventId: d.Get("external_event_id").(string)}
-	err = greenhouse.UpdateScheduledInterview(meta.(*greenhouse.Client), ctx, id, &updateObj)
+  var obj greenhouse.ScheduledInterviewUpdateInfo
+  if d.HasChanges("end") {
+    if v, ok := d.Get("end").([]interface{}); ok && len(v) > 0 {
+      list, err := inflateScheduledInterviewDates(ctx, &v)
+      if err != nil {
+        return err
+      }
+      obj.End = (*list)[0].DateTime
+    }
+  }
+  if d.HasChanges("external_event_id") {
+    if v, ok := d.Get("external_event_id").(string); ok && len(v) > 0 {
+      obj.ExternalEventId = v
+    }
+  }
+  if d.HasChanges("interviewers") {
+    if v, ok := d.Get("interviewers").([]interface{}); ok && len(v) > 0 {
+      list, err := inflateInterviewers(ctx, &v)
+      if err != nil {
+        return err
+      }
+      obj.Interviewers = *list
+    }
+  }
+  if d.HasChanges("location") {
+    if v, ok := d.Get("location").(string); ok && len(v) > 0 {
+      obj.Location = v
+    }
+  }
+  if d.HasChanges("start") {
+    if v, ok := d.Get("start").([]interface{}); ok && len(v) > 0 {
+      list, err := inflateScheduledInterviewDates(ctx, &v)
+      if err != nil {
+        return err
+      }
+      obj.Start = (*list)[0].DateTime
+    }
+  }
+	err = greenhouse.UpdateScheduledInterview(meta.(*greenhouse.Client), ctx, id, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	return nil
+	return resourceGreenhouseCandidateRead(ctx, d, meta)
 }
 
 func resourceGreenhouseScheduledInterviewDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

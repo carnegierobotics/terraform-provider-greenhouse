@@ -193,7 +193,7 @@ func resourceGreenhouseCandidateRead(ctx context.Context, d *schema.ResourceData
 
 func resourceGreenhouseCandidateUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	tflog.Debug(ctx, "Started resourceGreenhouseCandidateUpdate.")
-	/*
+	/* TODO
 			if d.HasChanges("educations") {
 		    err := updateEducations(ctx, d, meta)
 		    if err != nil {
