@@ -298,38 +298,48 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 	}
 	if v, ok := (*item)["job_ids"].([]interface{}); ok && len(v) > 0 {
 		jobIds := v
-		app.JobIds = *sliceItoSliceD(jobIds)
+		app.JobIds = *sliceItoSliceD(&jobIds)
 	}
 	if v, ok := (*item)["jobs"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating jobs.")
-		app.Jobs = *inflateJobs(ctx, v)
+		list, err := inflateJobs(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.Jobs = *list
 	}
 	if v, ok := (*item)["job_post_id"].(int); ok {
 		app.JobPostId = v
 	}
 	if v, ok := (*item)["keyed_custom_fields"].(map[string]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating keyed custom fields.")
-		app.KeyedCustomFields = *inflateKeyedCustomFields(ctx, v)
+		fields, err := inflateKeyedCustomFields(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.KeyedCustomFields = *fields
 	}
 	if v, ok := (*item)["last_activity_at"].(string); ok && len(v) > 0 {
 		app.LastActivityAt = v
 	}
 	if v, ok := (*item)["location"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating location.")
-		app.Location = inflateLocation(ctx, v[0])
+		list, err := inflateLocations(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.Location = &(*list)[0]
 	}
 	if v, ok := (*item)["prospect"].(bool); ok {
 		app.Prospect = v
 	}
 	if v, ok := (*item)["prospect_detail"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating prospect detail.")
-		inflatedDetail, err := inflateProspectDetail(ctx, v[0])
+		list, err := inflateProspectDetails(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		if inflatedDetail != nil {
-			app.ProspectDetail = inflatedDetail
-		}
+		app.ProspectDetail = &(*list)[0]
 	}
 	if v, ok := (*item)["prospect_owner_id"].(int); ok {
 		app.ProspectOwnerId = v
@@ -345,35 +355,51 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 	}
 	if v, ok := (*item)["prospective_department"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating department.")
-		app.ProspectiveDepartment = inflateDepartment(ctx, v[0])
+		list, err := inflateDepartments(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.ProspectiveDepartment = &(*list)[0]
 	}
 	if v, ok := (*item)["prospective_department_id"].(int); ok {
 		app.ProspectiveDepartmentId = v
 	}
 	if v, ok := (*item)["prospective_office"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating office.")
-		app.ProspectiveOffice = inflateOffice(ctx, v[0])
+		list, err := inflateOffices(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.ProspectiveOffice = &(*list)[0]
 	}
 	if v, ok := (*item)["prospective_office_id"].(int); ok {
 		app.ProspectiveOfficeId = v
 	}
 	if v, ok := (*item)["referrer"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating referrer.")
-		inflatedReferrer, err := inflateTypeTypeValue(ctx, v[0])
+		inflatedReferrer, err := inflateTypeTypeValues(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		app.Referrer = inflatedReferrer
+		app.Referrer = &(*inflatedReferrer)[0]
 	}
 	if v, ok := (*item)["rejected_at"].(string); ok && len(v) > 0 {
 		app.RejectedAt = v
 	}
 	if v, ok := (*item)["rejection_details"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating rejection details.")
-		app.RejectionDetails = inflateRejectionDetails(ctx, v[0])
+		list, err := inflateRejectionDetailsList(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.RejectionDetails = &(*list)[0]
 	}
 	if v, ok := (*item)["rejection_reason"].([]interface{}); ok && len(v) > 0 {
-		app.RejectionReason = inflateRejectionReason(ctx, v[0])
+		list, err := inflateRejectionReasons(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.RejectionReason = &(*list)[0]
 	}
 	if v, ok := (*item)["source"].([]interface{}); ok && len(v) > 0 {
 		app.Source = inflateSource(ctx, v)

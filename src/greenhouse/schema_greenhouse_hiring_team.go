@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -22,6 +23,32 @@ func schemaGreenhouseHiringTeam() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func inflateHiringTeams(ctx context.Context, source *map[string]interface{}) (*map[string][]greenhouse.HiringMember, diag.Diagnostics) {
+	newMap := make(map[string][]greenhouse.HiringMember)
+	for k, v := range *source {
+		team := v.([]interface{})
+		inflatedTeam, err := inflateHiringTeam(ctx, &team)
+		if err != nil {
+			return nil, err
+		}
+		newMap[k] = *inflatedTeam
+	}
+	return &newMap, nil
+}
+
+func inflateHiringTeam(ctx context.Context, source *[]interface{}) (*[]greenhouse.HiringMember, diag.Diagnostics) {
+	list := make([]greenhouse.HiringMember, len(*source), len(*source))
+	for i, item := range *source {
+		n := item.(map[string]interface{})
+		member, err := inflateHiringTeamMember(ctx, &n)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *member
+	}
+	return &list, nil
 }
 
 /*

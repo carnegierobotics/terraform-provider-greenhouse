@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -45,16 +46,40 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 	}
 }
 
-func inflateDepartments(ctx context.Context, source interface{}) *[]greenhouse.Department {
-	var list []greenhouse.Department
-	convertType(ctx, source, list)
-	return &list
+func inflateDepartments(ctx context.Context, source *[]interface{}) (*[]greenhouse.Department, diag.Diagnostics) {
+	list := make([]greenhouse.Department, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateDepartment(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
 }
 
-func inflateDepartment(ctx context.Context, source interface{}) *greenhouse.Department {
-	var item greenhouse.Department
-	convertType(ctx, source, item)
-	return &item
+func inflateDepartment(ctx context.Context, source *map[string]interface{}) (*greenhouse.Department, diag.Diagnostics) {
+	var obj greenhouse.Department
+	if v, ok := (*source)["child_department_external_ids"].([]interface{}); ok && len(v) > 0 {
+		obj.ChildDepartmentExternalIds = *sliceItoSliceA(&v)
+	}
+	if v, ok := (*source)["child_ids"].([]interface{}); ok && len(v) > 0 {
+		obj.ChildIds = *sliceItoSliceD(&v)
+	}
+	if v, ok := (*source)["external_id"].(string); ok && len(v) > 0 {
+		obj.ExternalId = v
+	}
+	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
+		obj.Name = v
+	}
+	if v, ok := (*source)["parent_department_external_ids"].(string); ok && len(v) > 0 {
+		obj.ParentDepartmentExternalId = v
+	}
+	if v, ok := (*source)["parent_id"].(int); ok {
+		obj.ParentId = v
+	}
+	return &obj, nil
 }
 
 func flattenDepartments(ctx context.Context, list *[]greenhouse.Department) []interface{} {
@@ -73,9 +98,11 @@ func flattenDepartments(ctx context.Context, list *[]greenhouse.Department) []in
 func flattenDepartment(ctx context.Context, item *greenhouse.Department) map[string]interface{} {
 	tflog.Debug(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
 	dept := make(map[string]interface{})
-	dept["name"] = item.Name
-	dept["parent_id"] = item.ParentId
+	dept["child_department_external_ids"] = item.ChildDepartmentExternalIds
 	dept["child_ids"] = item.ChildIds
+	dept["name"] = item.Name
+	dept["parent_department_external_id"] = item.ParentDepartmentExternalId
+	dept["parent_id"] = item.ParentId
 	tflog.Debug(ctx, "Flattened department", "department", fmt.Sprintf("%+v", dept))
 	return dept
 }

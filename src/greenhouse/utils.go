@@ -31,18 +31,18 @@ func mapAItoMapAA(ctx context.Context, mapAI map[string]interface{}) *map[string
 	return &mapAA
 }
 
-func sliceItoSliceA(sliceI []interface{}) *[]string {
-	sliceA := make([]string, len(sliceI), len(sliceI))
-	for i := range sliceI {
-		sliceA[i] = sliceI[i].(string)
+func sliceItoSliceA(sliceI *[]interface{}) *[]string {
+	sliceA := make([]string, len(*sliceI), len(*sliceI))
+	for i, item := range *sliceI {
+		sliceA[i] = item.(string)
 	}
 	return &sliceA
 }
 
-func sliceItoSliceD(sliceI []interface{}) *[]int {
-	sliceD := make([]int, len(sliceI), len(sliceI))
-	for i := range sliceI {
-		sliceD[i] = sliceI[i].(int)
+func sliceItoSliceD(sliceI *[]interface{}) *[]int {
+	sliceD := make([]int, len(*sliceI), len(*sliceI))
+	for i, item := range *sliceI {
+		sliceD[i] = item.(int)
 	}
 	return &sliceD
 }

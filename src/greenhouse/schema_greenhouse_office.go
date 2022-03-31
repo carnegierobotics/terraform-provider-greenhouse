@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -51,16 +52,50 @@ func schemaGreenhouseOffice() map[string]*schema.Schema {
 	}
 }
 
-func inflateOffices(ctx context.Context, source interface{}) *[]greenhouse.Office {
-	var list []greenhouse.Office
-	convertType(ctx, source, list)
-	return &list
+func inflateOffices(ctx context.Context, source *[]interface{}) (*[]greenhouse.Office, diag.Diagnostics) {
+	list := make([]greenhouse.Office, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateOffice(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
 }
 
-func inflateOffice(ctx context.Context, source interface{}) *greenhouse.Office {
-	var item greenhouse.Office
-	convertType(ctx, source, item)
-	return &item
+func inflateOffice(ctx context.Context, source *map[string]interface{}) (*greenhouse.Office, diag.Diagnostics) {
+	var obj greenhouse.Office
+	if v, ok := (*source)["child_ids"].([]interface{}); ok && len(v) > 0 {
+		obj.ChildIds = *sliceItoSliceD(&v)
+	}
+	if v, ok := (*source)["child_office_external_ids"].([]interface{}); ok && len(v) > 0 {
+		obj.ChildOfficeExternalIds = *sliceItoSliceA(&v)
+	}
+	if v, ok := (*source)["external_id"].(string); ok && len(v) > 0 {
+		obj.ExternalId = v
+	}
+	if v, ok := (*source)["location"].(map[string]interface{}); ok && len(v) > 0 {
+		item, err := inflateLocation(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		obj.Location = item
+	}
+	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
+		obj.Name = v
+	}
+	if v, ok := (*source)["parent_id"].(int); ok {
+		obj.ParentId = v
+	}
+	if v, ok := (*source)["parent_office_external_id"].(string); ok && len(v) > 0 {
+		obj.ParentOfficeExternalId = v
+	}
+	if v, ok := (*source)["primary_contact_user_id"].(int); ok {
+		obj.PrimaryContactUserId = v
+	}
+	return &obj, nil
 }
 
 func flattenOffices(ctx context.Context, list *[]greenhouse.Office) []interface{} {

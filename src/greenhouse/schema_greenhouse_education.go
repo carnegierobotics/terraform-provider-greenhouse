@@ -50,11 +50,11 @@ func schemaGreenhouseEducation() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"start_month": {
-			Type:     schema.TypeInt,
+			Type:     schema.TypeString,
 			Optional: true,
 		},
 		"start_year": {
-			Type:     schema.TypeInt,
+			Type:     schema.TypeString,
 			Optional: true,
 		},
 	}
@@ -105,11 +105,10 @@ func inflateEducation(ctx context.Context, source *map[string]interface{}) (*gre
 	if v, ok := (*source)["start_date"].(string); ok && len(v) > 0 {
 		obj.StartDate = v
 	}
-	//TODO: I think these two should be string...
-	if v, ok := (*source)["start_month"].(int); ok {
+	if v, ok := (*source)["start_month"].(string); ok && len(v) > 0 {
 		obj.StartMonth = v
 	}
-	if v, ok := (*source)["start_year"].(int); ok {
+	if v, ok := (*source)["start_year"].(string); ok && len(v) > 0 {
 		obj.StartYear = v
 	}
 	return &obj, nil
