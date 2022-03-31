@@ -24,9 +24,13 @@ func schemaGreenhouseFutureJobPermission() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
+    "user_id": {
+      Type: schema.TypeInt,
+      Required: true,
+    },
 		"user_role_id": {
 			Type:     schema.TypeInt,
-			Optional: true,
+			Required: true,
 		},
 	}
 }

@@ -39,7 +39,7 @@ func resourceGreenhouseScheduledInterviewCreate(ctx context.Context, d *schema.R
     obj.ApplicationId = v
   }
   if v, ok := d.Get("end").([]interface{}); ok && len(v) > 0 {
-    list, err := inflateScheduledInterviewDate(ctx, &v)
+    list, err := inflateScheduledInterviewDates(ctx, &v)
     if err != nil {
       return err
     }
@@ -59,7 +59,7 @@ func resourceGreenhouseScheduledInterviewCreate(ctx context.Context, d *schema.R
     obj.Interviewers = *list
   }
   if v, ok := d.Get("start").([]interface{}); ok && len(v) > 0 {
-    list, err := inflateScheduledInterviewDate(ctx, &v)
+    list, err := inflateScheduledInterviewDates(ctx, &v)
     if err != nil {
       return err
     }
