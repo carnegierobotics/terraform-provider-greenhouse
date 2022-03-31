@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -23,16 +24,33 @@ func schemaGreenhouseKeyedCustomField() map[string]*schema.Schema {
 	}
 }
 
-func inflateKeyedCustomFields(ctx context.Context, source interface{}) *map[string]greenhouse.KeyedCustomField {
-	var list map[string]greenhouse.KeyedCustomField
-	convertType(ctx, source, list)
-	return &list
+func inflateKeyedCustomFields(ctx context.Context, source *map[string]interface{}) (*map[string]greenhouse.KeyedCustomField, diag.Diagnostics) {
+	list := make(map[string]greenhouse.KeyedCustomField)
+	for k, v := range *source {
+		itemMap := v.(map[string]interface{})
+		obj, err := inflateKeyedCustomField(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[k] = *obj
+	}
+	return &list, nil
 }
 
-func inflateKeyedCustomField(ctx context.Context, source map[string]interface{}) *greenhouse.KeyedCustomField {
-	var item greenhouse.KeyedCustomField
-	convertType(ctx, source, item)
-	return &item
+func inflateKeyedCustomField(ctx context.Context, source *map[string]interface{}) (*greenhouse.KeyedCustomField, diag.Diagnostics) {
+	var obj greenhouse.KeyedCustomField
+	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
+		obj.Name = v
+	}
+	if v, ok := (*source)["type"].(string); ok && len(v) > 0 {
+		obj.Type = v
+	}
+	/* TODO this needs to be made consistent with the client.
+	if v, ok := (*source)["value"].(string); ok && len(v) > 0 {
+	  obj.Value = v
+	}
+	*/
+	return &obj, nil
 }
 
 func flattenKeyedCustomFields(ctx context.Context, list *map[string]greenhouse.KeyedCustomField) map[string]interface{} {

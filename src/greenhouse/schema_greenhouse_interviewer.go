@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -41,6 +42,48 @@ func schemaGreenhouseInterviewer() map[string]*schema.Schema {
 			Required: true,
 		},
 	}
+}
+
+func inflateInterviewers(ctx context.Context, source *[]interface{}) (*[]greenhouse.Interviewer, diag.Diagnostics) {
+	list := make([]greenhouse.Interviewer, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateInterviewer(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
+}
+
+func inflateInterviewer(ctx context.Context, source *map[string]interface{}) (*greenhouse.Interviewer, diag.Diagnostics) {
+	var obj greenhouse.Interviewer
+	if v, ok := (*source)["email"].(string); ok && len(v) > 0 {
+		obj.Email = v
+	}
+	if v, ok := (*source)["employee_id"].(string); ok && len(v) > 0 {
+		obj.EmployeeId = v
+	}
+	if v, ok := (*source)["first_name"].(string); ok && len(v) > 0 {
+		obj.FirstName = v
+	}
+	if v, ok := (*source)["last_name"].(string); ok && len(v) > 0 {
+		obj.LastName = v
+	}
+	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
+		obj.Name = v
+	}
+	if v, ok := (*source)["response_status"].(string); ok && len(v) > 0 {
+		obj.ResponseStatus = v
+	}
+	if v, ok := (*source)["scorecard_id"].(int); ok {
+		obj.ScorecardId = v
+	}
+	if v, ok := (*source)["user_id"].(int); ok {
+		obj.UserId = v
+	}
+	return &obj, nil
 }
 
 func flattenInterviewers(ctx context.Context, list *[]greenhouse.Interviewer) []interface{} {

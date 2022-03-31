@@ -313,7 +313,11 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 	}
 	if v, ok := (*item)["keyed_custom_fields"].(map[string]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating keyed custom fields.")
-		app.KeyedCustomFields = *inflateKeyedCustomFields(ctx, &v)
+		fields, err := inflateKeyedCustomFields(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.KeyedCustomFields = *fields
 	}
 	if v, ok := (*item)["last_activity_at"].(string); ok && len(v) > 0 {
 		app.LastActivityAt = v
@@ -384,10 +388,18 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 	}
 	if v, ok := (*item)["rejection_details"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating rejection details.")
-		app.RejectionDetails = inflateRejectionDetails(ctx, v[0])
+		list, err := inflateRejectionDetailsList(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.RejectionDetails = &(*list)[0]
 	}
 	if v, ok := (*item)["rejection_reason"].([]interface{}); ok && len(v) > 0 {
-		app.RejectionReason = inflateRejectionReason(ctx, v[0])
+		list, err := inflateRejectionReasons(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		app.RejectionReason = &(*list)[0]
 	}
 	if v, ok := (*item)["source"].([]interface{}); ok && len(v) > 0 {
 		app.Source = inflateSource(ctx, v)

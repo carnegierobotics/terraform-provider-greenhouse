@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -25,16 +26,32 @@ func schemaGreenhouseRejectionDetails() map[string]*schema.Schema {
 	}
 }
 
-func inflateRejectionDetailsList(ctx context.Context, source interface{}) *[]greenhouse.RejectionDetails {
-	var list []greenhouse.RejectionDetails
-	convertType(ctx, source, list)
-	return &list
+func inflateRejectionDetailsList(ctx context.Context, source *[]interface{}) (*[]greenhouse.RejectionDetails, diag.Diagnostics) {
+	list := make([]greenhouse.RejectionDetails, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateRejectionDetails(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
 }
 
-func inflateRejectionDetails(ctx context.Context, source interface{}) *greenhouse.RejectionDetails {
-	var item greenhouse.RejectionDetails
-	convertType(ctx, source, item)
-	return &item
+func inflateRejectionDetails(ctx context.Context, source *map[string]interface{}) (*greenhouse.RejectionDetails, diag.Diagnostics) {
+	var obj greenhouse.RejectionDetails
+	if v, ok := (*source)["custom_fields"].(map[string]string); ok && len(v) > 0 {
+		obj.CustomFields = v
+	}
+	if v, ok := (*source)["keyed_custom_fields"].(map[string]interface{}); ok && len(v) > 0 {
+		list, err := inflateKeyedCustomFields(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		obj.KeyedCustomFields = *list
+	}
+	return &obj, nil
 }
 
 func flattenRejectionDetailsList(ctx context.Context, list *[]greenhouse.RejectionDetails) []interface{} {

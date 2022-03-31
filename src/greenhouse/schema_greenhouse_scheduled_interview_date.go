@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -17,6 +18,30 @@ func schemaGreenhouseScheduledInterviewDate() map[string]*schema.Schema {
 			Optional: true,
 		},
 	}
+}
+
+func inflateScheduledInterviewDates(ctx context.Context, source *[]interface{}) (*[]greenhouse.ScheduledInterviewDate, diag.Diagnostics) {
+	list := make([]greenhouse.ScheduledInterviewDate, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateScheduledInterviewDate(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
+}
+
+func inflateScheduledInterviewDate(ctx context.Context, source *map[string]interface{}) (*greenhouse.ScheduledInterviewDate, diag.Diagnostics) {
+	var obj greenhouse.ScheduledInterviewDate
+	if v, ok := (*source)["date"].(string); ok && len(v) > 0 {
+		obj.Date = v
+	}
+	if v, ok := (*source)["date_time"].(string); ok && len(v) > 0 {
+		obj.DateTime = v
+	}
+	return &obj, nil
 }
 
 func flattenScheduledInterviewDates(ctx context.Context, list *[]greenhouse.ScheduledInterviewDate) []interface{} {

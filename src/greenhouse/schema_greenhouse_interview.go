@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -36,6 +37,47 @@ func schemaGreenhouseInterview() map[string]*schema.Schema {
 			Optional: true,
 		},
 	}
+}
+
+func inflateInterviews(ctx context.Context, source *[]interface{}) (*[]greenhouse.Interview, diag.Diagnostics) {
+	list := make([]greenhouse.Interview, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateInterview(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
+}
+
+func inflateInterview(ctx context.Context, source *map[string]interface{}) (*greenhouse.Interview, diag.Diagnostics) {
+	var obj greenhouse.Interview
+	if v, ok := (*source)["default_interviewer_users"].([]interface{}); ok && len(v) > 0 {
+		list, err := inflateInterviewers(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		obj.DefaultInterviewerUsers = *list
+	}
+	if v, ok := (*source)["estimated_minutes"].(int); ok {
+		obj.EstimatedMinutes = v
+	}
+	if v, ok := (*source)["interview_kit"].([]interface{}); ok && len(v) > 0 {
+		list, err := inflateInterviewKits(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		obj.InterviewKit = &(*list)[0]
+	}
+	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
+		obj.Name = v
+	}
+	if v, ok := (*source)["schedulable"].(bool); ok {
+		obj.Schedulable = v
+	}
+	return &obj, nil
 }
 
 func flattenInterviews(ctx context.Context, list *[]greenhouse.Interview) []interface{} {
