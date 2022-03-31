@@ -38,6 +38,10 @@ func schemaGreenhouseJobOpening() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 		},
+    "job_id": {
+      Type: schema.TypeInt,
+      Required: true,
+    },
 		"opened_at": {
 			Type:     schema.TypeString,
 			Computed: true,

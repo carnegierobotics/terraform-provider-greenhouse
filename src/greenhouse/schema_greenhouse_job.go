@@ -121,6 +121,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"openings": {
 			Type:     schema.TypeList,
+      Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseJobOpening(),

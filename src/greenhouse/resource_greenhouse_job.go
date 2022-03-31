@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+  "reflect"
 	"strconv"
 )
 
@@ -92,7 +93,13 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	if d.HasChanges("hiring_team") {
+  if d.HasChange("openings") {
+    diagErr := updateOpenings(ctx, d, meta)
+    if diagErr != nil {
+      return diagErr
+    }
+  }
+	if d.HasChange("hiring_team") {
 		teamUpdateObject, err := transformHiringTeam(ctx, d.Get("hiring_team"))
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -146,4 +153,87 @@ func transformHiringTeam(ctx context.Context, hiringTeam interface{}) (map[strin
 
 func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for jobs."}}
+}
+
+func updateOpenings(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+  jobId, err := strconv.Atoi(d.Id())
+  if err != nil {
+    return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+  }
+  var oldList *[]greenhouse.JobOpening
+  var newList *[]greenhouse.JobOpening
+  var add *greenhouse.JobOpeningCreateInfo
+  var del *[]int
+  var upd *[]greenhouse.JobOpeningUpdateInfo
+  var diagErr diag.Diagnostics
+  o, n := d.GetChange("openings")
+  if v, ok1 := o.([]interface{}); ok1 && len(v) > 0 {
+    oldList, diagErr = inflateJobOpenings(ctx, &v)
+    if diagErr != nil {
+      return diagErr
+    }
+  }
+  if w, ok2 := n.([]interface{}); ok2 && len(w) > 0 {
+    newList, diagErr = inflateJobOpenings(ctx, &w)
+    if diagErr != nil {
+      return diagErr
+    }
+  }
+  for _, i := range *oldList {
+    obj, match := compareJobOpenings(ctx, &i, newList)
+    if obj == nil && match {
+      continue
+    } else if match {
+      updateObj := greenhouse.JobOpeningUpdateInfo{
+        CloseReasonId: obj.CloseReason.Id,
+        CustomFields: []map[string]string{(*obj).CustomFields},
+        Status: obj.Status,
+      }
+      *upd = append(*upd, updateObj)
+    } else {
+      *del = append(*del, i.Id)
+    }
+  }
+  for _, i := range *newList {
+    _, match := compareJobOpenings(ctx, &i, oldList)
+    if !match {
+      createObj := greenhouse.Opening{
+        CustomFields: []map[string]string{i.CustomFields},
+      }
+      (*add).Openings = append((*add).Openings, createObj)
+    }
+  }
+  if add != nil {
+    _, err := greenhouse.CreateJobOpenings(meta.(*greenhouse.Client), ctx, jobId, *add)
+    if err != nil {
+      return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+    }
+  }
+  if len(*upd) > 0 {
+    for _, item := range *upd {
+      err := greenhouse.UpdateJobOpenings(meta.(*greenhouse.Client), ctx, jobId, item.Id, &item)
+      if err != nil {
+        return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+      }
+    }
+  }
+  if len(*del) > 0 {
+    err := greenhouse.DeleteJobOpenings(meta.(*greenhouse.Client), ctx, jobId, *del)
+    if err != nil {
+      return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+    }
+  }
+  return nil
+}
+
+func compareJobOpenings(ctx context.Context, o *greenhouse.JobOpening, j *[]greenhouse.JobOpening) (*greenhouse.JobOpening, bool) {
+  for _, item := range *j {
+    if (*o).Id == item.Id {
+      if reflect.DeepEqual(o, item) {
+        return nil, true
+      }
+      return &item, true
+    }
+  }
+  return nil, false
 }
