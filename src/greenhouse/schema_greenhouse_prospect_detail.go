@@ -36,13 +36,43 @@ func schemaGreenhouseProspectDetail() map[string]*schema.Schema {
 	}
 }
 
-func inflateProspectDetail(ctx context.Context, source interface{}) (*greenhouse.ProspectDetail, diag.Diagnostics) {
-	var item greenhouse.ProspectDetail
-	err := convertType(ctx, source, item)
-	if err != nil {
-		return nil, err
+func inflateProspectDetails(ctx context.Context, source *[]interface{}) (*[]greenhouse.ProspectDetail, diag.Diagnostics) {
+	list := make([]greenhouse.ProspectDetail, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateProspectDetail(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
 	}
-	return &item, nil
+	return &list, nil
+}
+
+func inflateProspectDetail(ctx context.Context, source *map[string]interface{}) (*greenhouse.ProspectDetail, diag.Diagnostics) {
+	var obj greenhouse.ProspectDetail
+	if v, ok := (*source)["prospect_owner"].([]interface{}); ok && len(v) > 0 {
+		list, err := inflateTypesIdName(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		obj.ProspectOwner = (*list)[0]
+	}
+	if v, ok := (*source)["prospect_pool"].([]interface{}); ok && len(v) > 0 {
+		list, err := inflateTypesIdName(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		obj.ProspectPool = (*list)[0]
+	}
+	if v, ok := (*source)["prospect_stage"].([]interface{}); ok && len(v) > 0 {
+		list, err := inflateTypesIdName(ctx, &v)
+		if err != nil {
+			return nil, err
+		}
+		obj.ProspectStage = (*list)[0]
+	}
+	return &obj, nil
 }
 
 func flattenProspectDetail(ctx context.Context, item *greenhouse.ProspectDetail) map[string]interface{} {

@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -19,6 +20,34 @@ func schemaGreenhouseOpening() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func inflateOpenings(ctx context.Context, source *[]interface{}) (*[]greenhouse.Opening, diag.Diagnostics) {
+	list := make([]greenhouse.Opening, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateOpening(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
+}
+
+func inflateOpening(ctx context.Context, source *map[string]interface{}) (*greenhouse.Opening, diag.Diagnostics) {
+	var obj greenhouse.Opening
+	if v, ok := (*source)["custom_fields"].([]interface{}); ok && len(v) > 0 {
+		list := make([]map[string]string, len(v), len(v))
+		for i, item := range v {
+			list[i] = make(map[string]string)
+			for k, v := range item.(map[string]interface{}) {
+				list[i][k] = v.(string)
+			}
+		}
+		obj.CustomFields = list
+	}
+	return &obj, nil
 }
 
 func flattenOpenings(ctx context.Context, list *[]greenhouse.Opening) []interface{} {

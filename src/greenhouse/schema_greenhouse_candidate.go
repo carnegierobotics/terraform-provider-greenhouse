@@ -310,8 +310,9 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 	if v, ok := (*source)["last_name"].(string); ok && len(v) > 0 {
 		obj.LastName = v
 	}
-	if v, ok := (*source)["linked_user_ids"].([]int); ok && len(v) > 0 {
-		obj.LinkedUserIds = v
+	if v, ok := (*source)["linked_user_ids"].([]interface{}); ok && len(v) > 0 {
+		ids := *sliceItoSliceD(&v)
+		obj.LinkedUserIds = ids
 	}
 	if v, ok := (*source)["phone_numbers"].([]interface{}); ok && len(v) > 0 {
 		phoneNumbers, diagErr := inflateTypeTypeValues(ctx, &v)
@@ -373,15 +374,18 @@ func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[strin
 	candidate["addresses"] = flattenTypeTypeValues(ctx, &convertedAddresses)
 	candidate["application_ids"] = item.ApplicationIds
 	candidate["attachments"] = flattenAttachments(ctx, &item.Attachments)
+	candidate["can_email"] = item.CanEmail
 	candidate["company"] = item.Company
 	candidate["created_at"] = item.CreatedAt
 	candidate["first_name"] = item.FirstName
 	candidate["is_private"] = item.IsPrivate
 	candidate["last_activity"] = item.LastActivity
 	candidate["last_name"] = item.LastName
+	candidate["linked_user_ids"] = item.LinkedUserIds
 	convertedPhoneNumbers := []greenhouse.TypeTypeValue(item.PhoneNumbers)
 	candidate["phone_numbers"] = flattenTypeTypeValues(ctx, &convertedPhoneNumbers)
 	candidate["photo_url"] = item.PhotoUrl
+	candidate["tags"] = item.Tags
 	candidate["title"] = item.Title
 	candidate["updated_at"] = item.UpdatedAt
 	return candidate

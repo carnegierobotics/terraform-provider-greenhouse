@@ -9,11 +9,11 @@ import (
 
 func schemaGreenhouseTypeTypeValue() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"value": {
+		"type": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"type": {
+		"value": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
@@ -21,21 +21,25 @@ func schemaGreenhouseTypeTypeValue() map[string]*schema.Schema {
 }
 
 func inflateTypeTypeValues(ctx context.Context, source *[]interface{}) (*[]greenhouse.TypeTypeValue, diag.Diagnostics) {
-	if source != nil && len(*source) > 0 {
-		newList := make([]greenhouse.TypeTypeValue, len(*source))
-		for i, item := range *source {
-			newList[i] = item.(greenhouse.TypeTypeValue)
+	list := make([]greenhouse.TypeTypeValue, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateTypeTypeValue(ctx, &itemMap)
+		if err != nil {
+			return nil, err
 		}
-		return &newList, nil
+		list[i] = *obj
 	}
-	return nil, nil
+	return &list, nil
 }
 
-func inflateTypeTypeValue(ctx context.Context, source interface{}) (*greenhouse.TypeTypeValue, diag.Diagnostics) {
+func inflateTypeTypeValue(ctx context.Context, source *map[string]interface{}) (*greenhouse.TypeTypeValue, diag.Diagnostics) {
 	var item greenhouse.TypeTypeValue
-	err := convertType(ctx, source, item)
-	if err != nil {
-		return nil, err
+	if v, ok := (*source)["type"].(string); ok && len(v) > 0 {
+		item.Type = v
+	}
+	if v, ok := (*source)["value"].(string); ok && len(v) > 0 {
+		item.Value = v
 	}
 	return &item, nil
 }
