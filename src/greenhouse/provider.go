@@ -42,7 +42,7 @@ func Provider() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"greenhouse_application": resourceGreenhouseApplication(),
-			//"greenhouse_approval": resourceGreenhouseApproval(),
+			"greenhouse_approval": resourceGreenhouseApproval(),
 			"greenhouse_candidate":             resourceGreenhouseCandidate(),
 			"greenhouse_custom_field":          resourceGreenhouseCustomField(),
 			"greenhouse_department":            resourceGreenhouseDepartment(),
