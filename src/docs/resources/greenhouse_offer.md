@@ -23,7 +23,7 @@ description: |-
 
 - **candidate_id** (Number)
 - **custom_fields** (Map of String)
-- **id** (Number) The ID of this resource.
+- **id** (String) The ID of this resource.
 - **job_id** (Number)
 - **keyed_custom_fields** (List of Map of Object)
 - **opening** (Block List, Max: 1) (see [below for nested schema](#nestedblock--opening))

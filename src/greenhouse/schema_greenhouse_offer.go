@@ -27,10 +27,6 @@ func schemaGreenhouseOffer() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 		},
-		"id": {
-			Type:     schema.TypeInt,
-			Optional: true,
-		},
 		"job_id": {
 			Type:     schema.TypeInt,
 			Optional: true,

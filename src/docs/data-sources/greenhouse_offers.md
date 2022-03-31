@@ -32,7 +32,6 @@ Read-Only:
 - **candidate_id** (Number)
 - **created_at** (String)
 - **custom_fields** (Map of String)
-- **id** (Number)
 - **job_id** (Number)
 - **keyed_custom_fields** (List of Map of Object)
 - **opening** (List of Object) (see [below for nested schema](#nestedobjatt--offers--opening))
