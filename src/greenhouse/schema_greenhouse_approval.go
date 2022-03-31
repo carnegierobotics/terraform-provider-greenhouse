@@ -16,10 +16,11 @@ func schemaGreenhouseApproval() map[string]*schema.Schema {
 		},
 		"approval_type": {
 			Type:     schema.TypeString,
-			Computed: true,
+			Required: true,
 		},
 		"approver_groups": {
 			Type:     schema.TypeList,
+			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseApproverGroup(),
@@ -27,11 +28,15 @@ func schemaGreenhouseApproval() map[string]*schema.Schema {
 		},
 		"job_id": {
 			Type:     schema.TypeInt,
-			Computed: true,
+			Required: true,
 		},
 		"offer_id": {
 			Type:     schema.TypeInt,
 			Computed: true,
+		},
+		"request_approval": {
+			Type:     schema.TypeBool,
+			Optional: true,
 		},
 		"requested_by_user_id": {
 			Type:     schema.TypeInt,
@@ -39,7 +44,7 @@ func schemaGreenhouseApproval() map[string]*schema.Schema {
 		},
 		"sequential": {
 			Type:     schema.TypeBool,
-			Computed: true,
+			Required: true,
 		},
 		"version": {
 			Type:     schema.TypeInt,

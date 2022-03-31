@@ -3,6 +3,7 @@ package greenhouse
 import (
 	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -24,6 +25,33 @@ func schemaGreenhouseCustomFieldOption() map[string]*schema.Schema {
 			Optional:    true,
 		},
 	}
+}
+
+func inflateCustomFieldOptions(ctx context.Context, source *[]interface{}) (*[]greenhouse.CustomFieldOption, diag.Diagnostics) {
+	list := make([]greenhouse.CustomFieldOption, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateCustomFieldOption(ctx, &itemMap)
+		if err != nil {
+			return nil, err
+		}
+		list[i] = *obj
+	}
+	return &list, nil
+}
+
+func inflateCustomFieldOption(ctx context.Context, source *map[string]interface{}) (*greenhouse.CustomFieldOption, diag.Diagnostics) {
+	var obj greenhouse.CustomFieldOption
+	if v, ok := (*source)["external_id"].(string); ok && len(v) > 0 {
+		obj.ExternalId = v
+	}
+	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
+		obj.Name = v
+	}
+	if v, ok := (*source)["priority"].(int); ok {
+		obj.Priority = v
+	}
+	return &obj, nil
 }
 
 func flattenCustomFieldOptions(ctx context.Context, list *[]greenhouse.CustomFieldOption) []interface{} {

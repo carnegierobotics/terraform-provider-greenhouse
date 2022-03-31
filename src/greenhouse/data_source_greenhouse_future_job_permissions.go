@@ -27,7 +27,7 @@ func dataSourceGreenhouseFutureJobPermissions() *schema.Resource {
 }
 
 func dataSourceGreenhouseFutureJobPermissionsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	list, err := greenhouse.GetFutureJobPermission(meta.(*greenhouse.Client), ctx, d.Get("user_id").(int))
+	list, err := greenhouse.GetFutureJobPermissions(meta.(*greenhouse.Client), ctx, d.Get("user_id").(int))
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}

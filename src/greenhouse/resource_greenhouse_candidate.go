@@ -193,28 +193,28 @@ func resourceGreenhouseCandidateRead(ctx context.Context, d *schema.ResourceData
 
 func resourceGreenhouseCandidateUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	tflog.Debug(ctx, "Started resourceGreenhouseCandidateUpdate.")
-	/*
-			if d.HasChanges("educations") {
-		    err := updateEducations(ctx, d, meta)
-		    if err != nil {
-		      return err
-		    }
-		  }
-		 	if d.HasChanges("employments") {
-		    o, n := d.GetChange("employments")
-			}
-			if d.HasChanges("attachments") {
-		    o, n := d.GetChange("attachments")
-			}
-			if d.HasChanges("notes") {
-		    o, n := d.GetChange("notes")
-			}
-			if d.HasChanges("email_notes") {
-		    o, n := d.GetChange("email_notes")
-			}
-			if d.HasChanges("tags") {
-		    o, n := d.GetChange("tags")
-			}
+	/* TODO
+		if d.HasChanges("educations") {
+	    err := updateEducations(ctx, d, meta)
+	    if err != nil {
+	      return err
+	    }
+	  }
+	 	if d.HasChanges("employments") {
+	    o, n := d.GetChange("employments")
+		}
+		if d.HasChanges("attachments") {
+	    o, n := d.GetChange("attachments")
+		}
+		if d.HasChanges("notes") {
+	    o, n := d.GetChange("notes")
+		}
+		if d.HasChanges("email_notes") {
+	    o, n := d.GetChange("email_notes")
+		}
+		if d.HasChanges("tags") {
+	    o, n := d.GetChange("tags")
+		}
 	*/
 	tflog.Debug(ctx, "Kicking off resourceGreenhouseCandidateRead from resourceGreenhouseCandidateUpdate.")
 	return resourceGreenhouseCandidateRead(ctx, d, meta)

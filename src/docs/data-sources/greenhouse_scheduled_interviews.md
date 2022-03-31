@@ -30,7 +30,7 @@ description: |-
 
 Read-Only:
 
-- **application_id** (String)
+- **application_id** (Number)
 - **end** (List of Object) (see [below for nested schema](#nestedobjatt--interviews--end))
 - **external_event_id** (String)
 - **interview_id** (Number)

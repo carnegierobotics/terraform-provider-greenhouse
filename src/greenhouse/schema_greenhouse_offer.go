@@ -10,7 +10,7 @@ func schemaGreenhouseOffer() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"application_id": {
 			Type:     schema.TypeInt,
-			Optional: true,
+			Required: true,
 		},
 		"candidate_id": {
 			Type:     schema.TypeInt,
@@ -26,10 +26,6 @@ func schemaGreenhouseOffer() map[string]*schema.Schema {
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
-		},
-		"id": {
-			Type:     schema.TypeInt,
-			Optional: true,
 		},
 		"job_id": {
 			Type:     schema.TypeInt,

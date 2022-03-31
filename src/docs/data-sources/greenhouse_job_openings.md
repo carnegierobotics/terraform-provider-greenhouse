@@ -38,6 +38,7 @@ Read-Only:
 - **close_reason_id** (Number)
 - **closed_at** (String)
 - **custom_fields** (Map of String)
+- **job_id** (Number)
 - **opened_at** (String)
 - **opening_id** (String)
 - **status** (String)
