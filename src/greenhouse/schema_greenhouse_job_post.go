@@ -48,10 +48,10 @@ func schemaGreenhouseJobPost() map[string]*schema.Schema {
 			Type:     schema.TypeBool,
 			Optional: true,
 		},
-    "location": {
-      Type: schema.TypeString,
-      Optional: true,
-    },
+		"location": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"questions": {
 			Type:     schema.TypeList,
 			Optional: true,
@@ -90,7 +90,7 @@ func flattenJobPost(ctx context.Context, item *greenhouse.JobPost) map[string]in
 	post["job_id"] = item.JobId
 	post["live"] = item.Live
 	post["questions"] = flattenDemographicQuestions(ctx, &item.Questions)
-  post["title"] = item.Title
+	post["title"] = item.Title
 	post["updated_at"] = item.UpdatedAt
 	return post
 }

@@ -12,10 +12,10 @@ func schemaGreenhouseUserPermission() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Required: true,
 		},
-    "user_id": {
-      Type: schema.TypeInt,
-      Required: true,
-    },
+		"user_id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
 		"user_role_id": {
 			Type:     schema.TypeInt,
 			Required: true,

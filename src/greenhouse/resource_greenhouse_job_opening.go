@@ -42,16 +42,16 @@ func resourceGreenhouseJobOpeningRead(ctx context.Context, d *schema.ResourceDat
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  if v, ok := d.Get("job_id").(int); ok {
-	  obj, err := greenhouse.GetJobOpening(meta.(*greenhouse.Client), ctx, v, id)
-	  if err != nil {
-		  return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-	  }
-	  d.Set("application_id", obj.ApplicationId)
-    d.Set("close_reason", flattenCloseReason(ctx, obj.CloseReason))
-	  return nil
-  }
-  return diag.Diagnostics{{Severity: diag.Error, Summary: "Error getting job_opening."}}
+	if v, ok := d.Get("job_id").(int); ok {
+		obj, err := greenhouse.GetJobOpening(meta.(*greenhouse.Client), ctx, v, id)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		}
+		d.Set("application_id", obj.ApplicationId)
+		d.Set("close_reason", flattenCloseReason(ctx, obj.CloseReason))
+		return nil
+	}
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Error getting job_opening."}}
 }
 
 func resourceGreenhouseJobOpeningUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

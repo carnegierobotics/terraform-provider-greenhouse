@@ -8,13 +8,13 @@ import (
 
 func schemaGreenhouseFutureJobPermissionList() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-    "permissions": {
-      Type: schema.TypeList,
-      Required: true,
-      Elem: &schema.Resource{
-        Schema: schemaGreenhouseFutureJobPermission(),
-      },
-    },
+		"permissions": {
+			Type:     schema.TypeList,
+			Required: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseFutureJobPermission(),
+			},
+		},
 		"user_id": {
 			Type:     schema.TypeInt,
 			Required: true,

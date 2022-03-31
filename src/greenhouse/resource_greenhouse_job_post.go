@@ -42,40 +42,40 @@ func resourceGreenhouseJobPostRead(ctx context.Context, d *schema.ResourceData, 
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  obj, err := greenhouse.GetJobPost(meta.(*greenhouse.Client), ctx, id)
+	obj, err := greenhouse.GetJobPost(meta.(*greenhouse.Client), ctx, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  for k, v := range flattenJobPost(ctx, obj) {
-    d.Set(k, v)
-  }
+	for k, v := range flattenJobPost(ctx, obj) {
+		d.Set(k, v)
+	}
 	return nil
 }
 
 func resourceGreenhouseJobPostUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-  id, err := strconv.Atoi(d.Id())
-  if err != nil {
-    return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-  }
-  if d.HasChanges("live") {
-    status := "offline"
-    if d.Get("live").(bool) {
-      status = "live"
-    }
-    err := greenhouse.UpdateJobPostStatus(meta.(*greenhouse.Client), ctx, id, status)
-    if err != nil {
-      return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-    }
-  }
-  var obj greenhouse.JobPost
-  obj.Location = d.Get("location").(string)
-  obj.Title = d.Get("title").(string)
-  obj.Content = d.Get("content").(string)
-  err = greenhouse.UpdateJobPost(meta.(*greenhouse.Client), ctx, id, &obj)
-  if err != nil {
-    return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-  }
-  return resourceGreenhouseJobPostRead(ctx, d, meta)
+	id, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	if d.HasChanges("live") {
+		status := "offline"
+		if d.Get("live").(bool) {
+			status = "live"
+		}
+		err := greenhouse.UpdateJobPostStatus(meta.(*greenhouse.Client), ctx, id, status)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		}
+	}
+	var obj greenhouse.JobPost
+	obj.Location = d.Get("location").(string)
+	obj.Title = d.Get("title").(string)
+	obj.Content = d.Get("content").(string)
+	err = greenhouse.UpdateJobPost(meta.(*greenhouse.Client), ctx, id, &obj)
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	return resourceGreenhouseJobPostRead(ctx, d, meta)
 }
 
 func resourceGreenhouseJobPostDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

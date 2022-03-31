@@ -34,31 +34,31 @@ func resourceGreenhouseFutureJobPermissionExists(d *schema.ResourceData, meta in
 }
 
 func resourceGreenhouseFutureJobPermissionCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-  var obj greenhouse.FutureJobPermission
-  if v, ok := d.Get("department_id").(int); ok {
-    obj.DepartmentId = v
-  }
-  if v, ok := d.Get("external_department_id").(string); ok && len(v) > 0 {
-    obj.ExternalDepartmentId = v
-  }
-  if v, ok := d.Get("external_office_id").(string); ok {
-    obj.ExternalOfficeId = v
-  }
-  if v, ok := d.Get("office_id").(int); ok {
-    obj.OfficeId = v
-  }
-  if v, ok := d.Get("user_role_id").(int); ok {
-    obj.UserRoleId = v
-  }
-  if v, ok := d.Get("user_id").(int); ok {
-    id, err := greenhouse.CreateFutureJobPermission(meta.(*greenhouse.Client), ctx, v, &obj)
-    if err != nil {
-      return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-    }
-    d.SetId(strconv.Itoa(id))
-    return resourceGreenhouseFutureJobPermissionRead(ctx, d, meta)
-  }
-  return diag.Diagnostics{{Severity: diag.Error, Summary: "Could not create permission."}}
+	var obj greenhouse.FutureJobPermission
+	if v, ok := d.Get("department_id").(int); ok {
+		obj.DepartmentId = v
+	}
+	if v, ok := d.Get("external_department_id").(string); ok && len(v) > 0 {
+		obj.ExternalDepartmentId = v
+	}
+	if v, ok := d.Get("external_office_id").(string); ok {
+		obj.ExternalOfficeId = v
+	}
+	if v, ok := d.Get("office_id").(int); ok {
+		obj.OfficeId = v
+	}
+	if v, ok := d.Get("user_role_id").(int); ok {
+		obj.UserRoleId = v
+	}
+	if v, ok := d.Get("user_id").(int); ok {
+		id, err := greenhouse.CreateFutureJobPermission(meta.(*greenhouse.Client), ctx, v, &obj)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		}
+		d.SetId(strconv.Itoa(id))
+		return resourceGreenhouseFutureJobPermissionRead(ctx, d, meta)
+	}
+	return diag.Diagnostics{{Severity: diag.Error, Summary: "Could not create permission."}}
 }
 
 func resourceGreenhouseFutureJobPermissionRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -66,19 +66,19 @@ func resourceGreenhouseFutureJobPermissionRead(ctx context.Context, d *schema.Re
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  userId, ok := d.Get("user_id").(int)
-  if !ok {
-    return diag.Diagnostics{{Severity: diag.Error, Summary: "Error getting user_id."}}
-  }
+	userId, ok := d.Get("user_id").(int)
+	if !ok {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: "Error getting user_id."}}
+	}
 	obj, err := greenhouse.GetFutureJobPermission(meta.(*greenhouse.Client), ctx, userId, id)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  d.Set("department_id", obj.DepartmentId)
-  d.Set("external_department_id", obj.ExternalDepartmentId)
-  d.Set("external_office_id", obj.ExternalOfficeId)
+	d.Set("department_id", obj.DepartmentId)
+	d.Set("external_department_id", obj.ExternalDepartmentId)
+	d.Set("external_office_id", obj.ExternalOfficeId)
 	d.Set("office_id", obj.OfficeId)
-  d.Set("user_role_id", obj.UserRoleId)
+	d.Set("user_role_id", obj.UserRoleId)
 	return nil
 }
 
@@ -87,18 +87,18 @@ func resourceGreenhouseFutureJobPermissionUpdate(ctx context.Context, d *schema.
 }
 
 func resourceGreenhouseFutureJobPermissionDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-  permId, err := strconv.Atoi(d.Id())
-  if err != nil {
-    return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-  }
-  jobId, ok := d.Get("job_id").(int)
-  if !ok {
-    return diag.Diagnostics{{Severity: diag.Error, Summary: "Error getting job_id."}}
-  }
-  err = greenhouse.DeleteFutureJobPermission(meta.(*greenhouse.Client), ctx, jobId, permId)
-  if err != nil {
-    return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-  }
-  d.SetId("")
-  return nil
+	permId, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	jobId, ok := d.Get("job_id").(int)
+	if !ok {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: "Error getting job_id."}}
+	}
+	err = greenhouse.DeleteFutureJobPermission(meta.(*greenhouse.Client), ctx, jobId, permId)
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	d.SetId("")
+	return nil
 }
