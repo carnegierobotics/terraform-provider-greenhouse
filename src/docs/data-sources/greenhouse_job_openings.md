@@ -34,12 +34,19 @@ description: |-
 Read-Only:
 
 - **application_id** (Number)
-- **close_reason** (Map of String)
+- **close_reason** (List of Object) (see [below for nested schema](#nestedobjatt--openings--close_reason))
 - **close_reason_id** (Number)
 - **closed_at** (String)
 - **custom_fields** (Map of String)
 - **opened_at** (String)
 - **opening_id** (String)
 - **status** (String)
+
+<a id="nestedobjatt--openings--close_reason"></a>
+### Nested Schema for `openings.close_reason`
+
+Read-Only:
+
+- **name** (String)
 
 

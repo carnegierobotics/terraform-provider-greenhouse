@@ -198,13 +198,21 @@ Read-Only:
 Read-Only:
 
 - **application_id** (Number)
-- **close_reason** (Map of String)
+- **close_reason** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--openings--close_reason))
 - **close_reason_id** (Number)
 - **closed_at** (String)
 - **custom_fields** (Map of String)
 - **opened_at** (String)
 - **opening_id** (String)
 - **status** (String)
+
+<a id="nestedobjatt--applications--jobs--openings--close_reason"></a>
+### Nested Schema for `applications.jobs.openings.status`
+
+Read-Only:
+
+- **name** (String)
+
 
 
 

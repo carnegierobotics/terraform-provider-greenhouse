@@ -50,8 +50,15 @@ Optional:
 
 Read-Only:
 
-- **close_reason** (Map of String)
+- **close_reason** (List of Object) (see [below for nested schema](#nestedatt--opening--close_reason))
 - **closed_at** (String)
 - **opened_at** (String)
+
+<a id="nestedatt--opening--close_reason"></a>
+### Nested Schema for `opening.close_reason`
+
+Read-Only:
+
+- **name** (String)
 
 
