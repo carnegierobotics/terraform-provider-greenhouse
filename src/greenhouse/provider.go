@@ -50,7 +50,7 @@ func Provider() *schema.Provider {
 			"greenhouse_job": resourceGreenhouseJob(),
 			//"greenhouse_job_opening": resourceGreenhouseJobOpening(),
 			"greenhouse_job_permission": resourceGreenhouseJobPermission(),
-			//"greenhouse_job_post": resourceGreenhouseJobPost(),
+			"greenhouse_job_post": resourceGreenhouseJobPost(),
 			//"greenhouse_offer": resourceGreenhouseOffer(),
 			"greenhouse_office": resourceGreenhouseOffice(),
 			"greenhouse_scheduled_interview": resourceGreenhouseScheduledInterview(),
