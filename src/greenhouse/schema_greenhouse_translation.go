@@ -32,7 +32,11 @@ func flattenTranslations(ctx context.Context, list *[]greenhouse.Translation) []
 
 func flattenTranslation(ctx context.Context, item *greenhouse.Translation) map[string]interface{} {
 	translation := make(map[string]interface{})
-	translation["language"] = item.Language
-	translation["name"] = item.Name
+	if v := item.Language; v != nil {
+		translation["language"] = *v
+	}
+	if v := item.Name; v != nil {
+		translation["name"] = *v
+	}
 	return translation
 }

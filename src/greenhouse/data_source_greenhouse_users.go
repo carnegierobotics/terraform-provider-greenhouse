@@ -29,7 +29,7 @@ func dataSourceGreenhouseUsersRead(ctx context.Context, d *schema.ResourceData, 
 	}
 	users := make([]string, len(*list), len(*list))
 	for i, user := range *list {
-		users[i] = user.Name
+		users[i] = *user.Name
 	}
 	d.SetId("all")
 	d.Set("names", users)

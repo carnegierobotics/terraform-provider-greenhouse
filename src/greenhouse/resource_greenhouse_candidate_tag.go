@@ -27,7 +27,7 @@ func resourceGreenhouseCandidateTag() *schema.Resource {
 
 func resourceGreenhouseCandidateTagCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	createObject := greenhouse.CandidateTag{
-		Name: d.Get("name").(string),
+		Name: StringPtr(d.Get("name").(string)),
 	}
 	id, err := greenhouse.CreateCandidateTag(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {

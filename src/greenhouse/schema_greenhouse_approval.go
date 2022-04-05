@@ -69,10 +69,10 @@ func inflateApprovals(ctx context.Context, source *[]interface{}) (*[]greenhouse
 func inflateApproval(ctx context.Context, source *map[string]interface{}) (*greenhouse.Approval, diag.Diagnostics) {
 	var obj greenhouse.Approval
 	if v, ok := (*source)["approval_status"].(string); ok && len(v) > 0 {
-		obj.ApprovalStatus = v
+		obj.ApprovalStatus = &v
 	}
 	if v, ok := (*source)["approval_type"].(string); ok && len(v) > 0 {
-		obj.ApprovalType = v
+		obj.ApprovalType = &v
 	}
 	if v, ok := (*source)["approver_groups"].([]interface{}); ok && len(v) > 0 {
 		list, diagErr := inflateApproverGroups(ctx, &v)
@@ -82,19 +82,19 @@ func inflateApproval(ctx context.Context, source *map[string]interface{}) (*gree
 		obj.ApproverGroups = *list
 	}
 	if v, ok := (*source)["job_id"].(int); ok {
-		obj.JobId = v
+		obj.JobId = &v
 	}
 	if v, ok := (*source)["offer_id"].(int); ok {
-		obj.OfferId = v
+		obj.OfferId = &v
 	}
 	if v, ok := (*source)["requested_by_user_id"].(int); ok {
-		obj.RequestedByUserId = v
+		obj.RequestedByUserId = &v
 	}
 	if v, ok := (*source)["sequential"].(bool); ok {
-		obj.Sequential = v
+		obj.Sequential = &v
 	}
 	if v, ok := (*source)["version"].(int); ok {
-		obj.Version = v
+		obj.Version = &v
 	}
 	return &obj, nil
 }
@@ -114,13 +114,29 @@ func flattenApprovals(ctx context.Context, list *[]greenhouse.Approval) []interf
 
 func flattenApproval(ctx context.Context, item *greenhouse.Approval) map[string]interface{} {
 	approval := make(map[string]interface{})
-	approval["approval_status"] = item.ApprovalStatus
-	approval["approval_type"] = item.ApprovalType
-	approval["approver_groups"] = flattenApproverGroups(ctx, &item.ApproverGroups)
-	approval["job_id"] = item.JobId
-	approval["offer_id"] = item.OfferId
-	approval["requested_by_user_id"] = item.RequestedByUserId
-	approval["sequential"] = item.Sequential
-	approval["version"] = item.Version
+	if v := item.ApprovalStatus; v != nil {
+		approval["approval_status"] = *v
+	}
+	if v := item.ApprovalType; v != nil {
+		approval["approval_type"] = *v
+	}
+	if v := item.ApproverGroups; len(v) > 0 {
+		approval["approver_groups"] = flattenApproverGroups(ctx, &v)
+	}
+	if v := item.JobId; v != nil {
+		approval["job_id"] = *v
+	}
+	if v := item.OfferId; v != nil {
+		approval["offer_id"] = *v
+	}
+	if v := item.RequestedByUserId; v != nil {
+		approval["requested_by_user_id"] = *v
+	}
+	if v := item.Sequential; v != nil {
+		approval["sequential"] = *v
+	}
+	if v := item.Version; v != nil {
+		approval["version"] = *v
+	}
 	return approval
 }

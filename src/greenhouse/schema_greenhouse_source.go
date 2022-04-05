@@ -36,7 +36,11 @@ func inflateSource(ctx context.Context, source interface{}) *greenhouse.Source {
 
 func flattenSource(ctx context.Context, item *greenhouse.Source) map[string]interface{} {
 	source := make(map[string]interface{})
-	source["public_name"] = item.PublicName
-	source["type"] = flattenTypeIdName(ctx, item.Type)
+	if v := item.PublicName; v != nil {
+		source["public_name"] = v
+	}
+	if v := item.Type; v != nil {
+		source["type"] = flattenTypeIdName(ctx, v)
+	}
 	return source
 }

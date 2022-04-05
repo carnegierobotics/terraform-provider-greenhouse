@@ -27,8 +27,8 @@ func dataSourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, me
 	}
 	name := d.Get("name").(string)
 	for _, job := range *list {
-		if job.Name == name {
-			d.SetId(strconv.Itoa(job.Id))
+		if *job.Name == name {
+			d.SetId(strconv.Itoa(*job.Id))
 			return nil
 		}
 	}

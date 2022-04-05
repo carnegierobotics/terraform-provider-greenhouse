@@ -21,7 +21,7 @@ func dataSourceGreenhouseDemographicAnswerOptionRead(ctx context.Context, d *sch
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	d.SetId(strconv.Itoa(option.Id))
+	d.SetId(strconv.Itoa(*option.Id))
 	d.Set("active", option.Active)
 	d.Set("demographic_question_id", option.DemographicQuestionId)
 	d.Set("free_form", option.FreeForm)

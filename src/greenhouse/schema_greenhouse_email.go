@@ -62,22 +62,22 @@ func inflateEmails(ctx context.Context, source *[]interface{}) (*[]greenhouse.Em
 func inflateEmail(ctx context.Context, source *map[string]interface{}) (*greenhouse.Email, diag.Diagnostics) {
 	var obj greenhouse.Email
 	if v, ok := (*source)["body"].(string); ok && len(v) > 0 {
-		obj.Body = v
+		obj.Body = &v
 	}
 	if v, ok := (*source)["cc"].(string); ok && len(v) > 0 {
-		obj.Cc = v
+		obj.Cc = &v
 	}
 	if v, ok := (*source)["created_at"].(string); ok && len(v) > 0 {
-		obj.CreatedAt = v
+		obj.CreatedAt = &v
 	}
 	if v, ok := (*source)["from"].(string); ok && len(v) > 0 {
-		obj.From = v
+		obj.From = &v
 	}
 	if v, ok := (*source)["subject"].(string); ok && len(v) > 0 {
-		obj.Subject = v
+		obj.Subject = &v
 	}
 	if v, ok := (*source)["to"].(string); ok && len(v) > 0 {
-		obj.To = v
+		obj.To = &v
 	}
 	if v, ok := (*source)["user"].([]interface{}); ok && len(v) > 0 {
 		item, err := inflateUser(ctx, &(v[0]))
@@ -106,12 +106,24 @@ func flattenEmails(ctx context.Context, list *[]greenhouse.Email) []interface{} 
 func flattenEmail(ctx context.Context, item *greenhouse.Email) map[string]interface{} {
 	tflog.Debug(ctx, "Flattening one email.")
 	email := make(map[string]interface{})
-	email["body"] = item.Body
-	email["cc"] = item.Cc
-	email["created_at"] = item.CreatedAt
-	email["subject"] = item.Subject
-	email["to"] = item.To
-	email["user"] = flattenUsersBasics(ctx, &[]greenhouse.User{*item.User})
+	if v := item.Body; v != nil {
+		email["body"] = *v
+	}
+	if v := item.Cc; v != nil {
+		email["cc"] = String(item.Cc)
+	}
+	if v := item.CreatedAt; v != nil {
+		email["created_at"] = String(item.CreatedAt)
+	}
+	if v := item.Subject; v != nil {
+		email["subject"] = String(item.Subject)
+	}
+	if v := item.To; v != nil {
+		email["to"] = String(item.To)
+	}
+	if v := item.User; v != nil {
+		email["user"] = flattenUsersBasics(ctx, &[]greenhouse.User{*item.User})
+	}
 	tflog.Debug(ctx, "Finished flattening email.")
 	return email
 }

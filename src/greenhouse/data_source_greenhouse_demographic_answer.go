@@ -21,7 +21,7 @@ func dataSourceGreenhouseDemographicAnswerRead(ctx context.Context, d *schema.Re
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	d.SetId(strconv.Itoa(answer.Id))
+	d.SetId(strconv.Itoa(*answer.Id))
 	d.Set("application_id", answer.ApplicationId)
 	d.Set("created_at", answer.CreatedAt)
 	d.Set("demographic_answer_option_id", answer.DemographicAnswerOptionId)

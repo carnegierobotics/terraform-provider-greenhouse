@@ -28,8 +28,8 @@ func dataSourceGreenhouseOfficeRead(ctx context.Context, d *schema.ResourceData,
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 		for _, office := range *list {
-			if office.Name == name {
-				d.SetId(strconv.Itoa(office.Id))
+			if *office.Name == name {
+				d.SetId(strconv.Itoa(*office.Id))
 				return nil
 			}
 		}

@@ -72,7 +72,7 @@ func resourceGreenhouseCustomFieldUpdate(ctx context.Context, d *schema.Resource
 	}
 	if d.HasChange("template_token_string") {
 		if v, ok := d.Get("template_token_string").(string); ok && len(v) > 0 {
-			obj.TemplateTokenString = v
+			obj.TemplateTokenString = &v
 		}
 	}
 	err = greenhouse.UpdateCustomField(meta.(*greenhouse.Client), ctx, id, obj)
@@ -89,7 +89,7 @@ func resourceGreenhouseCustomFieldDelete(ctx context.Context, d *schema.Resource
 func createCustomFieldObject(ctx context.Context, d *schema.ResourceData) (*greenhouse.CustomField, diag.Diagnostics) {
 	var obj greenhouse.CustomField
 	if v, ok := d.Get("api_only").(bool); ok {
-		obj.ApiOnly = v
+		obj.ApiOnly = &v
 	}
 	if v, ok := d.Get("custom_field_options").([]interface{}); ok && len(v) > 0 {
 		list, err := inflateCustomFieldOptions(ctx, &v)
@@ -102,37 +102,37 @@ func createCustomFieldObject(ctx context.Context, d *schema.ResourceData) (*gree
 		obj.DepartmentIds = *sliceItoSliceD(&v)
 	}
 	if v, ok := d.Get("description").(string); ok && len(v) > 0 {
-		obj.Description = v
+		obj.Description = &v
 	}
 	if v, ok := d.Get("expose_in_job_board_api").(bool); ok {
-		obj.ExposeInJobBoardAPI = v
+		obj.ExposeInJobBoardAPI = &v
 	}
 	if v, ok := d.Get("field_type").(string); ok && len(v) > 0 {
-		obj.FieldType = v
+		obj.FieldType = &v
 	}
 	if v, ok := d.Get("generate_email_token").(bool); ok {
-		obj.GenerateEmailToken = v
+		obj.GenerateEmailToken = &v
 	}
 	if v, ok := d.Get("name").(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	if v, ok := d.Get("office_ids").([]interface{}); ok && len(v) > 0 {
 		obj.OfficeIds = *sliceItoSliceD(&v)
 	}
 	if v, ok := d.Get("private").(bool); ok {
-		obj.Private = v
+		obj.Private = &v
 	}
 	if v, ok := d.Get("require_approval").(bool); ok {
-		obj.RequireApproval = v
+		obj.RequireApproval = &v
 	}
 	if v, ok := d.Get("required").(bool); ok {
-		obj.Required = v
+		obj.Required = &v
 	}
 	if v, ok := d.Get("trigger_new_version").(bool); ok {
-		obj.TriggerNewVersion = v
+		obj.TriggerNewVersion = &v
 	}
 	if v, ok := d.Get("value_type").(string); ok && len(v) > 0 {
-		obj.ValueType = v
+		obj.ValueType = &v
 	}
 	return &obj, nil
 }

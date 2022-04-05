@@ -36,7 +36,11 @@ func flattenUserPermissions(ctx context.Context, list *[]greenhouse.UserPermissi
 
 func flattenUserPermission(ctx context.Context, item *greenhouse.UserPermission) map[string]interface{} {
 	permission := make(map[string]interface{})
-	permission["job_id"] = item.JobId
-	permission["user_role_id"] = item.UserRoleId
+	if v := item.JobId; v != nil {
+		permission["job_id"] = *v
+	}
+	if v := item.UserRoleId; v != nil {
+		permission["user_role_id"] = *v
+	}
 	return permission
 }

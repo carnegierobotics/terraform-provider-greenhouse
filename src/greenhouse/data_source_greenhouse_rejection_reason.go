@@ -24,9 +24,9 @@ func dataSourceGreenhouseRejectionReasonRead(ctx context.Context, d *schema.Reso
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	for _, reason := range *list {
-		if reason.Name == name {
-			d.SetId(strconv.Itoa(reason.Id))
-			d.Set("type", flattenTypeIdName(ctx, &reason.Type))
+		if *reason.Name == name {
+			d.SetId(strconv.Itoa(*reason.Id))
+			d.Set("type", flattenTypeIdName(ctx, reason.Type))
 			return nil
 		}
 	}

@@ -81,7 +81,7 @@ func resourceGreenhouseApprovalDelete(ctx context.Context, d *schema.ResourceDat
 func createApprovalObj(ctx context.Context, d *schema.ResourceData) (*greenhouse.Approval, diag.Diagnostics) {
 	var obj greenhouse.Approval
 	if v, ok := d.Get("approval_type").(string); ok && len(v) > 0 {
-		obj.ApprovalType = v
+		obj.ApprovalType = &v
 	}
 	if v, ok := d.Get("approver_groups").([]interface{}); ok && len(v) > 0 {
 		list, err := inflateApproverGroups(ctx, &v)
@@ -91,10 +91,10 @@ func createApprovalObj(ctx context.Context, d *schema.ResourceData) (*greenhouse
 		obj.ApproverGroups = *list
 	}
 	if v, ok := d.Get("offer_id").(int); ok {
-		obj.OfferId = v
+		obj.OfferId = &v
 	}
 	if v, ok := d.Get("sequential").(bool); ok {
-		obj.Sequential = v
+		obj.Sequential = &v
 	}
 	return &obj, nil
 }

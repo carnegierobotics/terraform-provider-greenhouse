@@ -68,7 +68,7 @@ func dataSourceGreenhouseCandidatesRead(ctx context.Context, d *schema.ResourceD
 	}
 	nameList := make([]string, len(*list), len(*list))
 	for i, item := range *list {
-		nameList[i] = fmt.Sprintf("%s %s", item.FirstName, item.LastName)
+		nameList[i] = fmt.Sprintf("%s %s", *item.FirstName, *item.LastName)
 	}
 	d.SetId("all")
 	d.Set("candidates", flattenCandidates(ctx, list))

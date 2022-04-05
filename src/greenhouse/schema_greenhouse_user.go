@@ -95,17 +95,40 @@ func inflateUser(ctx context.Context, source interface{}) (*greenhouse.User, dia
 }
 
 func flattenUser(ctx context.Context, item *greenhouse.User) map[string]interface{} {
+	tflog.Debug(ctx, "User item:", fmt.Sprintf("%+v\n", *item))
 	user := make(map[string]interface{})
-	user["created_at"] = item.CreatedAt
-	user["disabled"] = item.Disabled
-	user["emails"] = item.Emails
-	user["employee_id"] = item.EmployeeId
-	user["first_name"] = item.FirstName
-	user["last_name"] = item.LastName
-	user["linked_candidate_ids"] = item.LinkedCandidateIds
-	user["name"] = item.Name
-	user["primary_email_address"] = item.PrimaryEmail
-	user["site_admin"] = item.SiteAdmin
-	user["updated_at"] = item.UpdatedAt
+	if v := item.CreatedAt; v != nil {
+		user["created_at"] = *v
+	}
+	if v := item.Disabled; v != nil {
+		user["disabled"] = *v
+	}
+	if v := item.Emails; len(v) > 0 {
+		user["emails"] = item.Emails
+	}
+	if v := item.EmployeeId; v != nil {
+		user["employee_id"] = *v
+	}
+	if v := item.FirstName; v != nil {
+		user["first_name"] = *v
+	}
+	if v := item.LastName; v != nil {
+		user["last_name"] = *v
+	}
+	if v := item.LinkedCandidateIds; len(v) > 0 {
+		user["linked_candidate_ids"] = item.LinkedCandidateIds
+	}
+	if v := item.Name; v != nil {
+		user["name"] = item.Name
+	}
+	if v := item.PrimaryEmail; v != nil {
+		user["primary_email_address"] = item.PrimaryEmail
+	}
+	if v := item.SiteAdmin; v != nil {
+		user["site_admin"] = item.SiteAdmin
+	}
+	if v := item.UpdatedAt; v != nil {
+		user["updated_at"] = item.UpdatedAt
+	}
 	return user
 }

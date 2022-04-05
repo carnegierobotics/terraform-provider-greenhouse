@@ -37,10 +37,10 @@ func inflateAnswers(ctx context.Context, source *[]interface{}) (*[]greenhouse.A
 func inflateAnswer(ctx context.Context, source *map[string]interface{}) (*greenhouse.Answer, diag.Diagnostics) {
 	var obj greenhouse.Answer
 	if v, ok := (*source)["answer"].(string); ok && len(v) > 0 {
-		obj.Answer = v
+		obj.Answer = &v
 	}
 	if v, ok := (*source)["question"].(string); ok && len(v) > 0 {
-		obj.Question = v
+		obj.Question = &v
 	}
 	return &obj, nil
 }
@@ -61,8 +61,12 @@ func flattenAnswers(ctx context.Context, list *[]greenhouse.Answer) []interface{
 func flattenAnswer(ctx context.Context, item *greenhouse.Answer) map[string]interface{} {
 	tflog.Debug(ctx, "Flattening one answer.")
 	answer := make(map[string]interface{})
-	answer["question"] = item.Question
-	answer["answer"] = item.Answer
+	if v := item.Question; v != nil {
+		answer["question"] = *v
+	}
+	if v := item.Answer; v != nil {
+		answer["answer"] = *v
+	}
 	tflog.Debug(ctx, "Finished flattening answer.")
 	return answer
 }

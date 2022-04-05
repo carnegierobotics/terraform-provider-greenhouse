@@ -54,7 +54,7 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		createObj.Addresses = *addresses
 	}
 	if v, ok := d.Get("company").(string); ok && len(v) > 0 {
-		createObj.Company = v
+		createObj.Company = &v
 	}
 	if v, ok := d.Get("custom_fields").([]interface{}); ok && len(v) > 0 {
 		createObj.CustomFields = v[0].(map[string]interface{})
@@ -81,10 +81,10 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		createObj.Employments = *list
 	}
 	if v, ok := d.Get("first_name").(string); ok && len(v) > 0 {
-		createObj.FirstName = v
+		createObj.FirstName = &v
 	}
 	if v, ok := d.Get("last_name").(string); ok && len(v) > 0 {
-		createObj.LastName = v
+		createObj.LastName = &v
 	}
 	if v, ok := d.Get("phone_numbers").([]interface{}); ok && len(v) > 0 {
 		phoneNumbers, diagErr := inflateTypeTypeValues(ctx, &v)
@@ -104,7 +104,7 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		createObj.Tags = *sliceItoSliceA(&v)
 	}
 	if v, ok := d.Get("title").(string); ok && len(v) > 0 {
-		createObj.Title = v
+		createObj.Title = &v
 	}
 	if v, ok := d.Get("website_addresses").([]interface{}); ok && len(v) > 0 {
 		websiteAddresses, diagErr := inflateTypeTypeValues(ctx, &v)
@@ -277,7 +277,7 @@ func updateEducations(ctx context.Context, d *schema.ResourceData, meta interfac
 		}
 	}
 	for _, edu := range *del {
-		err = greenhouse.DeleteEducationFromCandidate(meta.(*greenhouse.Client), ctx, cId, edu.Id)
+		err = greenhouse.DeleteEducationFromCandidate(meta.(*greenhouse.Client), ctx, cId, Int(edu.Id))
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}

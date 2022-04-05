@@ -36,10 +36,10 @@ func inflateRejectionEmails(ctx context.Context, source *[]interface{}) (*[]gree
 func inflateRejectionEmail(ctx context.Context, source *map[string]interface{}) (*greenhouse.RejectionEmail, diag.Diagnostics) {
 	var obj greenhouse.RejectionEmail
 	if v, ok := (*source)["email_template_id"].(string); ok && len(v) > 0 {
-		obj.EmailTemplateId = v
+		obj.EmailTemplateId = &v
 	}
 	if v, ok := (*source)["send_email_at"].(string); ok && len(v) > 0 {
-		obj.SendEmailAt = v
+		obj.SendEmailAt = &v
 	}
 	return &obj, nil
 }

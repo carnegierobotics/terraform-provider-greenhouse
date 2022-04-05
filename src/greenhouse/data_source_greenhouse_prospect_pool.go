@@ -22,8 +22,8 @@ func dataSourceGreenhouseProspectPoolRead(ctx context.Context, d *schema.Resourc
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	for _, pool := range *list {
-		if pool.Name == name {
-			d.SetId(strconv.Itoa(pool.Id))
+		if *pool.Name == name {
+			d.SetId(strconv.Itoa(*pool.Id))
 			return nil
 		}
 	}

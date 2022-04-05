@@ -36,10 +36,10 @@ func resourceGreenhouseJobPermissionExists(d *schema.ResourceData, meta interfac
 func resourceGreenhouseJobPermissionCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var obj greenhouse.UserPermission
 	if v, ok := d.Get("job_id").(int); ok {
-		obj.JobId = v
+		obj.JobId = &v
 	}
 	if v, ok := d.Get("user_role_id").(int); ok {
-		obj.UserRoleId = v
+		obj.UserRoleId = &v
 	}
 	if v, ok := d.Get("user_id").(int); ok {
 		id, err := greenhouse.CreateJobPermission(meta.(*greenhouse.Client), ctx, v, &obj)

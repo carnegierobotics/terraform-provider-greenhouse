@@ -32,7 +32,11 @@ func flattenScorecardQuestions(ctx context.Context, list *[]greenhouse.Scorecard
 
 func flattenScorecardQuestion(ctx context.Context, item *greenhouse.ScorecardQuestion) map[string]interface{} {
 	question := make(map[string]interface{})
-	question["answer"] = item.Answer
-	question["question"] = item.Question
+	if v := item.Answer; v != nil {
+		question["answer"] = *v
+	}
+	if v := item.Question; v != nil {
+		question["question"] = *v
+	}
 	return question
 }

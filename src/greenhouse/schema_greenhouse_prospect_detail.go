@@ -56,29 +56,35 @@ func inflateProspectDetail(ctx context.Context, source *map[string]interface{}) 
 		if err != nil {
 			return nil, err
 		}
-		obj.ProspectOwner = (*list)[0]
+		obj.ProspectOwner = &(*list)[0]
 	}
 	if v, ok := (*source)["prospect_pool"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateTypesIdName(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		obj.ProspectPool = (*list)[0]
+		obj.ProspectPool = &(*list)[0]
 	}
 	if v, ok := (*source)["prospect_stage"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateTypesIdName(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		obj.ProspectStage = (*list)[0]
+		obj.ProspectStage = &(*list)[0]
 	}
 	return &obj, nil
 }
 
 func flattenProspectDetail(ctx context.Context, item *greenhouse.ProspectDetail) map[string]interface{} {
 	detail := make(map[string]interface{})
-	detail["prospect_owner"] = flattenTypeIdName(ctx, &item.ProspectOwner)
-	detail["prospect_pool"] = flattenTypeIdName(ctx, &item.ProspectPool)
-	detail["prospect_stage"] = flattenTypeIdName(ctx, &item.ProspectStage)
+	if v := item.ProspectOwner; v != nil {
+		detail["prospect_owner"] = flattenTypeIdName(ctx, v)
+	}
+	if v := item.ProspectPool; v != nil {
+		detail["prospect_pool"] = flattenTypeIdName(ctx, v)
+	}
+	if v := item.ProspectStage; v != nil {
+		detail["prospect_stage"] = flattenTypeIdName(ctx, item.ProspectStage)
+	}
 	return detail
 }

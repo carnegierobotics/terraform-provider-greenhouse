@@ -22,8 +22,8 @@ func dataSourceGreenhouseDemographicQuestionSetRead(ctx context.Context, d *sche
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	for _, set := range *list {
-		if set.Title == title {
-			d.SetId(strconv.Itoa(set.Id))
+		if *set.Title == title {
+			d.SetId(strconv.Itoa(*set.Id))
 			d.Set("active", set.Active)
 			d.Set("description", set.Description)
 			return nil

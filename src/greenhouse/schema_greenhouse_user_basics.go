@@ -42,10 +42,18 @@ func flattenUsersBasics(ctx context.Context, list *[]greenhouse.User) []interfac
 func flattenUserBasics(ctx context.Context, item *greenhouse.User) map[string]interface{} {
 	tflog.Debug(ctx, "Flattening one user basics.")
 	user := make(map[string]interface{})
-	user["employee_id"] = item.EmployeeId
-	user["first_name"] = item.FirstName
-	user["last_name"] = item.LastName
-	user["name"] = item.Name
+	if v := item.EmployeeId; v != nil {
+		user["employee_id"] = *v
+	}
+	if v := item.FirstName; v != nil {
+		user["first_name"] = *v
+	}
+	if v := item.LastName; v != nil {
+		user["last_name"] = *v
+	}
+	if v := item.Name; v != nil {
+		user["name"] = *v
+	}
 	tflog.Debug(ctx, "Finished flattening user basics.")
 	return user
 }

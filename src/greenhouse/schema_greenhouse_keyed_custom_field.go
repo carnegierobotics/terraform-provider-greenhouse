@@ -40,10 +40,10 @@ func inflateKeyedCustomFields(ctx context.Context, source *map[string]interface{
 func inflateKeyedCustomField(ctx context.Context, source *map[string]interface{}) (*greenhouse.KeyedCustomField, diag.Diagnostics) {
 	var obj greenhouse.KeyedCustomField
 	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	if v, ok := (*source)["type"].(string); ok && len(v) > 0 {
-		obj.Type = v
+		obj.Type = &v
 	}
 	/* TODO this needs to be made consistent with the client.
 	if v, ok := (*source)["value"].(string); ok && len(v) > 0 {
@@ -63,8 +63,14 @@ func flattenKeyedCustomFields(ctx context.Context, list *map[string]greenhouse.K
 
 func flattenKeyedCustomField(ctx context.Context, item *greenhouse.KeyedCustomField) map[string]interface{} {
 	kcf := make(map[string]interface{})
-	kcf["name"] = item.Name
-	kcf["type"] = item.Type
-	kcf["value"] = item.Value
+	if v := item.Name; v != nil {
+		kcf["name"] = *v
+	}
+	if v := item.Type; v != nil {
+		kcf["type"] = *v
+	}
+	if v := item.Value; v != nil {
+		kcf["value"] = *v
+	}
 	return kcf
 }

@@ -68,9 +68,9 @@ func resourceGreenhouseJobPostUpdate(ctx context.Context, d *schema.ResourceData
 		}
 	}
 	var obj greenhouse.JobPost
-	obj.Location = d.Get("location").(string)
-	obj.Title = d.Get("title").(string)
-	obj.Content = d.Get("content").(string)
+	obj.Location = StringPtr(d.Get("location").(string))
+	obj.Title = StringPtr(d.Get("title").(string))
+	obj.Content = StringPtr(d.Get("content").(string))
 	err = greenhouse.UpdateJobPost(meta.(*greenhouse.Client), ctx, id, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}

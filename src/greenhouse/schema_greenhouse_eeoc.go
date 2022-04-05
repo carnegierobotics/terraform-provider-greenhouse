@@ -54,8 +54,14 @@ func schemaGreenhouseEEOC() map[string]*schema.Schema {
 
 func flattenEEOCAnswer(ctx context.Context, item *greenhouse.EEOCAnswer) map[string]interface{} {
 	answer := make(map[string]interface{})
-	answer["description"] = item.Description
-	answer["id"] = strconv.Itoa(item.Id)
-	answer["message"] = item.Message
+	if v := item.Description; v != nil {
+		answer["description"] = *v
+	}
+	if v := item.Id; v != nil {
+		answer["id"] = strconv.Itoa(*v)
+	}
+	if v := item.Message; v != nil {
+		answer["message"] = *v
+	}
 	return answer
 }

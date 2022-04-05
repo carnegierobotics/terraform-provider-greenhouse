@@ -68,16 +68,16 @@ func inflateDepartment(ctx context.Context, source *map[string]interface{}) (*gr
 		obj.ChildIds = *sliceItoSliceD(&v)
 	}
 	if v, ok := (*source)["external_id"].(string); ok && len(v) > 0 {
-		obj.ExternalId = v
+		obj.ExternalId = &v
 	}
 	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	if v, ok := (*source)["parent_department_external_ids"].(string); ok && len(v) > 0 {
-		obj.ParentDepartmentExternalId = v
+		obj.ParentDepartmentExternalId = &v
 	}
 	if v, ok := (*source)["parent_id"].(int); ok {
-		obj.ParentId = v
+		obj.ParentId = &v
 	}
 	return &obj, nil
 }
@@ -98,11 +98,21 @@ func flattenDepartments(ctx context.Context, list *[]greenhouse.Department) []in
 func flattenDepartment(ctx context.Context, item *greenhouse.Department) map[string]interface{} {
 	tflog.Debug(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
 	dept := make(map[string]interface{})
-	dept["child_department_external_ids"] = item.ChildDepartmentExternalIds
-	dept["child_ids"] = item.ChildIds
-	dept["name"] = item.Name
-	dept["parent_department_external_id"] = item.ParentDepartmentExternalId
-	dept["parent_id"] = item.ParentId
+	if v := item.ChildDepartmentExternalIds; len(v) > 0 {
+		dept["child_department_external_ids"] = v
+	}
+	if v := item.ChildIds; len(v) > 0 {
+		dept["child_ids"] = v
+	}
+	if v := item.Name; v != nil {
+		dept["name"] = *v
+	}
+	if v := item.ParentDepartmentExternalId; v != nil {
+		dept["parent_department_external_id"] = *v
+	}
+	if v := item.ParentId; v != nil {
+		dept["parent_id"] = *v
+	}
 	tflog.Debug(ctx, "Flattened department", "department", fmt.Sprintf("%+v", dept))
 	return dept
 }

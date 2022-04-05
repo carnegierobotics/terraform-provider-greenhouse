@@ -22,8 +22,14 @@ func schemaGreenhouseJobBoard() map[string]*schema.Schema {
 
 func flattenJobBoard(ctx context.Context, item *greenhouse.JobBoard) map[string]interface{} {
 	board := make(map[string]interface{})
-	board["company_name"] = item.CompanyName
-	board["id"] = strconv.Itoa(item.Id)
-	board["url_token"] = item.UrlToken
+	if v := item.CompanyName; v != nil {
+		board["company_name"] = *v
+	}
+	if v := item.Id; v != nil {
+		board["id"] = strconv.Itoa(*v)
+	}
+	if v := item.UrlToken; v != nil {
+		board["url_token"] = *v
+	}
 	return board
 }

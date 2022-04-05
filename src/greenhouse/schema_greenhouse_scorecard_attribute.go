@@ -40,9 +40,17 @@ func flattenScorecardAttributes(ctx context.Context, list *[]greenhouse.Scorecar
 
 func flattenScorecardAttribute(ctx context.Context, item *greenhouse.ScorecardAttribute) map[string]interface{} {
 	attributes := make(map[string]interface{})
-	attributes["name"] = item.Name
-	attributes["note"] = item.Note
-	attributes["rating"] = item.Rating
-	attributes["type"] = item.Type
+	if v := item.Name; v != nil {
+		attributes["name"] = *v
+	}
+	if v := item.Note; v != nil {
+		attributes["note"] = *v
+	}
+	if v := item.Rating; v != nil {
+		attributes["rating"] = *v
+	}
+	if v := item.Type; v != nil {
+		attributes["type"] = *v
+	}
 	return attributes
 }

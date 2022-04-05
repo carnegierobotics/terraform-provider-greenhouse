@@ -31,6 +31,42 @@ func mapAItoMapAA(ctx context.Context, mapAI map[string]interface{}) *map[string
 	return &mapAA
 }
 
+func Bool(ptr *bool) bool {
+	if ptr != nil {
+		return *ptr
+	} else {
+		return false
+	}
+}
+
+func BoolPtr(v bool) *bool {
+	return &v
+}
+
+func Int(ptr *int) int {
+	if ptr != nil {
+		return *ptr
+	} else {
+		return 0
+	}
+}
+
+func IntPtr(v int) *int {
+	return &v
+}
+
+func String(ptr *string) string {
+	if ptr != nil {
+		return *ptr
+	} else {
+		return ""
+	}
+}
+
+func StringPtr(v string) *string {
+	return &v
+}
+
 func sliceItoSliceA(sliceI *[]interface{}) *[]string {
 	sliceA := make([]string, len(*sliceI), len(*sliceI))
 	for i, item := range *sliceI {

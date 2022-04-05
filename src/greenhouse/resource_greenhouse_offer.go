@@ -37,16 +37,16 @@ func resourceGreenhouseOfferCreate(ctx context.Context, d *schema.ResourceData, 
 	var obj greenhouse.Offer
 	id := d.Get("application_id").(int)
 	if v, ok := d.Get("created_at").(string); ok && len(v) > 0 {
-		obj.CreatedAt = v
+		obj.CreatedAt = &v
 	}
 	if v, ok := d.Get("custom_fields").([]interface{}); ok && len(v) > 0 {
 		obj.CustomFields = v[0].(map[string]interface{})
 	}
 	if v, ok := d.Get("start_date").(string); ok && len(v) > 0 {
-		obj.StartsAt = v
+		obj.StartsAt = &v
 	}
 	if v, ok := d.Get("sent_at").(string); ok && len(v) > 0 {
-		obj.SentAt = v
+		obj.SentAt = &v
 	}
 	err := greenhouse.UpdateCurrentOffer(meta.(*greenhouse.Client), ctx, id, &obj)
 	if err != nil {

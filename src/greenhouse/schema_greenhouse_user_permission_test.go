@@ -8,7 +8,6 @@ import (
 )
 
 var (
-	ctx                             context.Context
 	testGreenhouseUserPermissionObj []greenhouse.UserPermission
 	testGreenhouseUserPermissionInt []interface{}
 )
@@ -17,8 +16,8 @@ func init() {
 	ctx = context.TODO()
 	testGreenhouseUserPermissionObj = []greenhouse.UserPermission{
 		{
-			JobId:      123,
-			UserRoleId: 789,
+			JobId:      IntPtr(123),
+			UserRoleId: IntPtr(789),
 		},
 	}
 	testGreenhouseUserPermissionInt = []interface{}{
@@ -42,7 +41,7 @@ func TestFlattenUserPermissions(t *testing.T) {
 	for _, c := range cases {
 		output := flattenUserPermissions(ctx, &c.Input)
 		if !reflect.DeepEqual(output, c.Expected) {
-			t.Fatalf("Failed to flatten. Expected: %+v\nGot: %+v\n", c.Expected, c.Input)
+			t.Fatalf("Failed to flatten. Expected: %+v\nGot: %+v\n", c.Expected, output)
 		}
 	}
 }

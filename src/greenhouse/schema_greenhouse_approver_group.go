@@ -59,7 +59,7 @@ func inflateApproverGroups(ctx context.Context, source *[]interface{}) (*[]green
 func inflateApproverGroup(ctx context.Context, source *map[string]interface{}) (*greenhouse.ApproverGroup, diag.Diagnostics) {
 	var obj greenhouse.ApproverGroup
 	if v, ok := (*source)["approvals_required"].(int); ok {
-		obj.ApprovalsRequired = v
+		obj.ApprovalsRequired = &v
 	}
 	if v, ok := (*source)["approvers"].([]interface{}); ok && len(v) > 0 {
 		list, diagErr := inflateApprovers(ctx, &v)
@@ -69,19 +69,19 @@ func inflateApproverGroup(ctx context.Context, source *map[string]interface{}) (
 		obj.Approvers = *list
 	}
 	if v, ok := (*source)["created_at"].(string); ok && len(v) > 0 {
-		obj.CreatedAt = v
+		obj.CreatedAt = &v
 	}
 	if v, ok := (*source)["job_id"].(int); ok {
-		obj.JobId = v
+		obj.JobId = &v
 	}
 	if v, ok := (*source)["offer_id"].(int); ok {
-		obj.OfferId = v
+		obj.OfferId = &v
 	}
 	if v, ok := (*source)["priority"].(int); ok {
-		obj.Priority = v
+		obj.Priority = &v
 	}
 	if v, ok := (*source)["resolved_at"].(string); ok && len(v) > 0 {
-		obj.ResolvedAt = v
+		obj.ResolvedAt = &v
 	}
 	return &obj, nil
 }
@@ -99,12 +99,26 @@ func flattenApproverGroups(ctx context.Context, list *[]greenhouse.ApproverGroup
 
 func flattenApproverGroup(ctx context.Context, item *greenhouse.ApproverGroup) map[string]interface{} {
 	approver := make(map[string]interface{})
-	approver["approvals_required"] = item.ApprovalsRequired
-	approver["approvers"] = flattenApprovers(ctx, &item.Approvers)
-	approver["created_at"] = item.CreatedAt
-	approver["job_id"] = item.JobId
-	approver["offer_id"] = item.OfferId
-	approver["priority"] = item.Priority
-	approver["resolved_at"] = item.ResolvedAt
+	if v := item.ApprovalsRequired; v != nil {
+		approver["approvals_required"] = *v
+	}
+	if v := item.Approvers; len(v) > 0 {
+		approver["approvers"] = flattenApprovers(ctx, &v)
+	}
+	if v := item.CreatedAt; v != nil {
+		approver["created_at"] = *v
+	}
+	if v := item.JobId; v != nil {
+		approver["job_id"] = *v
+	}
+	if v := item.OfferId; v != nil {
+		approver["offer_id"] = *v
+	}
+	if v := item.Priority; v != nil {
+		approver["priority"] = *v
+	}
+	if v := item.ResolvedAt; v != nil {
+		approver["resolved_at"] = *v
+	}
 	return approver
 }

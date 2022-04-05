@@ -35,10 +35,10 @@ func resourceGreenhouseOfficeExists(d *schema.ResourceData, meta interface{}) (b
 
 func resourceGreenhouseOfficeCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	createObject := greenhouse.OfficeCreateInfo{
-		Name:                 d.Get("name").(string),
-		Location:             d.Get("location.name").(string),
-		PrimaryContactUserId: d.Get("primary_contact_user_id").(int),
-		ParentId:             d.Get("parent_id").(int),
+		Name:                 StringPtr(d.Get("name").(string)),
+		Location:             StringPtr(d.Get("location.name").(string)),
+		PrimaryContactUserId: IntPtr(d.Get("primary_contact_user_id").(int)),
+		ParentId:             IntPtr(d.Get("parent_id").(int)),
 	}
 	id, err := greenhouse.CreateOffice(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {
@@ -70,8 +70,8 @@ func resourceGreenhouseOfficeUpdate(ctx context.Context, d *schema.ResourceData,
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	updateObject := greenhouse.OfficeUpdateInfo{
-		Name:     d.Get("name").(string),
-		Location: d.Get("location.name").(string),
+		Name:     StringPtr(d.Get("name").(string)),
+		Location: StringPtr(d.Get("location.name").(string)),
 	}
 	err = greenhouse.UpdateOffice(meta.(*greenhouse.Client), ctx, id, &updateObject)
 	if err != nil {

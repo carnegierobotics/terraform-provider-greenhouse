@@ -52,22 +52,22 @@ func inflateAttachments(ctx context.Context, source *[]interface{}) (*[]greenhou
 func inflateAttachment(ctx context.Context, source *map[string]interface{}) (*greenhouse.Attachment, diag.Diagnostics) {
 	var obj greenhouse.Attachment
 	if v, ok := (*source)["content"].(string); ok && len(v) > 0 {
-		obj.Content = v
+		obj.Content = &v
 	}
 	if v, ok := (*source)["content_type"].(string); ok && len(v) > 0 {
-		obj.ContentType = v
+		obj.ContentType = &v
 	}
 	if v, ok := (*source)["filename"].(string); ok && len(v) > 0 {
-		obj.ContentType = v
+		obj.ContentType = &v
 	}
 	if v, ok := (*source)["type"].(string); ok && len(v) > 0 {
-		obj.Type = v
+		obj.Type = &v
 	}
 	if v, ok := (*source)["url"].(string); ok && len(v) > 0 {
-		obj.Url = v
+		obj.Url = &v
 	}
 	if v, ok := (*source)["visibility"].(string); ok && len(v) > 0 {
-		obj.Visibility = v
+		obj.Visibility = &v
 	}
 	return &obj, nil
 }
@@ -85,8 +85,14 @@ func flattenAttachments(ctx context.Context, list *[]greenhouse.Attachment) []in
 
 func flattenAttachment(ctx context.Context, item *greenhouse.Attachment) map[string]interface{} {
 	attachment := make(map[string]interface{})
-	attachment["filename"] = item.Filename
-	attachment["type"] = item.Type
-	attachment["url"] = item.Url
+	if v := item.Filename; v != nil {
+		attachment["filename"] = *v
+	}
+	if v := item.Type; v != nil {
+		attachment["type"] = *v
+	}
+	if v := item.Url; v != nil {
+		attachment["url"] = *v
+	}
 	return attachment
 }

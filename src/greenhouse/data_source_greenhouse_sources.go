@@ -41,8 +41,8 @@ func dataSourceGreenhouseSourcesRead(ctx context.Context, d *schema.ResourceData
 	names := make([]string, len(*list), len(*list))
 	public_names := make([]string, len(*list), len(*list))
 	for i, source := range *list {
-		names[i] = source.Name
-		public_names[i] = source.PublicName
+		names[i] = *source.Name
+		public_names[i] = *source.PublicName
 	}
 	d.SetId("all")
 	d.Set("names", names)

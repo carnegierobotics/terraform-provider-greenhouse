@@ -43,7 +43,7 @@ func inflateLocation(ctx context.Context, source *map[string]interface{}) (*gree
 	  }
 	*/
 	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	return &obj, nil
 }
@@ -52,8 +52,8 @@ func flattenLocation(ctx context.Context, item *greenhouse.Location) []interface
 	tflog.Debug(ctx, "Flattening location", "location", fmt.Sprintf("%+v", item))
 	location := make([]interface{}, 1, 1)
 	oneLocation := make(map[string]interface{})
-	if item.Name != "" {
-		oneLocation["name"] = item.Name
+	if *item.Name != "" {
+		oneLocation["name"] = *item.Name
 	}
 	location[0] = oneLocation
 	tflog.Debug(ctx, "Flattened location", "location", fmt.Sprintf("%+v", location))

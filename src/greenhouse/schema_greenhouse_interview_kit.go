@@ -39,7 +39,7 @@ func inflateInterviewKits(ctx context.Context, source *[]interface{}) (*[]greenh
 func inflateInterviewKit(ctx context.Context, source *map[string]interface{}) (*greenhouse.InterviewKit, diag.Diagnostics) {
 	var obj greenhouse.InterviewKit
 	if v, ok := (*source)["content"].(string); ok && len(v) > 0 {
-		obj.Content = v
+		obj.Content = &v
 	}
 	if v, ok := (*source)["questions"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateInterviewQuestions(ctx, &v)
@@ -54,8 +54,12 @@ func inflateInterviewKit(ctx context.Context, source *map[string]interface{}) (*
 func flattenInterviewKit(ctx context.Context, item *greenhouse.InterviewKit) []interface{} {
 	kit := make([]interface{}, 1, 1)
 	oneKit := make(map[string]interface{})
-	oneKit["content"] = item.Content
-	oneKit["questions"] = flattenInterviewQuestions(ctx, &item.Questions)
+	if v := item.Content; v != nil {
+		oneKit["content"] = *v
+	}
+	if v := item.Questions; len(v) > 0 {
+		oneKit["questions"] = flattenInterviewQuestions(ctx, &v)
+	}
 	kit[0] = oneKit
 	return kit
 }

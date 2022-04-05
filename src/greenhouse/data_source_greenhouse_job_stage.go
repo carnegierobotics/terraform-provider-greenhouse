@@ -37,12 +37,12 @@ func dataSourceGreenhouseJobStageRead(ctx context.Context, d *schema.ResourceDat
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 		for _, item := range *list {
-			if name == item.Name {
+			if name == *item.Name {
 				stage = &item
 			}
 		}
 	}
-	d.SetId(strconv.Itoa(stage.Id))
+	d.SetId(strconv.Itoa(*stage.Id))
 	d.Set("created_at", stage.CreatedAt)
 	d.Set("interviews", flattenInterviews(ctx, &stage.Interviews))
 	d.Set("job_id", stage.JobId)

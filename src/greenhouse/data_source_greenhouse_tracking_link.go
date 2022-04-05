@@ -26,7 +26,7 @@ func dataSourceGreenhouseTrackingLinkRead(ctx context.Context, d *schema.Resourc
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	d.SetId(strconv.Itoa(link.Id))
+	d.SetId(strconv.Itoa(*link.Id))
 	d.Set("created_at", link.CreatedAt)
 	d.Set("credited_to", flattenUser(ctx, link.CreditedTo))
 	d.Set("job_board", flattenJobBoard(ctx, link.JobBoard))

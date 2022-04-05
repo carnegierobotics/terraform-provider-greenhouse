@@ -83,7 +83,7 @@ func inflateScheduledInterviews(ctx context.Context, source *[]interface{}) (*[]
 func inflateScheduledInterview(ctx context.Context, source *map[string]interface{}) (*greenhouse.ScheduledInterview, diag.Diagnostics) {
 	var obj greenhouse.ScheduledInterview
 	if v, ok := (*source)["application_id"].(int); ok {
-		obj.ApplicationId = v
+		obj.ApplicationId = &v
 	}
 	if v, ok := (*source)["end"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateScheduledInterviewDates(ctx, &v)
@@ -93,7 +93,7 @@ func inflateScheduledInterview(ctx context.Context, source *map[string]interface
 		obj.End = &(*list)[0]
 	}
 	if v, ok := (*source)["external_event_id"].(string); ok && len(v) > 0 {
-		obj.ExternalEventId = v
+		obj.ExternalEventId = &v
 	}
 	if v, ok := (*source)["interviewers"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateInterviewers(ctx, &v)
@@ -103,7 +103,7 @@ func inflateScheduledInterview(ctx context.Context, source *map[string]interface
 		obj.Interviewers = *list
 	}
 	if v, ok := (*source)["location"].(string); ok && len(v) > 0 {
-		obj.Location = v
+		obj.Location = &v
 	}
 	if v, ok := (*source)["organizer"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateUsers(ctx, &v)
@@ -120,10 +120,10 @@ func inflateScheduledInterview(ctx context.Context, source *map[string]interface
 		obj.Start = &(*list)[0]
 	}
 	if v, ok := (*source)["status"].(string); ok && len(v) > 0 {
-		obj.Status = v
+		obj.Status = &v
 	}
 	if v, ok := (*source)["video_conferencing_url"].(string); ok && len(v) > 0 {
-		obj.VideoConferencingUrl = v
+		obj.VideoConferencingUrl = &v
 	}
 	return &obj, nil
 }
@@ -141,14 +141,32 @@ func flattenScheduledInterviews(ctx context.Context, list *[]greenhouse.Schedule
 
 func flattenScheduledInterview(ctx context.Context, item *greenhouse.ScheduledInterview) map[string]interface{} {
 	interview := make(map[string]interface{})
-	interview["application_id"] = item.ApplicationId
-	interview["end"] = flattenScheduledInterviewDate(ctx, item.End)
-	interview["external_event_id"] = item.ExternalEventId
-	interview["interviewers"] = flattenInterviewers(ctx, &item.Interviewers)
-	interview["location"] = item.Location
-	interview["organizer"] = flattenUser(ctx, item.Organizer)
-	interview["start"] = flattenScheduledInterviewDate(ctx, item.Start)
-	interview["status"] = item.Status
-	interview["video_conferencing_url"] = item.VideoConferencingUrl
+	if v := item.ApplicationId; v != nil {
+		interview["application_id"] = *v
+	}
+	if v := item.End; v != nil {
+		interview["end"] = flattenScheduledInterviewDate(ctx, v)
+	}
+	if v := item.ExternalEventId; v != nil {
+		interview["external_event_id"] = *v
+	}
+	if v := item.Interviewers; len(v) > 0 {
+		interview["interviewers"] = flattenInterviewers(ctx, &v)
+	}
+	if v := item.Location; v != nil {
+		interview["location"] = *v
+	}
+	if v := item.Organizer; v != nil {
+		interview["organizer"] = flattenUser(ctx, v)
+	}
+	if v := item.Start; v != nil {
+		interview["start"] = flattenScheduledInterviewDate(ctx, v)
+	}
+	if v := item.Status; v != nil {
+		interview["status"] = *v
+	}
+	if v := item.VideoConferencingUrl; v != nil {
+		interview["video_conferencing_url"] = *v
+	}
 	return interview
 }

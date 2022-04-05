@@ -75,17 +75,41 @@ func schemaGreenhouseOffer() map[string]*schema.Schema {
 
 func flattenOffer(ctx context.Context, item *greenhouse.Offer) map[string]interface{} {
 	offer := make(map[string]interface{})
-	offer["application_id"] = item.ApplicationId
-	offer["candidate_id"] = item.CandidateId
-	offer["created_at"] = item.CreatedAt
-	offer["custom_fields"] = item.CustomFields
-	offer["job_id"] = item.JobId
-	offer["keyed_custom_fields"] = item.KeyedCustomFields
-	offer["opening"] = flattenJobOpening(ctx, item.Opening)
-	offer["resolved_at"] = item.ResolvedAt
-	offer["sent_at"] = item.SentAt
-	offer["starts_at"] = item.StartsAt
-	offer["status"] = item.Status
-	offer["version"] = item.Version
+	if v := item.ApplicationId; v != nil {
+		offer["application_id"] = *v
+	}
+	if v := item.CandidateId; v != nil {
+		offer["candidate_id"] = *v
+	}
+	if v := item.CreatedAt; v != nil {
+		offer["created_at"] = *v
+	}
+	if v := item.CustomFields; v != nil {
+		offer["custom_fields"] = v
+	}
+	if v := item.JobId; v != nil {
+		offer["job_id"] = *v
+	}
+	if v := item.KeyedCustomFields; len(v) > 0 {
+		offer["keyed_custom_fields"] = v
+	}
+	if v := item.Opening; v != nil {
+		offer["opening"] = flattenJobOpening(ctx, v)
+	}
+	if v := item.ResolvedAt; v != nil {
+		offer["resolved_at"] = *v
+	}
+	if v := item.SentAt; v != nil {
+		offer["sent_at"] = *v
+	}
+	if v := item.StartsAt; v != nil {
+		offer["starts_at"] = *v
+	}
+	if v := item.Status; v != nil {
+		offer["status"] = *v
+	}
+	if v := item.Version; v != nil {
+		offer["version"] = *v
+	}
 	return offer
 }
