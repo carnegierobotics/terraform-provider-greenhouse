@@ -17,9 +17,7 @@ func resourceGreenhouseOffer() *schema.Resource {
 		DeleteContext: resourceGreenhouseOfferDelete,
 		Exists:        resourceGreenhouseOfferExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseOfferImport,
 		},
 		Schema: schemaGreenhouseOffer(),
 	}
@@ -77,4 +75,8 @@ func resourceGreenhouseOfferUpdate(ctx context.Context, d *schema.ResourceData, 
 
 func resourceGreenhouseOfferDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for offers."}}
+}
+
+func resourceGreenhouseOfferImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseOfferRead)
 }

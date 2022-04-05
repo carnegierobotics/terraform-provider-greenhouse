@@ -17,9 +17,7 @@ func resourceGreenhouseJobPermission() *schema.Resource {
 		DeleteContext: resourceGreenhouseJobPermissionDelete,
 		Exists:        resourceGreenhouseJobPermissionExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseJobPermissionImport,
 		},
 		Schema: schemaGreenhouseUserPermission(),
 	}
@@ -89,4 +87,8 @@ func resourceGreenhouseJobPermissionDelete(ctx context.Context, d *schema.Resour
 	}
 	d.SetId("")
 	return nil
+}
+
+func resourceGreenhouseJobPermissionImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseJobPermissionRead)
 }

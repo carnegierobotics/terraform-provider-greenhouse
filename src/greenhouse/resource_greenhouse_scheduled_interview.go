@@ -17,9 +17,7 @@ func resourceGreenhouseScheduledInterview() *schema.Resource {
 		DeleteContext: resourceGreenhouseScheduledInterviewDelete,
 		Exists:        resourceGreenhouseScheduledInterviewExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseScheduledInterviewImport,
 		},
 		Schema: schemaGreenhouseScheduledInterview(),
 	}
@@ -149,4 +147,8 @@ func resourceGreenhouseScheduledInterviewDelete(ctx context.Context, d *schema.R
 	}
 	d.SetId("")
 	return nil
+}
+
+func resourceGreenhouseScheduledInterviewImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseScheduledInterviewRead)
 }

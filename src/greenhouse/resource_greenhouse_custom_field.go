@@ -17,9 +17,7 @@ func resourceGreenhouseCustomField() *schema.Resource {
 		DeleteContext: resourceGreenhouseCustomFieldDelete,
 		Exists:        resourceGreenhouseCustomFieldExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseCustomFieldImport,
 		},
 		Schema: schemaGreenhouseCustomField(),
 	}
@@ -84,6 +82,10 @@ func resourceGreenhouseCustomFieldUpdate(ctx context.Context, d *schema.Resource
 
 func resourceGreenhouseCustomFieldDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for custom_field."}}
+}
+
+func resourceGreenhouseCustomFieldImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseCustomFieldRead)
 }
 
 func createCustomFieldObject(ctx context.Context, d *schema.ResourceData) (*greenhouse.CustomField, diag.Diagnostics) {

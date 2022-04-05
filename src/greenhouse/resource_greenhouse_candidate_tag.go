@@ -17,9 +17,7 @@ func resourceGreenhouseCandidateTag() *schema.Resource {
 		UpdateContext: resourceGreenhouseCandidateTagUpdate,
 		DeleteContext: resourceGreenhouseCandidateTagDelete,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseCandidateTagImport,
 		},
 		Schema: schemaGreenhouseTypeIdName(),
 	}
@@ -71,4 +69,8 @@ func resourceGreenhouseCandidateTagDelete(ctx context.Context, d *schema.Resourc
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	return nil
+}
+
+func resourceGreenhouseCandidateTagImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseCandidateTagRead)
 }

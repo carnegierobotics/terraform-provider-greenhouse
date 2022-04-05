@@ -17,9 +17,7 @@ func resourceGreenhouseJobOpening() *schema.Resource {
 		DeleteContext: resourceGreenhouseJobOpeningDelete,
 		Exists:        resourceGreenhouseJobOpeningExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseJobOpeningImport,
 		},
 		Schema: schemaGreenhouseJobOpening(),
 	}
@@ -60,4 +58,8 @@ func resourceGreenhouseJobOpeningUpdate(ctx context.Context, d *schema.ResourceD
 
 func resourceGreenhouseJobOpeningDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for job_openings."}}
+}
+
+func resourceGreenhouseJobOpeningImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseJobOpeningRead)
 }

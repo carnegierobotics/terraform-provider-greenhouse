@@ -17,9 +17,7 @@ func resourceGreenhouseApplication() *schema.Resource {
 		DeleteContext: resourceGreenhouseApplicationDelete,
 		Exists:        resourceGreenhouseApplicationExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseApplicationImport,
 		},
 		Schema: schemaGreenhouseApplication(),
 	}
@@ -179,4 +177,8 @@ func resourceGreenhouseApplicationDelete(ctx context.Context, d *schema.Resource
 	}
 	d.SetId("")
 	return nil
+}
+
+func resourceGreenhouseApplicationImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseApplicationRead)
 }

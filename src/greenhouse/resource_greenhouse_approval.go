@@ -17,9 +17,7 @@ func resourceGreenhouseApproval() *schema.Resource {
 		DeleteContext: resourceGreenhouseApprovalDelete,
 		Exists:        resourceGreenhouseApprovalExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseApprovalImport,
 		},
 		Schema: schemaGreenhouseApproval(),
 	}
@@ -76,6 +74,10 @@ func resourceGreenhouseApprovalUpdate(ctx context.Context, d *schema.ResourceDat
 
 func resourceGreenhouseApprovalDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for approvals."}}
+}
+
+func resourceGreenhouseApprovalImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseApprovalRead)
 }
 
 func createApprovalObj(ctx context.Context, d *schema.ResourceData) (*greenhouse.Approval, diag.Diagnostics) {

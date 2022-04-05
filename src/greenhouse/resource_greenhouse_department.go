@@ -20,7 +20,7 @@ func resourceGreenhouseDepartment() *schema.Resource {
 		Exists:        resourceGreenhouseDepartmentExists,
 		Importer: &schema.ResourceImporter{
 			StateContext: resourceGreenhouseDepartmentImport,
-    },
+		},
 		Schema: schemaGreenhouseDepartment(),
 	}
 }
@@ -85,5 +85,5 @@ func resourceGreenhouseDepartmentDelete(ctx context.Context, d *schema.ResourceD
 }
 
 func resourceGreenhouseDepartmentImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-  return importByRead(ctx, d, meta, resourceGreenhouseDepartmentRead)
+	return importByRead(ctx, d, meta, resourceGreenhouseDepartmentRead)
 }

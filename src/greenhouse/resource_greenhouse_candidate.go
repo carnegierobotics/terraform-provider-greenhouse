@@ -19,9 +19,7 @@ func resourceGreenhouseCandidate() *schema.Resource {
 		DeleteContext: resourceGreenhouseCandidateDelete,
 		Exists:        resourceGreenhouseCandidateExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseCandidateImport,
 		},
 		Schema: schemaGreenhouseCandidate(),
 	}
@@ -233,6 +231,10 @@ func resourceGreenhouseCandidateDelete(ctx context.Context, d *schema.ResourceDa
 	tflog.Debug(ctx, "Finished resourceGreenhouseCandidateDelete.")
 	d.SetId("")
 	return nil
+}
+
+func resourceGreenhouseCandidateImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseCandidateRead)
 }
 
 func updateEducations(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
