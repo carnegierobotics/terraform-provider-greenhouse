@@ -142,7 +142,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"template_job_id": {
 			Type:     schema.TypeInt,
-			Required: true,
+			Optional: true,
 		},
 		"updated_at": {
 			Type:     schema.TypeString,

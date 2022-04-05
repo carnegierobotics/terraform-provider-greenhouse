@@ -3,9 +3,11 @@ package greenhouse
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func convertType(ctx context.Context, source interface{}, target interface{}) diag.Diagnostics {
@@ -41,6 +43,16 @@ func Bool(ptr *bool) bool {
 
 func BoolPtr(v bool) *bool {
 	return &v
+}
+
+type readFunc func(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
+
+func importByRead(ctx context.Context, d *schema.ResourceData, meta interface{}, fn readFunc) ([]*schema.ResourceData, error) {
+	err := fn(ctx, d, meta)
+	if err != nil {
+		return nil, errors.New(err[0].Summary)
+	}
+	return []*schema.ResourceData{d}, nil
 }
 
 func Int(ptr *int) int {

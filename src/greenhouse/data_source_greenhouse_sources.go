@@ -38,11 +38,15 @@ func dataSourceGreenhouseSourcesRead(ctx context.Context, d *schema.ResourceData
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	names := make([]string, len(*list), len(*list))
-	public_names := make([]string, len(*list), len(*list))
-	for i, source := range *list {
-		names[i] = *source.Name
-		public_names[i] = *source.PublicName
+	names := make([]string, 0, len(*list))
+	public_names := make([]string, 0, len(*list))
+	for _, source := range *list {
+		if v := source.Name; v != nil {
+			names = append(names, *v)
+		}
+		if v := source.PublicName; v != nil {
+			public_names = append(public_names, *v)
+		}
 	}
 	d.SetId("all")
 	d.Set("names", names)

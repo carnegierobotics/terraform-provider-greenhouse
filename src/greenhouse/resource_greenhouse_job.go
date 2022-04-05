@@ -19,7 +19,7 @@ func resourceGreenhouseJob() *schema.Resource {
 		UpdateContext: resourceGreenhouseJobUpdate,
 		DeleteContext: resourceGreenhouseJobDelete,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: resourceGreenhouseJobImport,
 		},
 		Schema: schemaGreenhouseJob(),
 	}
@@ -137,6 +137,10 @@ func transformHiringTeam(ctx context.Context, hiringTeam interface{}) (map[strin
 
 func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for jobs."}}
+}
+
+func resourceGreenhouseJobImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseJobRead)
 }
 
 func updateOpenings(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
