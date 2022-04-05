@@ -43,7 +43,7 @@ func inflateApplicationRejects(ctx context.Context, source *[]interface{}) (*[]g
 func inflateApplicationReject(ctx context.Context, source *map[string]interface{}) (*greenhouse.ApplicationReject, diag.Diagnostics) {
 	var obj greenhouse.ApplicationReject
 	if v, ok := (*source)["notes"].(string); ok && len(v) > 0 {
-		obj.Notes = v
+		obj.Notes = &v
 	}
 	if v, ok := (*source)["rejection_email"].([]interface{}); ok && len(v) > 0 {
 		item, diagErr := inflateRejectionEmails(ctx, &v)
@@ -53,7 +53,7 @@ func inflateApplicationReject(ctx context.Context, source *map[string]interface{
 		obj.RejectionEmail = &(*item)[0]
 	}
 	if v, ok := (*source)["rejection_reason"].(int); ok {
-		obj.RejectionReasonId = v
+		obj.RejectionReasonId = &v
 	}
 	return &obj, nil
 }

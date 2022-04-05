@@ -29,7 +29,7 @@ func dataSourceGreenhouseDepartmentsRead(ctx context.Context, d *schema.Resource
 	}
 	departments := make([]string, len(*list), len(*list))
 	for i, department := range *list {
-		departments[i] = department.Name
+		departments[i] = *department.Name
 	}
 	d.SetId("all")
 	d.Set("names", departments)

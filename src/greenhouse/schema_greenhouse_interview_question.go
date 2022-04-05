@@ -32,7 +32,7 @@ func inflateInterviewQuestions(ctx context.Context, source *[]interface{}) (*[]g
 func inflateInterviewQuestion(ctx context.Context, source *map[string]interface{}) (*greenhouse.InterviewQuestion, diag.Diagnostics) {
 	var obj greenhouse.InterviewQuestion
 	if v, ok := (*source)["question"].(string); ok && len(v) > 0 {
-		obj.Question = v
+		obj.Question = &v
 	}
 	return &obj, nil
 }
@@ -50,6 +50,8 @@ func flattenInterviewQuestions(ctx context.Context, list *[]greenhouse.Interview
 
 func flattenInterviewQuestion(ctx context.Context, item *greenhouse.InterviewQuestion) map[string]interface{} {
 	question := make(map[string]interface{})
-	question["question"] = item.Question
+	if v := item.Question; v != nil {
+		question["question"] = *v
+	}
 	return question
 }

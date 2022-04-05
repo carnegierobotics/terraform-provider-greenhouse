@@ -74,7 +74,7 @@ func inflateOffice(ctx context.Context, source *map[string]interface{}) (*greenh
 		obj.ChildOfficeExternalIds = *sliceItoSliceA(&v)
 	}
 	if v, ok := (*source)["external_id"].(string); ok && len(v) > 0 {
-		obj.ExternalId = v
+		obj.ExternalId = &v
 	}
 	if v, ok := (*source)["location"].(map[string]interface{}); ok && len(v) > 0 {
 		item, err := inflateLocation(ctx, &v)
@@ -84,16 +84,16 @@ func inflateOffice(ctx context.Context, source *map[string]interface{}) (*greenh
 		obj.Location = item
 	}
 	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	if v, ok := (*source)["parent_id"].(int); ok {
-		obj.ParentId = v
+		obj.ParentId = &v
 	}
 	if v, ok := (*source)["parent_office_external_id"].(string); ok && len(v) > 0 {
-		obj.ParentOfficeExternalId = v
+		obj.ParentOfficeExternalId = &v
 	}
 	if v, ok := (*source)["primary_contact_user_id"].(int); ok {
-		obj.PrimaryContactUserId = v
+		obj.PrimaryContactUserId = &v
 	}
 	return &obj, nil
 }
@@ -114,11 +114,21 @@ func flattenOffices(ctx context.Context, list *[]greenhouse.Office) []interface{
 func flattenOffice(ctx context.Context, item *greenhouse.Office) map[string]interface{} {
 	tflog.Debug(ctx, "Flattening office", "office", fmt.Sprintf("%+v", item))
 	office := make(map[string]interface{})
-	office["name"] = item.Name
-	office["location"] = flattenLocation(ctx, item.Location)[0]
-	office["primary_contact_user_id"] = item.PrimaryContactUserId
-	office["parent_id"] = item.ParentId
-	office["child_ids"] = item.ChildIds
+	if v := item.Name; v != nil {
+		office["name"] = *v
+	}
+	if v := item.Location; v != nil {
+		office["location"] = flattenLocation(ctx, v)[0]
+	}
+	if v := item.PrimaryContactUserId; v != nil {
+		office["primary_contact_user_id"] = *v
+	}
+	if v := item.ParentId; v != nil {
+		office["parent_id"] = *v
+	}
+	if v := item.ChildIds; len(v) > 0 {
+		office["child_ids"] = v
+	}
 	tflog.Debug(ctx, "Flattened office", "office", fmt.Sprintf("%+v", office))
 	return office
 }

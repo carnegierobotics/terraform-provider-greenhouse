@@ -73,7 +73,7 @@ func inflateJobOpenings(ctx context.Context, source *[]interface{}) (*[]greenhou
 func inflateJobOpening(ctx context.Context, source *map[string]interface{}) (*greenhouse.JobOpening, diag.Diagnostics) {
 	var obj greenhouse.JobOpening
 	if v, ok := (*source)["application_id"].(int); ok {
-		obj.ApplicationId = v
+		obj.ApplicationId = &v
 	}
 	if v, ok := (*source)["close_reason"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateCloseReasons(ctx, &v)
@@ -83,19 +83,19 @@ func inflateJobOpening(ctx context.Context, source *map[string]interface{}) (*gr
 		obj.CloseReason = &(*list)[0]
 	}
 	if v, ok := (*source)["closed_at"].(string); ok && len(v) > 0 {
-		obj.ClosedAt = v
+		obj.ClosedAt = &v
 	}
 	if v, ok := (*source)["custom_fields"].(map[string]string); ok && len(v) > 0 {
 		obj.CustomFields = v
 	}
 	if v, ok := (*source)["opened_at"].(string); ok && len(v) > 0 {
-		obj.OpenedAt = v
+		obj.OpenedAt = &v
 	}
 	if v, ok := (*source)["opening_id"].(string); ok && len(v) > 0 {
-		obj.OpeningId = v
+		obj.OpeningId = &v
 	}
 	if v, ok := (*source)["status"].(string); ok && len(v) > 0 {
-		obj.Status = v
+		obj.Status = &v
 	}
 	return &obj, nil
 }
@@ -115,18 +115,30 @@ func flattenJobOpenings(ctx context.Context, list *[]greenhouse.JobOpening) []in
 
 func flattenJobOpening(ctx context.Context, item *greenhouse.JobOpening) map[string]interface{} {
 	opening := make(map[string]interface{})
-	opening["opening_id"] = item.OpeningId
-	opening["status"] = item.Status
-	opening["opened_at"] = item.OpenedAt
-	opening["closed_at"] = item.ClosedAt
-	opening["application_id"] = item.ApplicationId
-	if item.CloseReason != nil {
-		convertedCloseReason := greenhouse.TypeIdName(*item.CloseReason)
+	if v := item.OpeningId; v != nil {
+		opening["opening_id"] = *v
+	}
+	if v := item.Status; v != nil {
+		opening["status"] = *v
+	}
+	if v := item.OpenedAt; v != nil {
+		opening["opened_at"] = *v
+	}
+	if v := item.ClosedAt; v != nil {
+		opening["closed_at"] = *v
+	}
+	if v := item.ApplicationId; v != nil {
+		opening["application_id"] = *v
+	}
+	if v := item.CloseReason; v != nil {
+		convertedCloseReason := greenhouse.TypeIdName(*v)
 		tflog.Debug(ctx, "Converted close reason", "reason", fmt.Sprintf("%+v", convertedCloseReason))
 		opening["close_reason"] = flattenTypeIdName(ctx, &convertedCloseReason)
 	} else {
 		opening["close_reason"] = nil
 	}
-	opening["custom_fields"] = item.CustomFields
+	if v := item.CustomFields; len(v) > 0 {
+		opening["custom_fields"] = v
+	}
 	return opening
 }

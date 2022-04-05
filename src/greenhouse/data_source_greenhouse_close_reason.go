@@ -27,8 +27,8 @@ func dataSourceGreenhouseCloseReasonRead(ctx context.Context, d *schema.Resource
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	for _, reason := range *list {
-		if reason.Name == name {
-			d.SetId(strconv.Itoa(reason.Id))
+		if *reason.Name == name {
+			d.SetId(strconv.Itoa(*reason.Id))
 			return nil
 		}
 	}

@@ -46,10 +46,10 @@ func inflateApprover(ctx context.Context, source *map[string]interface{}) (*gree
 		obj.EmailAddresses = v
 	}
 	if v, ok := (*source)["employee_id"].(string); ok && len(v) > 0 {
-		obj.EmployeeId = v
+		obj.EmployeeId = &v
 	}
 	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	return &obj, nil
 }
@@ -67,8 +67,14 @@ func flattenApprovers(ctx context.Context, list *[]greenhouse.Approver) []interf
 
 func flattenApprover(ctx context.Context, item *greenhouse.Approver) map[string]interface{} {
 	approver := make(map[string]interface{})
-	approver["email_addresses"] = item.EmailAddresses
-	approver["employee_id"] = item.EmployeeId
-	approver["name"] = item.Name
+	if v := item.EmailAddresses; len(v) > 0 {
+		approver["email_addresses"] = v
+	}
+	if v := item.EmployeeId; v != nil {
+		approver["employee_id"] = *v
+	}
+	if v := item.Name; v != nil {
+		approver["name"] = *v
+	}
 	return approver
 }

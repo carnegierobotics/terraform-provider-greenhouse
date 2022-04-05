@@ -63,6 +63,8 @@ func flattenOpenings(ctx context.Context, list *[]greenhouse.Opening) []interfac
 
 func flattenOpening(ctx context.Context, item *greenhouse.Opening) map[string]interface{} {
 	opening := make(map[string]interface{})
-	opening["custom_fields"] = item.CustomFields
+	if v := item.CustomFields; len(v) > 0 {
+		opening["custom_fields"] = v
+	}
 	return opening
 }

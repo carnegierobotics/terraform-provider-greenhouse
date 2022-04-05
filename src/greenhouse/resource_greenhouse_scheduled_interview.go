@@ -17,9 +17,7 @@ func resourceGreenhouseScheduledInterview() *schema.Resource {
 		DeleteContext: resourceGreenhouseScheduledInterviewDelete,
 		Exists:        resourceGreenhouseScheduledInterviewExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseScheduledInterviewImport,
 		},
 		Schema: schemaGreenhouseScheduledInterview(),
 	}
@@ -36,7 +34,7 @@ func resourceGreenhouseScheduledInterviewExists(d *schema.ResourceData, meta int
 func resourceGreenhouseScheduledInterviewCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var obj greenhouse.ScheduledInterviewCreateInfo
 	if v, ok := d.Get("application_id").(int); ok {
-		obj.ApplicationId = v
+		obj.ApplicationId = &v
 	}
 	if v, ok := d.Get("end").([]interface{}); ok && len(v) > 0 {
 		list, err := inflateScheduledInterviewDates(ctx, &v)
@@ -46,10 +44,10 @@ func resourceGreenhouseScheduledInterviewCreate(ctx context.Context, d *schema.R
 		obj.End = (*list)[0].DateTime
 	}
 	if v, ok := d.Get("external_event_id").(string); ok && len(v) > 0 {
-		obj.ExternalEventId = v
+		obj.ExternalEventId = &v
 	}
 	if v, ok := d.Get("interview_id").(int); ok {
-		obj.InterviewId = v
+		obj.InterviewId = &v
 	}
 	if v, ok := d.Get("interviewers").([]interface{}); ok && len(v) > 0 {
 		list, err := inflateInterviewers(ctx, &v)
@@ -105,7 +103,7 @@ func resourceGreenhouseScheduledInterviewUpdate(ctx context.Context, d *schema.R
 	}
 	if d.HasChanges("external_event_id") {
 		if v, ok := d.Get("external_event_id").(string); ok && len(v) > 0 {
-			obj.ExternalEventId = v
+			obj.ExternalEventId = &v
 		}
 	}
 	if d.HasChanges("interviewers") {
@@ -119,7 +117,7 @@ func resourceGreenhouseScheduledInterviewUpdate(ctx context.Context, d *schema.R
 	}
 	if d.HasChanges("location") {
 		if v, ok := d.Get("location").(string); ok && len(v) > 0 {
-			obj.Location = v
+			obj.Location = &v
 		}
 	}
 	if d.HasChanges("start") {
@@ -149,4 +147,8 @@ func resourceGreenhouseScheduledInterviewDelete(ctx context.Context, d *schema.R
 	}
 	d.SetId("")
 	return nil
+}
+
+func resourceGreenhouseScheduledInterviewImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseScheduledInterviewRead)
 }

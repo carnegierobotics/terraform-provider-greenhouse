@@ -36,10 +36,10 @@ func inflateScheduledInterviewDates(ctx context.Context, source *[]interface{}) 
 func inflateScheduledInterviewDate(ctx context.Context, source *map[string]interface{}) (*greenhouse.ScheduledInterviewDate, diag.Diagnostics) {
 	var obj greenhouse.ScheduledInterviewDate
 	if v, ok := (*source)["date"].(string); ok && len(v) > 0 {
-		obj.Date = v
+		obj.Date = &v
 	}
 	if v, ok := (*source)["date_time"].(string); ok && len(v) > 0 {
-		obj.DateTime = v
+		obj.DateTime = &v
 	}
 	return &obj, nil
 }
@@ -57,7 +57,11 @@ func flattenScheduledInterviewDates(ctx context.Context, list *[]greenhouse.Sche
 
 func flattenScheduledInterviewDate(ctx context.Context, item *greenhouse.ScheduledInterviewDate) map[string]interface{} {
 	date := make(map[string]interface{})
-	date["date"] = item.Date
-	date["date_time"] = item.DateTime
+	if v := item.Date; v != nil {
+		date["date"] = *v
+	}
+	if v := item.DateTime; v != nil {
+		date["date_time"] = *v
+	}
 	return date
 }

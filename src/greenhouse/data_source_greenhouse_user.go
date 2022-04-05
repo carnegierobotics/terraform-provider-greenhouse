@@ -27,8 +27,8 @@ func dataSourceGreenhouseUserRead(ctx context.Context, d *schema.ResourceData, m
 	}
 	name := d.Get("name").(string)
 	for _, user := range *list {
-		if user.Name == name {
-			d.SetId(strconv.Itoa(user.Id))
+		if *user.Name == name {
+			d.SetId(strconv.Itoa(*user.Id))
 			return nil
 		}
 	}

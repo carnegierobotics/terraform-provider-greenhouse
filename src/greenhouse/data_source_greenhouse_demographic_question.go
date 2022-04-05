@@ -22,8 +22,8 @@ func dataSourceGreenhouseDemographicQuestionRead(ctx context.Context, d *schema.
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	for _, question := range *list {
-		if question.Name == name {
-			d.SetId(strconv.Itoa(question.Id))
+		if *question.Name == name {
+			d.SetId(strconv.Itoa(*question.Id))
 			d.Set("active", question.Active)
 			d.Set("answer_type", question.AnswerType)
 			d.Set("demographic_question_set_id", question.DemographicQuestionSetId)

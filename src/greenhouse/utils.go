@@ -3,9 +3,11 @@ package greenhouse
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func convertType(ctx context.Context, source interface{}, target interface{}) diag.Diagnostics {
@@ -29,6 +31,52 @@ func mapAItoMapAA(ctx context.Context, mapAI map[string]interface{}) *map[string
 		mapAA[k] = v.(string)
 	}
 	return &mapAA
+}
+
+func Bool(ptr *bool) bool {
+	if ptr != nil {
+		return *ptr
+	} else {
+		return false
+	}
+}
+
+func BoolPtr(v bool) *bool {
+	return &v
+}
+
+type readFunc func(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
+
+func importByRead(ctx context.Context, d *schema.ResourceData, meta interface{}, fn readFunc) ([]*schema.ResourceData, error) {
+	err := fn(ctx, d, meta)
+	if err != nil {
+		return nil, errors.New(err[0].Summary)
+	}
+	return []*schema.ResourceData{d}, nil
+}
+
+func Int(ptr *int) int {
+	if ptr != nil {
+		return *ptr
+	} else {
+		return 0
+	}
+}
+
+func IntPtr(v int) *int {
+	return &v
+}
+
+func String(ptr *string) string {
+	if ptr != nil {
+		return *ptr
+	} else {
+		return ""
+	}
+}
+
+func StringPtr(v string) *string {
+	return &v
 }
 
 func sliceItoSliceA(sliceI *[]interface{}) *[]string {

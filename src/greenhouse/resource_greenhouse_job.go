@@ -19,7 +19,7 @@ func resourceGreenhouseJob() *schema.Resource {
 		UpdateContext: resourceGreenhouseJobUpdate,
 		DeleteContext: resourceGreenhouseJobDelete,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: resourceGreenhouseJobImport,
 		},
 		Schema: schemaGreenhouseJob(),
 	}
@@ -28,12 +28,12 @@ func resourceGreenhouseJob() *schema.Resource {
 func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	tflog.Debug(ctx, "Started resourceGreenhouseJobCreate")
 	createObject := greenhouse.JobCreateInfo{
-		TemplateJobId:  d.Get("template_job_id").(int),
-		NumberOpenings: d.Get("number_of_openings").(int),
-		JobPostName:    d.Get("job_post_name").(string),
-		JobName:        d.Get("job_name").(string),
-		DepartmentId:   d.Get("department_id").(int),
-		RequisitionId:  d.Get("requisition_id").(string),
+		TemplateJobId:  IntPtr(d.Get("template_job_id").(int)),
+		NumberOpenings: IntPtr(d.Get("number_of_openings").(int)),
+		JobPostName:    StringPtr(d.Get("job_post_name").(string)),
+		JobName:        StringPtr(d.Get("job_name").(string)),
+		DepartmentId:   IntPtr(d.Get("department_id").(int)),
+		RequisitionId:  StringPtr(d.Get("requisition_id").(string)),
 	}
 	if v, ok := d.Get("office_ids").([]interface{}); ok && len(v) > 0 {
 		createObject.OfficeIds = *sliceItoSliceD(&v)
@@ -92,13 +92,13 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 		}
 	}
 	updateObject := greenhouse.JobUpdateInfo{
-		Name:                    d.Get("job_name").(string),
-		Notes:                   d.Get("notes").(string),
-		Anywhere:                d.Get("anywhere").(bool),
-		RequisitionId:           d.Get("requisition_id").(string),
-		TeamandResponsibilities: d.Get("team_and_responsibilities").(string),
-		HowToSellThisJob:        d.Get("how_to_sell_this_job").(string),
-		DepartmentId:            d.Get("department_id").(int),
+		Name:                    StringPtr(d.Get("job_name").(string)),
+		Notes:                   StringPtr(d.Get("notes").(string)),
+		Anywhere:                BoolPtr(d.Get("anywhere").(bool)),
+		RequisitionId:           StringPtr(d.Get("requisition_id").(string)),
+		TeamandResponsibilities: StringPtr(d.Get("team_and_responsibilities").(string)),
+		HowToSellThisJob:        StringPtr(d.Get("how_to_sell_this_job").(string)),
+		DepartmentId:            IntPtr(d.Get("department_id").(int)),
 	}
 	if v, ok := d.Get("office_ids").([]interface{}); ok && len(v) > 0 {
 		updateObject.OfficeIds = *sliceItoSliceD(&v)
@@ -139,6 +139,10 @@ func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, me
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for jobs."}}
 }
 
+func resourceGreenhouseJobImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseJobRead)
+}
+
 func updateOpenings(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	jobId, err := strconv.Atoi(d.Id())
 	if err != nil {
@@ -175,7 +179,7 @@ func updateOpenings(ctx context.Context, d *schema.ResourceData, meta interface{
 			}
 			*upd = append(*upd, updateObj)
 		} else {
-			*del = append(*del, i.Id)
+			*del = append(*del, Int(i.Id))
 		}
 	}
 	for _, i := range *newList {
@@ -195,7 +199,7 @@ func updateOpenings(ctx context.Context, d *schema.ResourceData, meta interface{
 	}
 	if len(*upd) > 0 {
 		for _, item := range *upd {
-			err := greenhouse.UpdateJobOpenings(meta.(*greenhouse.Client), ctx, jobId, item.Id, &item)
+			err := greenhouse.UpdateJobOpenings(meta.(*greenhouse.Client), ctx, jobId, Int(item.Id), &item)
 			if err != nil {
 				return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 			}

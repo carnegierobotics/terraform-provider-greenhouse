@@ -142,7 +142,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"template_job_id": {
 			Type:     schema.TypeInt,
-			Required: true,
+			Optional: true,
 		},
 		"updated_at": {
 			Type:     schema.TypeString,
@@ -167,16 +167,16 @@ func inflateJobs(ctx context.Context, source *[]interface{}) (*[]greenhouse.Job,
 func inflateJob(ctx context.Context, source *map[string]interface{}) (*greenhouse.Job, diag.Diagnostics) {
 	var obj greenhouse.Job
 	if v, ok := (*source)["closed_at"].(string); ok && len(v) > 0 {
-		obj.ClosedAt = v
+		obj.ClosedAt = &v
 	}
 	if v, ok := (*source)["confidential"].(bool); ok {
-		obj.Confidential = v
+		obj.Confidential = &v
 	}
 	if v, ok := (*source)["copied_from_id"].(int); ok {
-		obj.CopiedFromId = v
+		obj.CopiedFromId = &v
 	}
 	if v, ok := (*source)["created_at"].(string); ok && len(v) > 0 {
-		obj.CreatedAt = v
+		obj.CreatedAt = &v
 	}
 	/*
 	  if v, ok := (*source)["custom_fields"].(map[string]string); ok && len(v) > 0 {
@@ -203,13 +203,13 @@ func inflateJob(ctx context.Context, source *map[string]interface{}) (*greenhous
 		obj.HiringTeam = *teamMap
 	}
 	if v, ok := (*source)["is_template"].(bool); ok {
-		obj.IsTemplate = v
+		obj.IsTemplate = &v
 	}
 	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	if v, ok := (*source)["notes"].(string); ok && len(v) > 0 {
-		obj.Notes = v
+		obj.Notes = &v
 	}
 	if v, ok := (*source)["offices"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateOffices(ctx, &v)
@@ -219,7 +219,7 @@ func inflateJob(ctx context.Context, source *map[string]interface{}) (*greenhous
 		obj.Offices = *list
 	}
 	if v, ok := (*source)["opened_at"].(string); ok && len(v) > 0 {
-		obj.OpenedAt = v
+		obj.OpenedAt = &v
 	}
 	if v, ok := (*source)["openings"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateJobOpenings(ctx, &v)
@@ -229,13 +229,13 @@ func inflateJob(ctx context.Context, source *map[string]interface{}) (*greenhous
 		obj.Openings = *list
 	}
 	if v, ok := (*source)["requisition_id"].(string); ok && len(v) > 0 {
-		obj.RequisitionId = v
+		obj.RequisitionId = &v
 	}
 	if v, ok := (*source)["status"].(string); ok && len(v) > 0 {
-		obj.Status = v
+		obj.Status = &v
 	}
 	if v, ok := (*source)["updated_at"].(string); ok && len(v) > 0 {
-		obj.UpdatedAt = v
+		obj.UpdatedAt = &v
 	}
 	return &obj, nil
 }
@@ -253,22 +253,54 @@ func flattenJobs(ctx context.Context, list *[]greenhouse.Job) []interface{} {
 
 func flattenJob(ctx context.Context, item *greenhouse.Job) map[string]interface{} {
 	job := make(map[string]interface{})
-	job["closed_at"] = item.ClosedAt
-	job["confidential"] = item.Confidential
-	job["copied_from_id"] = item.CopiedFromId
-	job["created_at"] = item.CreatedAt
-	job["custom_fields"] = item.CustomFields
-	job["departments"] = flattenDepartments(ctx, &item.Departments)
-	job["hiring_team"] = flattenHiringTeam(ctx, &item.HiringTeam)
-	job["is_template"] = item.IsTemplate
-	job["job_name"] = item.Name
+	if v := item.ClosedAt; v != nil {
+		job["closed_at"] = *v
+	}
+	if v := item.Confidential; v != nil {
+		job["confidential"] = *v
+	}
+	if v := item.CopiedFromId; v != nil {
+		job["copied_from_id"] = *v
+	}
+	if v := item.CreatedAt; v != nil {
+		job["created_at"] = *v
+	}
+	if v := item.CustomFields; len(v) > 0 {
+		job["custom_fields"] = v
+	}
+	if v := item.Departments; len(v) > 0 {
+		job["departments"] = flattenDepartments(ctx, &v)
+	}
+	if v := item.HiringTeam; len(v) > 0 {
+		job["hiring_team"] = flattenHiringTeam(ctx, &v)
+	}
+	if v := item.IsTemplate; v != nil {
+		job["is_template"] = *v
+	}
+	if v := item.Name; v != nil {
+		job["job_name"] = *v
+	}
 	//job["keyed_custom_fields"] = flattenKeyedCustomFields(ctx, &item.KeyedCustomFields)
-	job["notes"] = item.Notes
-	job["offices"] = flattenOffices(ctx, &item.Offices)
-	job["opened_at"] = item.OpenedAt
-	job["openings"] = flattenJobOpenings(ctx, &item.Openings)
-	job["requisition_id"] = item.RequisitionId
-	job["status"] = item.Status
-	job["updated_at"] = item.UpdatedAt
+	if v := item.Notes; v != nil {
+		job["notes"] = *v
+	}
+	if v := item.Offices; len(v) > 0 {
+		job["offices"] = flattenOffices(ctx, &v)
+	}
+	if v := item.OpenedAt; v != nil {
+		job["opened_at"] = *v
+	}
+	if v := item.Openings; len(v) > 0 {
+		job["openings"] = flattenJobOpenings(ctx, &v)
+	}
+	if v := item.RequisitionId; v != nil {
+		job["requisition_id"] = *v
+	}
+	if v := item.Status; v != nil {
+		job["status"] = *v
+	}
+	if v := item.UpdatedAt; v != nil {
+		job["updated_at"] = *v
+	}
 	return job
 }

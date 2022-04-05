@@ -48,13 +48,13 @@ func inflateActivities(ctx context.Context, source *[]interface{}) (*[]greenhous
 func inflateActivity(ctx context.Context, source *map[string]interface{}) (*greenhouse.Activity, diag.Diagnostics) {
 	var obj greenhouse.Activity
 	if v, ok := (*source)["body"].(string); ok && len(v) > 0 {
-		obj.Body = v
+		obj.Body = &v
 	}
 	if v, ok := (*source)["created_at"].(string); ok && len(v) > 0 {
-		obj.CreatedAt = v
+		obj.CreatedAt = &v
 	}
 	if v, ok := (*source)["subject"].(string); ok && len(v) > 0 {
-		obj.Subject = v
+		obj.Subject = &v
 	}
 	if v, ok := (*source)["user"].([]interface{}); ok && len(v) > 0 {
 		user, diagErr := inflateUser(ctx, &(v[0]))
@@ -83,10 +83,18 @@ func flattenActivities(ctx context.Context, list *[]greenhouse.Activity) []inter
 func flattenActivity(ctx context.Context, item *greenhouse.Activity) map[string]interface{} {
 	tflog.Debug(ctx, "Flattening one activity.")
 	activity := make(map[string]interface{})
-	activity["body"] = item.Body
-	activity["created_at"] = item.CreatedAt
-	activity["subject"] = item.Subject
-	activity["user"] = flattenUsersBasics(ctx, &[]greenhouse.User{*item.User})
+	if v := item.Body; v != nil {
+		activity["body"] = *v
+	}
+	if v := item.CreatedAt; v != nil {
+		activity["created_at"] = *v
+	}
+	if v := item.Subject; v != nil {
+		activity["subject"] = *v
+	}
+	if v := item.User; v != nil {
+		activity["user"] = flattenUsersBasics(ctx, &[]greenhouse.User{*v})
+	}
 	tflog.Debug(ctx, "Finished flattening activity.")
 	return activity
 }

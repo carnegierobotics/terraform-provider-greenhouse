@@ -24,7 +24,7 @@ func dataSourceGreenhouseEEOCRead(ctx context.Context, d *schema.ResourceData, m
 	applicationId := d.Get("candidate_id").(int)
 	candidateId := d.Get("candidate_id").(int)
 	for _, eeoc := range *list {
-		if eeoc.CandidateId == candidateId && eeoc.ApplicationId == applicationId {
+		if *eeoc.CandidateId == candidateId && *eeoc.ApplicationId == applicationId {
 			d.SetId(fmt.Sprintf("%s-%s", strconv.Itoa(applicationId), strconv.Itoa(candidateId)))
 			d.Set("disability_status", flattenEEOCAnswer(ctx, eeoc.DisabilityStatus))
 			d.Set("gender", flattenEEOCAnswer(ctx, eeoc.Gender))

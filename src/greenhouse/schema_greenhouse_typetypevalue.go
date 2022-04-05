@@ -36,10 +36,10 @@ func inflateTypeTypeValues(ctx context.Context, source *[]interface{}) (*[]green
 func inflateTypeTypeValue(ctx context.Context, source *map[string]interface{}) (*greenhouse.TypeTypeValue, diag.Diagnostics) {
 	var item greenhouse.TypeTypeValue
 	if v, ok := (*source)["type"].(string); ok && len(v) > 0 {
-		item.Type = v
+		item.Type = &v
 	}
 	if v, ok := (*source)["value"].(string); ok && len(v) > 0 {
-		item.Value = v
+		item.Value = &v
 	}
 	return &item, nil
 }
@@ -57,7 +57,11 @@ func flattenTypeTypeValues(ctx context.Context, list *[]greenhouse.TypeTypeValue
 
 func flattenTypeTypeValue(ctx context.Context, item *greenhouse.TypeTypeValue) map[string]interface{} {
 	obj := make(map[string]interface{})
-	obj["type"] = item.Type
-	obj["value"] = item.Value
+	if v := item.Type; v != nil {
+		obj["type"] = *v
+	}
+	if v := item.Value; v != nil {
+		obj["value"] = *v
+	}
 	return obj
 }

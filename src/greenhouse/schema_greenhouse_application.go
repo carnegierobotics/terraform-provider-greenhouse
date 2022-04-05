@@ -252,7 +252,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.Answers = *list
 	}
 	if v, ok := (*item)["applied_at"].(string); ok && len(v) > 0 {
-		app.AppliedAt = v
+		app.AppliedAt = &v
 	}
 	if v, ok := (*item)["attachments"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating attachments.")
@@ -263,7 +263,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.Attachments = *list
 	}
 	if v, ok := (*item)["candidate_id"].(int); ok {
-		app.CandidateId = v
+		app.CandidateId = &v
 	}
 	if v, ok := (*item)["credited_to"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating credited to.")
@@ -288,17 +288,17 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.CustomFields = *mapAItoMapAA(ctx, v)
 	}
 	if v, ok := (*item)["id"].(int); ok {
-		app.Id = v
+		app.Id = &v
 	}
 	if v, ok := (*item)["initial_stage_id"].(int); ok {
-		app.InitialStageId = v
+		app.InitialStageId = &v
 	}
 	if v, ok := (*item)["job_id"].(int); ok {
-		app.JobId = v
+		app.JobId = &v
 	}
 	if v, ok := (*item)["job_ids"].([]interface{}); ok && len(v) > 0 {
-		jobIds := v
-		app.JobIds = *sliceItoSliceD(&jobIds)
+		jobIds := &v
+		app.JobIds = *sliceItoSliceD(jobIds)
 	}
 	if v, ok := (*item)["jobs"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating jobs.")
@@ -309,7 +309,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.Jobs = *list
 	}
 	if v, ok := (*item)["job_post_id"].(int); ok {
-		app.JobPostId = v
+		app.JobPostId = &v
 	}
 	if v, ok := (*item)["keyed_custom_fields"].(map[string]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating keyed custom fields.")
@@ -320,7 +320,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.KeyedCustomFields = *fields
 	}
 	if v, ok := (*item)["last_activity_at"].(string); ok && len(v) > 0 {
-		app.LastActivityAt = v
+		app.LastActivityAt = &v
 	}
 	if v, ok := (*item)["location"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating location.")
@@ -331,7 +331,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.Location = &(*list)[0]
 	}
 	if v, ok := (*item)["prospect"].(bool); ok {
-		app.Prospect = v
+		app.Prospect = &v
 	}
 	if v, ok := (*item)["prospect_detail"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating prospect detail.")
@@ -342,16 +342,16 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.ProspectDetail = &(*list)[0]
 	}
 	if v, ok := (*item)["prospect_owner_id"].(int); ok {
-		app.ProspectOwnerId = v
+		app.ProspectOwnerId = &v
 	}
 	if v, ok := (*item)["prospect_pool_id"].(int); ok {
-		app.ProspectPoolId = v
+		app.ProspectPoolId = &v
 	}
 	if v, ok := (*item)["prospect_pool_stage_id"].(int); ok {
-		app.ProspectPoolStageId = v
+		app.ProspectPoolStageId = &v
 	}
 	if v, ok := (*item)["prospect_stage_id"].(int); ok {
-		app.ProspectStageId = v
+		app.ProspectStageId = &v
 	}
 	if v, ok := (*item)["prospective_department"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating department.")
@@ -362,7 +362,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.ProspectiveDepartment = &(*list)[0]
 	}
 	if v, ok := (*item)["prospective_department_id"].(int); ok {
-		app.ProspectiveDepartmentId = v
+		app.ProspectiveDepartmentId = &v
 	}
 	if v, ok := (*item)["prospective_office"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating office.")
@@ -373,7 +373,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.ProspectiveOffice = &(*list)[0]
 	}
 	if v, ok := (*item)["prospective_office_id"].(int); ok {
-		app.ProspectiveOfficeId = v
+		app.ProspectiveOfficeId = &v
 	}
 	if v, ok := (*item)["referrer"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating referrer.")
@@ -384,7 +384,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.Referrer = &(*inflatedReferrer)[0]
 	}
 	if v, ok := (*item)["rejected_at"].(string); ok && len(v) > 0 {
-		app.RejectedAt = v
+		app.RejectedAt = &v
 	}
 	if v, ok := (*item)["rejection_details"].([]interface{}); ok && len(v) > 0 {
 		tflog.Debug(ctx, "Inflating rejection details.")
@@ -405,10 +405,10 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.Source = inflateSource(ctx, v)
 	}
 	if v, ok := (*item)["source_id"].(int); ok {
-		app.SourceId = v
+		app.SourceId = &v
 	}
 	if v, ok := (*item)["status"].(string); ok && len(v) > 0 {
-		app.Status = v
+		app.Status = &v
 	}
 	tflog.Debug(ctx, "Done inflating application.")
 	return &app, nil
@@ -430,28 +430,70 @@ func flattenApplications(ctx context.Context, list *[]greenhouse.Application) []
 func flattenApplication(ctx context.Context, item *greenhouse.Application) map[string]interface{} {
 	tflog.Debug(ctx, "Flattening one application.")
 	app := make(map[string]interface{})
-	app["answers"] = flattenAnswers(ctx, &item.Answers)
-	app["applied_at"] = item.AppliedAt
-	app["attachments"] = flattenAttachments(ctx, &item.Attachments)
-	app["candidate_id"] = item.CandidateId
-	app["credited_to"] = flattenUser(ctx, item.CreditedTo)
-	convertedStage := greenhouse.TypeIdName(*item.CurrentStage)
-	app["current_stage"] = flattenTypeIdName(ctx, &convertedStage)
-	app["custom_fields"] = item.CustomFields
-	app["jobs"] = flattenJobs(ctx, &item.Jobs)
-	app["job_post_id"] = item.JobPostId
-	app["keyed_custom_fields"] = item.KeyedCustomFields
-	app["last_activity_at"] = item.LastActivityAt
-	app["location"] = flattenLocation(ctx, item.Location)
-	app["prospect"] = item.Prospect
-	app["prospect_detail"] = flattenProspectDetail(ctx, item.ProspectDetail)
-	app["prospective_department"] = flattenDepartment(ctx, item.ProspectiveDepartment)
-	app["prospective_office"] = flattenOffice(ctx, item.ProspectiveOffice)
-	app["rejected_at"] = item.RejectedAt
-	app["rejection_details"] = item.RejectionDetails
-	app["rejection_reason"] = item.RejectionReason
-	app["source"] = flattenSource(ctx, item.Source)
-	app["status"] = item.Status
+	if v := item.Answers; v != nil {
+		app["answers"] = flattenAnswers(ctx, &v)
+	}
+	if v := item.AppliedAt; v != nil {
+		app["applied_at"] = *v
+	}
+	if v := item.Attachments; len(v) > 0 {
+		app["attachments"] = flattenAttachments(ctx, &v)
+	}
+	if v := item.CandidateId; v != nil {
+		app["candidate_id"] = *v
+	}
+	if v := item.CreditedTo; v != nil {
+		app["credited_to"] = flattenUser(ctx, v)
+	}
+	if v := item.CurrentStage; v != nil {
+		convertedStage := greenhouse.TypeIdName(*v)
+		app["current_stage"] = flattenTypeIdName(ctx, &convertedStage)
+	}
+	if v := item.CustomFields; len(v) > 0 {
+		app["custom_fields"] = v
+	}
+	if v := item.Jobs; len(v) > 0 {
+		app["jobs"] = flattenJobs(ctx, &v)
+	}
+	if v := item.JobPostId; v != nil {
+		app["job_post_id"] = *v
+	}
+	if v := item.KeyedCustomFields; len(v) > 0 {
+		app["keyed_custom_fields"] = v
+	}
+	if v := item.LastActivityAt; v != nil {
+		app["last_activity_at"] = *v
+	}
+	if v := item.Location; v != nil {
+		app["location"] = flattenLocation(ctx, v)
+	}
+	if v := item.Prospect; v != nil {
+		app["prospect"] = *v
+	}
+	if v := item.ProspectDetail; v != nil {
+		app["prospect_detail"] = flattenProspectDetail(ctx, v)
+	}
+	if v := item.ProspectiveDepartment; v != nil {
+		app["prospective_department"] = flattenDepartment(ctx, v)
+	}
+	if v := item.ProspectiveOffice; v != nil {
+		app["prospective_office"] = flattenOffice(ctx, v)
+	}
+	if v := item.RejectedAt; v != nil {
+		app["rejected_at"] = *v
+	}
+	if v := item.RejectionDetails; v != nil {
+		app["rejection_details"] = flattenRejectionDetails(ctx, v)
+	}
+	if v := item.RejectionReason; v != nil {
+		app["rejection_reason"] = flattenRejectionReason(ctx, v)
+	}
+	if v := item.Source; v != nil {
+		app["source"] = flattenSource(ctx, v)
+	}
+	if v := item.Status; v != nil {
+		app["status"] = *v
+	}
 	tflog.Debug(ctx, "Finished flattening application.")
 	return app
 }

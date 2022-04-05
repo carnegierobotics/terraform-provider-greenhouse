@@ -138,22 +138,56 @@ func flattenCustomFields(ctx context.Context, list *[]greenhouse.CustomField) []
 
 func flattenCustomField(ctx context.Context, item *greenhouse.CustomField) map[string]interface{} {
 	fields := make(map[string]interface{})
-	fields["active"] = item.Active
-	fields["api_only"] = item.ApiOnly
-	fields["custom_field_options"] = flattenCustomFieldOptions(ctx, &item.CustomFieldOptions)
-	fields["departments"] = flattenDepartments(ctx, &item.Departments)
-	fields["description"] = item.Description
-	fields["expose_in_job_board_api"] = item.ExposeInJobBoardAPI
-	fields["field_type"] = item.FieldType
-	fields["name"] = item.Name
-	fields["name_key"] = item.NameKey
-	fields["offices"] = flattenOffices(ctx, &item.Offices)
-	fields["priority"] = item.Priority
-	fields["private"] = item.Private
-	fields["require_approval"] = item.RequireApproval
-	fields["required"] = item.Required
-	fields["template_token_string"] = item.TemplateTokenString
-	fields["trigger_new_version"] = item.TriggerNewVersion
-	fields["value_type"] = item.ValueType
+	if v := item.Active; v != nil {
+		fields["active"] = *v
+	}
+	if v := item.ApiOnly; v != nil {
+		fields["api_only"] = *v
+	}
+	if v := item.CustomFieldOptions; len(v) > 0 {
+		fields["custom_field_options"] = flattenCustomFieldOptions(ctx, &v)
+	}
+	if v := item.Departments; len(v) > 0 {
+		fields["departments"] = flattenDepartments(ctx, &v)
+	}
+	if v := item.Description; v != nil {
+		fields["description"] = *v
+	}
+	if v := item.ExposeInJobBoardAPI; v != nil {
+		fields["expose_in_job_board_api"] = *v
+	}
+	if v := item.FieldType; v != nil {
+		fields["field_type"] = *v
+	}
+	if v := item.Name; v != nil {
+		fields["name"] = *v
+	}
+	if v := item.NameKey; v != nil {
+		fields["name_key"] = *v
+	}
+	if v := item.Offices; len(v) > 0 {
+		fields["offices"] = flattenOffices(ctx, &v)
+	}
+	if v := item.Priority; v != nil {
+		fields["priority"] = *v
+	}
+	if v := item.Private; v != nil {
+		fields["private"] = *v
+	}
+	if v := item.RequireApproval; v != nil {
+		fields["require_approval"] = *v
+	}
+	if v := item.Required; v != nil {
+		fields["required"] = *v
+	}
+	if v := item.TemplateTokenString; v != nil {
+		fields["template_token_string"] = *v
+	}
+	if v := item.TriggerNewVersion; v != nil {
+		fields["trigger_new_version"] = *v
+	}
+	if v := item.ValueType; v != nil {
+		fields["value_type"] = *v
+	}
 	return fields
 }

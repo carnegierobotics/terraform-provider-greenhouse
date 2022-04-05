@@ -79,18 +79,44 @@ func flattenJobPosts(ctx context.Context, list *[]greenhouse.JobPost) []interfac
 
 func flattenJobPost(ctx context.Context, item *greenhouse.JobPost) map[string]interface{} {
 	post := make(map[string]interface{})
-	post["active"] = item.Active
-	post["content"] = item.Content
-	post["created_at"] = item.CreatedAt
-	post["demographic_question_set_id"] = item.DemographicQuestionSetId
-	post["external"] = item.External
-	post["first_published_at"] = item.FirstPublishedAt
-	post["internal"] = item.Internal
-	post["internal_content"] = item.InternalContent
-	post["job_id"] = item.JobId
-	post["live"] = item.Live
-	post["questions"] = flattenDemographicQuestions(ctx, &item.Questions)
-	post["title"] = item.Title
-	post["updated_at"] = item.UpdatedAt
+	if v := item.Active; v != nil {
+		post["active"] = *v
+	}
+	if v := item.Content; v != nil {
+		post["content"] = *v
+	}
+	if v := item.CreatedAt; v != nil {
+		post["created_at"] = *v
+	}
+	if v := item.DemographicQuestionSetId; v != nil {
+		post["demographic_question_set_id"] = *v
+	}
+	if v := item.External; v != nil {
+		post["external"] = *v
+	}
+	if v := item.FirstPublishedAt; v != nil {
+		post["first_published_at"] = *v
+	}
+	if v := item.Internal; v != nil {
+		post["internal"] = *v
+	}
+	if v := item.InternalContent; v != nil {
+		post["internal_content"] = *v
+	}
+	if v := item.JobId; v != nil {
+		post["job_id"] = *v
+	}
+	if v := item.Live; v != nil {
+		post["live"] = *v
+	}
+	if v := item.Questions; len(v) > 0 {
+		post["questions"] = flattenDemographicQuestions(ctx, &v)
+	}
+	if v := item.Title; v != nil {
+		post["title"] = *v
+	}
+	if v := item.UpdatedAt; v != nil {
+		post["updated_at"] = *v
+	}
 	return post
 }

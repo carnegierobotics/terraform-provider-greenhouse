@@ -259,10 +259,10 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.Attachments = *list
 	}
 	if v, ok := (*source)["can_email"].(bool); ok {
-		obj.CanEmail = v
+		obj.CanEmail = &v
 	}
 	if v, ok := (*source)["company"].(string); ok && len(v) > 0 {
-		obj.Company = v
+		obj.Company = &v
 	}
 	if v, ok := (*source)["coordinator"].([]interface{}); ok && len(v) > 0 {
 		item, err := inflateUser(ctx, &(v[0]))
@@ -272,7 +272,7 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.Coordinator = item
 	}
 	if v, ok := (*source)["created_at"].(string); ok && len(v) > 0 {
-		obj.CreatedAt = v
+		obj.CreatedAt = &v
 	}
 	if v, ok := (*source)["educations"].([]interface{}); ok && len(v) > 0 {
 		list, diagErr := inflateEducations(ctx, &v)
@@ -296,19 +296,19 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.Employments = *list
 	}
 	if v, ok := (*source)["first_name"].(string); ok && len(v) > 0 {
-		obj.FirstName = v
+		obj.FirstName = &v
 	}
 	if v, ok := (*source)["is_private"].(bool); ok {
-		obj.IsPrivate = v
+		obj.IsPrivate = &v
 	}
 	if v, ok := (*source)["is_prospect"].(bool); ok {
-		obj.IsProspect = v
+		obj.IsProspect = &v
 	}
 	if v, ok := (*source)["last_activity"].(string); ok && len(v) > 0 {
-		obj.LastActivity = v
+		obj.LastActivity = &v
 	}
 	if v, ok := (*source)["last_name"].(string); ok && len(v) > 0 {
-		obj.LastName = v
+		obj.LastName = &v
 	}
 	if v, ok := (*source)["linked_user_ids"].([]interface{}); ok && len(v) > 0 {
 		ids := *sliceItoSliceD(&v)
@@ -322,7 +322,7 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.PhoneNumbers = *phoneNumbers
 	}
 	if v, ok := (*source)["photo_url"].(string); ok && len(v) > 0 {
-		obj.PhotoUrl = v
+		obj.PhotoUrl = &v
 	}
 	if v, ok := (*source)["recruiter"].([]interface{}); ok && len(v) > 0 {
 		item, diagErr := inflateUser(ctx, &(v[0]))
@@ -342,10 +342,10 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.Tags = v
 	}
 	if v, ok := (*source)["title"].(string); ok && len(v) > 0 {
-		obj.Title = v
+		obj.Title = &v
 	}
 	if v, ok := (*source)["updated_at"].(string); ok && len(v) > 0 {
-		obj.UpdatedAt = v
+		obj.UpdatedAt = &v
 	}
 	if v, ok := (*source)["website_addresses"].([]interface{}); ok && len(v) > 0 {
 		addresses, diagErr := inflateTypeTypeValues(ctx, &v)
@@ -370,23 +370,55 @@ func flattenCandidates(ctx context.Context, list *[]greenhouse.Candidate) []inte
 
 func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[string]interface{} {
 	candidate := make(map[string]interface{})
-	convertedAddresses := []greenhouse.TypeTypeValue(item.Addresses)
-	candidate["addresses"] = flattenTypeTypeValues(ctx, &convertedAddresses)
-	candidate["application_ids"] = item.ApplicationIds
-	candidate["attachments"] = flattenAttachments(ctx, &item.Attachments)
-	candidate["can_email"] = item.CanEmail
-	candidate["company"] = item.Company
-	candidate["created_at"] = item.CreatedAt
-	candidate["first_name"] = item.FirstName
-	candidate["is_private"] = item.IsPrivate
-	candidate["last_activity"] = item.LastActivity
-	candidate["last_name"] = item.LastName
-	candidate["linked_user_ids"] = item.LinkedUserIds
-	convertedPhoneNumbers := []greenhouse.TypeTypeValue(item.PhoneNumbers)
-	candidate["phone_numbers"] = flattenTypeTypeValues(ctx, &convertedPhoneNumbers)
-	candidate["photo_url"] = item.PhotoUrl
-	candidate["tags"] = item.Tags
-	candidate["title"] = item.Title
-	candidate["updated_at"] = item.UpdatedAt
+	if v := item.Addresses; len(v) > 0 {
+		convertedAddresses := []greenhouse.TypeTypeValue(v)
+		candidate["addresses"] = flattenTypeTypeValues(ctx, &convertedAddresses)
+	}
+	if v := item.ApplicationIds; len(v) > 0 {
+		candidate["application_ids"] = v
+	}
+	if v := item.Attachments; len(v) > 0 {
+		candidate["attachments"] = flattenAttachments(ctx, &v)
+	}
+	if v := item.CanEmail; v != nil {
+		candidate["can_email"] = *v
+	}
+	if v := item.Company; v != nil {
+		candidate["company"] = *v
+	}
+	if v := item.CreatedAt; v != nil {
+		candidate["created_at"] = *v
+	}
+	if v := item.FirstName; v != nil {
+		candidate["first_name"] = *v
+	}
+	if v := item.IsPrivate; v != nil {
+		candidate["is_private"] = *v
+	}
+	if v := item.LastActivity; v != nil {
+		candidate["last_activity"] = *v
+	}
+	if v := item.LastName; v != nil {
+		candidate["last_name"] = *v
+	}
+	if v := item.LinkedUserIds; len(v) > 0 {
+		candidate["linked_user_ids"] = v
+	}
+	if v := item.PhoneNumbers; len(v) > 0 {
+		convertedPhoneNumbers := []greenhouse.TypeTypeValue(v)
+		candidate["phone_numbers"] = flattenTypeTypeValues(ctx, &convertedPhoneNumbers)
+	}
+	if v := item.PhotoUrl; v != nil {
+		candidate["photo_url"] = *v
+	}
+	if v := item.Tags; len(v) > 0 {
+		candidate["tags"] = v
+	}
+	if v := item.Title; v != nil {
+		candidate["title"] = *v
+	}
+	if v := item.UpdatedAt; v != nil {
+		candidate["updated_at"] = *v
+	}
 	return candidate
 }

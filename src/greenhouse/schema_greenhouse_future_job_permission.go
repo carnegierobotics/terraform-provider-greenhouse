@@ -48,10 +48,20 @@ func flattenFutureJobPermissions(ctx context.Context, list *[]greenhouse.FutureJ
 
 func flattenFutureJobPermission(ctx context.Context, item *greenhouse.FutureJobPermission) map[string]interface{} {
 	permission := make(map[string]interface{})
-	permission["department_id"] = item.DepartmentId
-	permission["external_department_id"] = item.ExternalDepartmentId
-	permission["external_office_id"] = item.ExternalOfficeId
-	permission["office_id"] = item.OfficeId
-	permission["user_role_id"] = item.UserRoleId
+	if v := item.DepartmentId; v != nil {
+		permission["department_id"] = *v
+	}
+	if v := item.ExternalDepartmentId; v != nil {
+		permission["external_department_id"] = *v
+	}
+	if v := item.ExternalOfficeId; v != nil {
+		permission["external_office_id"] = *v
+	}
+	if v := item.OfficeId; v != nil {
+		permission["office_id"] = *v
+	}
+	if v := item.UserRoleId; v != nil {
+		permission["user_role_id"] = *v
+	}
 	return permission
 }

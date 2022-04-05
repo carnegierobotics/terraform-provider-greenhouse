@@ -60,28 +60,28 @@ func inflateInterviewers(ctx context.Context, source *[]interface{}) (*[]greenho
 func inflateInterviewer(ctx context.Context, source *map[string]interface{}) (*greenhouse.Interviewer, diag.Diagnostics) {
 	var obj greenhouse.Interviewer
 	if v, ok := (*source)["email"].(string); ok && len(v) > 0 {
-		obj.Email = v
+		obj.Email = &v
 	}
 	if v, ok := (*source)["employee_id"].(string); ok && len(v) > 0 {
-		obj.EmployeeId = v
+		obj.EmployeeId = &v
 	}
 	if v, ok := (*source)["first_name"].(string); ok && len(v) > 0 {
-		obj.FirstName = v
+		obj.FirstName = &v
 	}
 	if v, ok := (*source)["last_name"].(string); ok && len(v) > 0 {
-		obj.LastName = v
+		obj.LastName = &v
 	}
 	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	if v, ok := (*source)["response_status"].(string); ok && len(v) > 0 {
-		obj.ResponseStatus = v
+		obj.ResponseStatus = &v
 	}
 	if v, ok := (*source)["scorecard_id"].(int); ok {
-		obj.ScorecardId = v
+		obj.ScorecardId = &v
 	}
 	if v, ok := (*source)["user_id"].(int); ok {
-		obj.UserId = v
+		obj.UserId = &v
 	}
 	return &obj, nil
 }
@@ -99,13 +99,29 @@ func flattenInterviewers(ctx context.Context, list *[]greenhouse.Interviewer) []
 
 func flattenInterviewer(ctx context.Context, item *greenhouse.Interviewer) map[string]interface{} {
 	interviewer := make(map[string]interface{})
-	interviewer["email"] = item.Email
-	interviewer["employee_id"] = item.EmployeeId
-	interviewer["first_name"] = item.FirstName
-	interviewer["last_name"] = item.LastName
-	interviewer["name"] = item.Name
-	interviewer["response_status"] = item.ResponseStatus
-	interviewer["scorecard_id"] = item.ScorecardId
-	interviewer["user_id"] = item.UserId
+	if v := item.Email; v != nil {
+		interviewer["email"] = *v
+	}
+	if v := item.EmployeeId; v != nil {
+		interviewer["employee_id"] = *v
+	}
+	if v := item.FirstName; v != nil {
+		interviewer["first_name"] = *v
+	}
+	if v := item.LastName; v != nil {
+		interviewer["last_name"] = *v
+	}
+	if v := item.Name; v != nil {
+		interviewer["name"] = *v
+	}
+	if v := item.ResponseStatus; v != nil {
+		interviewer["response_status"] = *v
+	}
+	if v := item.ScorecardId; v != nil {
+		interviewer["scorecard_id"] = *v
+	}
+	if v := item.UserId; v != nil {
+		interviewer["user_id"] = *v
+	}
 	return interviewer
 }

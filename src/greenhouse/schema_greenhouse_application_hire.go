@@ -40,13 +40,13 @@ func inflateApplicationHires(ctx context.Context, source *[]interface{}) (*[]gre
 func inflateApplicationHire(ctx context.Context, source *map[string]interface{}) (*greenhouse.ApplicationHire, diag.Diagnostics) {
 	var obj greenhouse.ApplicationHire
 	if v, ok := (*source)["close_reason_id"].(int); ok {
-		obj.CloseReasonId = v
+		obj.CloseReasonId = &v
 	}
 	if v, ok := (*source)["opening_id"].(int); ok {
-		obj.OpeningId = v
+		obj.OpeningId = &v
 	}
 	if v, ok := (*source)["start_date"].(string); ok && len(v) > 0 {
-		obj.StartDate = v
+		obj.StartDate = &v
 	}
 	return &obj, nil
 }

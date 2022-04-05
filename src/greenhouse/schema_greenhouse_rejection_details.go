@@ -67,7 +67,11 @@ func flattenRejectionDetailsList(ctx context.Context, list *[]greenhouse.Rejecti
 
 func flattenRejectionDetails(ctx context.Context, item *greenhouse.RejectionDetails) map[string]interface{} {
 	details := make(map[string]interface{})
-	details["custom_fields"] = item.CustomFields
-	details["keyed_custom_fields"] = flattenKeyedCustomFields(ctx, &item.KeyedCustomFields)
+	if v := item.CustomFields; len(v) > 0 {
+		details["custom_fields"] = v
+	}
+	if v := item.KeyedCustomFields; len(v) > 0 {
+		details["keyed_custom_fields"] = flattenKeyedCustomFields(ctx, &v)
+	}
 	return details
 }

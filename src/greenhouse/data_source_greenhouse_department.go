@@ -27,8 +27,8 @@ func dataSourceGreenhouseDepartmentRead(ctx context.Context, d *schema.ResourceD
 	}
 	name := d.Get("name").(string)
 	for _, department := range *list {
-		if department.Name == name {
-			d.SetId(strconv.Itoa(department.Id))
+		if *department.Name == name {
+			d.SetId(strconv.Itoa(*department.Id))
 			d.Set("child_department_external_ids", department.ChildDepartmentExternalIds)
 			d.Set("child_ids", department.ChildIds)
 			d.Set("parent_department_external_id", department.ParentDepartmentExternalId)

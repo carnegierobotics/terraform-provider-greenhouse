@@ -17,9 +17,7 @@ func resourceGreenhouseFutureJobPermission() *schema.Resource {
 		DeleteContext: resourceGreenhouseFutureJobPermissionDelete,
 		Exists:        resourceGreenhouseFutureJobPermissionExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseFutureJobPermissionImport,
 		},
 		Schema: schemaGreenhouseFutureJobPermission(),
 	}
@@ -36,19 +34,19 @@ func resourceGreenhouseFutureJobPermissionExists(d *schema.ResourceData, meta in
 func resourceGreenhouseFutureJobPermissionCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var obj greenhouse.FutureJobPermission
 	if v, ok := d.Get("department_id").(int); ok {
-		obj.DepartmentId = v
+		obj.DepartmentId = &v
 	}
 	if v, ok := d.Get("external_department_id").(string); ok && len(v) > 0 {
-		obj.ExternalDepartmentId = v
+		obj.ExternalDepartmentId = &v
 	}
 	if v, ok := d.Get("external_office_id").(string); ok {
-		obj.ExternalOfficeId = v
+		obj.ExternalOfficeId = &v
 	}
 	if v, ok := d.Get("office_id").(int); ok {
-		obj.OfficeId = v
+		obj.OfficeId = &v
 	}
 	if v, ok := d.Get("user_role_id").(int); ok {
-		obj.UserRoleId = v
+		obj.UserRoleId = &v
 	}
 	if v, ok := d.Get("user_id").(int); ok {
 		id, err := greenhouse.CreateFutureJobPermission(meta.(*greenhouse.Client), ctx, v, &obj)
@@ -101,4 +99,8 @@ func resourceGreenhouseFutureJobPermissionDelete(ctx context.Context, d *schema.
 	}
 	d.SetId("")
 	return nil
+}
+
+func resourceGreenhouseFutureJobPermissionImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseFutureJobPermissionRead)
 }

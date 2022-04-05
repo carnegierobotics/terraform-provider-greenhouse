@@ -27,8 +27,8 @@ func dataSourceGreenhouseEmailTemplateRead(ctx context.Context, d *schema.Resour
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	for _, email := range *list {
-		if email.Name == name {
-			d.SetId(strconv.Itoa(email.Id))
+		if *email.Name == name {
+			d.SetId(strconv.Itoa(*email.Id))
 			d.Set("body", email.Body)
 			d.Set("cc", email.Cc)
 			d.Set("created_at", email.CreatedAt)

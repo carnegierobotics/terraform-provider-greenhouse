@@ -17,9 +17,7 @@ func resourceGreenhouseApproval() *schema.Resource {
 		DeleteContext: resourceGreenhouseApprovalDelete,
 		Exists:        resourceGreenhouseApprovalExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseApprovalImport,
 		},
 		Schema: schemaGreenhouseApproval(),
 	}
@@ -78,10 +76,14 @@ func resourceGreenhouseApprovalDelete(ctx context.Context, d *schema.ResourceDat
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for approvals."}}
 }
 
+func resourceGreenhouseApprovalImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseApprovalRead)
+}
+
 func createApprovalObj(ctx context.Context, d *schema.ResourceData) (*greenhouse.Approval, diag.Diagnostics) {
 	var obj greenhouse.Approval
 	if v, ok := d.Get("approval_type").(string); ok && len(v) > 0 {
-		obj.ApprovalType = v
+		obj.ApprovalType = &v
 	}
 	if v, ok := d.Get("approver_groups").([]interface{}); ok && len(v) > 0 {
 		list, err := inflateApproverGroups(ctx, &v)
@@ -91,10 +93,10 @@ func createApprovalObj(ctx context.Context, d *schema.ResourceData) (*greenhouse
 		obj.ApproverGroups = *list
 	}
 	if v, ok := d.Get("offer_id").(int); ok {
-		obj.OfferId = v
+		obj.OfferId = &v
 	}
 	if v, ok := d.Get("sequential").(bool); ok {
-		obj.Sequential = v
+		obj.Sequential = &v
 	}
 	return &obj, nil
 }

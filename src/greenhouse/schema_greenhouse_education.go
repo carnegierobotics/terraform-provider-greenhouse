@@ -76,40 +76,40 @@ func inflateEducations(ctx context.Context, source *[]interface{}) (*[]greenhous
 func inflateEducation(ctx context.Context, source *map[string]interface{}) (*greenhouse.Education, diag.Diagnostics) {
 	var obj greenhouse.Education
 	if v, ok := (*source)["degree"].(string); ok && len(v) > 0 {
-		obj.Degree = v
+		obj.Degree = &v
 	}
 	if v, ok := (*source)["degree_id"].(int); ok {
-		obj.DegreeId = v
+		obj.DegreeId = &v
 	}
 	if v, ok := (*source)["discipline"].(string); ok && len(v) > 0 {
-		obj.Discipline = v
+		obj.Discipline = &v
 	}
 	if v, ok := (*source)["discipline_id"].(int); ok {
-		obj.DisciplineId = v
+		obj.DisciplineId = &v
 	}
 	if v, ok := (*source)["end_date"].(string); ok && len(v) > 0 {
-		obj.EndDate = v
+		obj.EndDate = &v
 	}
 	if v, ok := (*source)["end_month"].(string); ok && len(v) > 0 {
-		obj.EndMonth = v
+		obj.EndMonth = &v
 	}
 	if v, ok := (*source)["end_year"].(string); ok && len(v) > 0 {
-		obj.EndYear = v
+		obj.EndYear = &v
 	}
 	if v, ok := (*source)["school_id"].(int); ok {
-		obj.SchoolId = v
+		obj.SchoolId = &v
 	}
 	if v, ok := (*source)["school_name"].(string); ok && len(v) > 0 {
-		obj.SchoolName = v
+		obj.SchoolName = &v
 	}
 	if v, ok := (*source)["start_date"].(string); ok && len(v) > 0 {
-		obj.StartDate = v
+		obj.StartDate = &v
 	}
 	if v, ok := (*source)["start_month"].(string); ok && len(v) > 0 {
-		obj.StartMonth = v
+		obj.StartMonth = &v
 	}
 	if v, ok := (*source)["start_year"].(string); ok && len(v) > 0 {
-		obj.StartYear = v
+		obj.StartYear = &v
 	}
 	return &obj, nil
 }

@@ -22,8 +22,8 @@ func dataSourceGreenhouseUserRoleRead(ctx context.Context, d *schema.ResourceDat
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	for _, role := range *list {
-		if role.Name == name {
-			d.SetId(strconv.Itoa(role.Id))
+		if *role.Name == name {
+			d.SetId(strconv.Itoa(*role.Id))
 			return nil
 		}
 	}

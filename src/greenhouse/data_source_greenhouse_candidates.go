@@ -2,7 +2,6 @@ package greenhouse
 
 import (
 	"context"
-	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -66,9 +65,18 @@ func dataSourceGreenhouseCandidatesRead(ctx context.Context, d *schema.ResourceD
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	nameList := make([]string, len(*list), len(*list))
-	for i, item := range *list {
-		nameList[i] = fmt.Sprintf("%s %s", item.FirstName, item.LastName)
+	nameList := make([]string, 0, len(*list))
+	for _, item := range *list {
+		var name string
+		if v := item.FirstName; v != nil {
+			name += *v
+		}
+		if v := item.LastName; v != nil {
+			name += *v
+		}
+		if name != "" {
+			nameList = append(nameList, name)
+		}
 	}
 	d.SetId("all")
 	d.Set("candidates", flattenCandidates(ctx, list))

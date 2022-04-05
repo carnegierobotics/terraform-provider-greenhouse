@@ -62,7 +62,7 @@ func inflateInterview(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.DefaultInterviewerUsers = *list
 	}
 	if v, ok := (*source)["estimated_minutes"].(int); ok {
-		obj.EstimatedMinutes = v
+		obj.EstimatedMinutes = &v
 	}
 	if v, ok := (*source)["interview_kit"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateInterviewKits(ctx, &v)
@@ -72,10 +72,10 @@ func inflateInterview(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.InterviewKit = &(*list)[0]
 	}
 	if v, ok := (*source)["name"].(string); ok && len(v) > 0 {
-		obj.Name = v
+		obj.Name = &v
 	}
 	if v, ok := (*source)["schedulable"].(bool); ok {
-		obj.Schedulable = v
+		obj.Schedulable = &v
 	}
 	return &obj, nil
 }
@@ -93,10 +93,20 @@ func flattenInterviews(ctx context.Context, list *[]greenhouse.Interview) []inte
 
 func flattenInterview(ctx context.Context, item *greenhouse.Interview) map[string]interface{} {
 	interview := make(map[string]interface{})
-	interview["default_interviewer_users"] = flattenInterviewers(ctx, &item.DefaultInterviewerUsers)
-	interview["estimated_minutes"] = item.EstimatedMinutes
-	interview["interview_kit"] = flattenInterviewKit(ctx, item.InterviewKit)[0]
-	interview["name"] = item.Name
-	interview["schedulable"] = item.Schedulable
+	if v := item.DefaultInterviewerUsers; len(v) > 0 {
+		interview["default_interviewer_users"] = flattenInterviewers(ctx, &v)
+	}
+	if v := item.EstimatedMinutes; v != nil {
+		interview["estimated_minutes"] = *v
+	}
+	if v := item.InterviewKit; v != nil {
+		interview["interview_kit"] = flattenInterviewKit(ctx, v)[0]
+	}
+	if v := item.Name; v != nil {
+		interview["name"] = *v
+	}
+	if v := item.Schedulable; v != nil {
+		interview["schedulable"] = *v
+	}
 	return interview
 }

@@ -40,11 +40,23 @@ func schemaGreenhouseDemographicQuestion() map[string]*schema.Schema {
 
 func flattenDemographicQuestion(ctx context.Context, item *greenhouse.DemographicQuestion) map[string]interface{} {
 	question := make(map[string]interface{})
-	question["active"] = item.Active
-	question["answer_type"] = item.AnswerType
-	question["demographic_question_set_id"] = item.DemographicQuestionSetId
-	question["name"] = item.Name
-	question["required"] = item.Required
-	question["translations"] = flattenTranslations(ctx, &item.Translations)
+	if v := item.Active; v != nil {
+		question["active"] = *v
+	}
+	if v := item.AnswerType; v != nil {
+		question["answer_type"] = *v
+	}
+	if v := item.DemographicQuestionSetId; v != nil {
+		question["demographic_question_set_id"] = *v
+	}
+	if v := item.Name; v != nil {
+		question["name"] = *v
+	}
+	if v := item.Required; v != nil {
+		question["required"] = *v
+	}
+	if v := item.Translations; len(v) > 0 {
+		question["translations"] = flattenTranslations(ctx, &v)
+	}
 	return question
 }
