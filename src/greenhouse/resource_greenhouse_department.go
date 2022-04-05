@@ -19,10 +19,8 @@ func resourceGreenhouseDepartment() *schema.Resource {
 		DeleteContext: resourceGreenhouseDepartmentDelete,
 		Exists:        resourceGreenhouseDepartmentExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
-		},
+			StateContext: resourceGreenhouseDepartmentImport,
+    },
 		Schema: schemaGreenhouseDepartment(),
 	}
 }
@@ -84,4 +82,8 @@ func resourceGreenhouseDepartmentUpdate(ctx context.Context, d *schema.ResourceD
 
 func resourceGreenhouseDepartmentDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for departments."}}
+}
+
+func resourceGreenhouseDepartmentImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+  return importByRead(ctx, d, meta, resourceGreenhouseDepartmentRead)
 }

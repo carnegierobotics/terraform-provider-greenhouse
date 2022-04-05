@@ -17,9 +17,7 @@ func resourceGreenhouseUser() *schema.Resource {
 		DeleteContext: resourceGreenhouseUserDelete,
 		Exists:        resourceGreenhouseUserExists,
 		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, client interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
-			},
+			StateContext: resourceGreenhouseUserImport,
 		},
 		Schema: schemaGreenhouseUser(),
 	}
@@ -93,4 +91,8 @@ func resourceGreenhouseUserUpdate(ctx context.Context, d *schema.ResourceData, m
 
 func resourceGreenhouseUserDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return diag.Diagnostics{{Severity: diag.Error, Summary: "Delete is not supported for users."}}
+}
+
+func resourceGreenhouseUserImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	return importByRead(ctx, d, meta, resourceGreenhouseUserRead)
 }
