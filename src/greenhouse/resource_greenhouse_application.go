@@ -21,7 +21,7 @@ func resourceGreenhouseApplication() *schema.Resource {
 				return []*schema.ResourceData{d}, nil
 			},
 		},
-		Schema: schemaGreenhouseTypeIdName(),
+		Schema: schemaGreenhouseApplication(),
 	}
 }
 
