@@ -2,7 +2,6 @@ package greenhouse
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -26,7 +25,7 @@ func resourceGreenhouseJob() *schema.Resource {
 }
 
 func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseJobCreate")
+	tflog.Trace(ctx, "Started resourceGreenhouseJobCreate")
 	createObject := greenhouse.JobCreateInfo{
 		TemplateJobId:  IntPtr(d.Get("template_job_id").(int)),
 		NumberOpenings: IntPtr(d.Get("number_of_openings").(int)),
@@ -47,12 +46,12 @@ func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, me
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	tflog.Debug(ctx, "Kicking off resourceGreenhouseJobUpdate from resourceGreenhouseJobCreate")
+	tflog.Trace(ctx, "Kicking off resourceGreenhouseJobUpdate from resourceGreenhouseJobCreate")
 	return resourceGreenhouseJobUpdate(ctx, d, meta)
 }
 
 func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseJobRead")
+	tflog.Trace(ctx, "Started resourceGreenhouseJobRead")
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -61,16 +60,16 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
+	tflog.Trace(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
 	for k, v := range flattenJob(ctx, obj) {
 		d.Set(k, v)
 	}
-	tflog.Debug(ctx, "Finished resourceGreenhouseJobRead")
+	tflog.Trace(ctx, "Finished resourceGreenhouseJobRead")
 	return nil
 }
 
 func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseJobUpdate")
+	tflog.Trace(ctx, "Started resourceGreenhouseJobUpdate")
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -79,16 +78,6 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 		diagErr := updateOpenings(ctx, d, meta)
 		if diagErr != nil {
 			return diagErr
-		}
-	}
-	if d.HasChange("hiring_team") {
-		teamUpdateObject, err := transformHiringTeam(ctx, d.Get("hiring_team"))
-		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-		}
-		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), ctx, id, &teamUpdateObject)
-		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 	}
 	updateObject := greenhouse.JobUpdateInfo{
@@ -107,32 +96,8 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	tflog.Debug(ctx, "Kicking off resourceGreenhouseJobRead from resourceGreenhouseJobUpdate")
+	tflog.Trace(ctx, "Kicking off resourceGreenhouseJobRead from resourceGreenhouseJobUpdate")
 	return resourceGreenhouseJobRead(ctx, d, meta)
-}
-
-func transformHiringTeam(ctx context.Context, hiringTeam interface{}) (map[string][]greenhouse.HiringMemberUpdateInfo, error) {
-	update := make(map[string][]greenhouse.HiringMemberUpdateInfo)
-	for _, team := range hiringTeam.([]interface{}) {
-		teamItem := team.(map[string]interface{})
-		teamName := teamItem["name"].(string)
-		members := teamItem["members"].([]interface{})
-		update[teamName] = make([]greenhouse.HiringMemberUpdateInfo, len(members), len(members))
-		for j, member := range members {
-			var obj greenhouse.HiringMemberUpdateInfo
-			marshaled, err := json.Marshal(member)
-			if err != nil {
-				return nil, err
-			}
-			err = json.Unmarshal(marshaled, &obj)
-			if err != nil {
-				return nil, err
-			}
-			update[teamName][j] = obj
-		}
-	}
-	tflog.Debug(ctx, "Updating hiring team", "updateObj", fmt.Sprintf("%+v", update))
-	return update, nil
 }
 
 func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

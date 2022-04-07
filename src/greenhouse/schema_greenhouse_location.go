@@ -49,13 +49,13 @@ func inflateLocation(ctx context.Context, source *map[string]interface{}) (*gree
 }
 
 func flattenLocation(ctx context.Context, item *greenhouse.Location) []interface{} {
-	tflog.Debug(ctx, "Flattening location", "location", fmt.Sprintf("%+v", item))
+	tflog.Trace(ctx, "Flattening location", "location", fmt.Sprintf("%+v", item))
 	location := make([]interface{}, 1, 1)
 	oneLocation := make(map[string]interface{})
 	if v := item.Name; v != nil {
 		oneLocation["name"] = *v
 	}
 	location[0] = oneLocation
-	tflog.Debug(ctx, "Flattened location", "location", fmt.Sprintf("%+v", location))
+	tflog.Trace(ctx, "Flattened location", "location", fmt.Sprintf("%+v", location))
 	return location
 }

@@ -67,11 +67,11 @@ func inflateNote(ctx context.Context, source *map[string]interface{}) (*greenhou
 		obj.Private = &v
 	}
 	if v, ok := (*source)["user"].([]interface{}); ok && len(v) > 0 {
-		item, err := inflateUser(ctx, &(v[0]))
+		list, err := inflateUsers(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		obj.User = item
+		obj.User = &(*list)[0] 
 	}
 	if v, ok := (*source)["user_id"].(int); ok {
 		obj.UserId = &v
@@ -84,20 +84,20 @@ func inflateNote(ctx context.Context, source *map[string]interface{}) (*greenhou
 
 func flattenNotes(ctx context.Context, list *[]greenhouse.Note) []interface{} {
 	if list != nil {
-		tflog.Debug(ctx, "Flattening notes.")
+		tflog.Trace(ctx, "Flattening notes.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, note := range *list {
 			note := flattenNote(ctx, &note)
 			flatList[i] = note
 		}
-		tflog.Debug(ctx, "Finished flattening notes.")
+		tflog.Trace(ctx, "Finished flattening notes.")
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenNote(ctx context.Context, item *greenhouse.Note) map[string]interface{} {
-	tflog.Debug(ctx, "Flattening one note.")
+	tflog.Trace(ctx, "Flattening one note.")
 	note := make(map[string]interface{})
 	if v := item.Body; v != nil {
 		note["body"] = *v
@@ -114,6 +114,6 @@ func flattenNote(ctx context.Context, item *greenhouse.Note) map[string]interfac
 	if v := item.Visibility; v != nil {
 		note["visibility"] = *v
 	}
-	tflog.Debug(ctx, "Finished flattening note.")
+	tflog.Trace(ctx, "Finished flattening note.")
 	return note
 }

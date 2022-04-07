@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
+	//"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
@@ -32,7 +33,7 @@ func resourceGreenhouseApplicationExists(d *schema.ResourceData, meta interface{
 }
 
 func resourceGreenhouseApplicationCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	var createObj greenhouse.Application
+	var obj greenhouse.Application
 	referrer := d.Get("referrer").([]interface{})
 	if len(referrer) == 1 {
 		referrerObj, err := inflateTypeTypeValues(ctx, &referrer)
@@ -40,28 +41,46 @@ func resourceGreenhouseApplicationCreate(ctx context.Context, d *schema.Resource
 			return err
 		}
 		if referrerObj != nil && len(*referrerObj) > 0 {
-			createObj.Referrer = &(*referrerObj)[0]
+			obj.Referrer = &(*referrerObj)[0]
 		}
 	}
-	if d.Get("prospect").(bool) {
-		createObj.Prospect = BoolPtr(d.Get("prospect").(bool))
-		createObj.JobIds = d.Get("job_ids").([]int)
-		createObj.SourceId = IntPtr(d.Get("source_id").(int))
-		createObj.ProspectPoolId = IntPtr(d.Get("prospect_pool_id").(int))
-		createObj.ProspectPoolStageId = IntPtr(d.Get("prospect_pool_stage_id").(int))
-		createObj.ProspectOwnerId = IntPtr(d.Get("prospect_owner_id").(int))
-		createObj.ProspectiveDepartmentId = IntPtr(d.Get("prospective_department_id").(int))
-		createObj.ProspectiveOfficeId = IntPtr(d.Get("prospective_office_id").(int))
-	} else {
-		createObj.JobId = IntPtr(d.Get("job_id").(int))
-		createObj.SourceId = IntPtr(d.Get("source_id").(int))
-		createObj.InitialStageId = IntPtr(d.Get("initial_stage_id").(int))
-		attachments := d.Get("attachments").([]interface{})
-		obj, err := inflateAttachments(ctx, &attachments)
-		if err != nil {
-			return err
+	if v, ok := d.Get("source_id").(int); ok {
+		obj.SourceId = &v
+	}
+	if v, ok := d.Get("prospect").(bool); ok && v {
+		obj.Prospect = &v
+		if v, ok := d.Get("job_ids").([]int); ok && len(v) > 0 {
+			obj.JobIds = v
 		}
-		createObj.Attachments = *obj
+		if v, ok := d.Get("prospect_pool_id").(int); ok {
+			obj.ProspectPoolId = &v
+		}
+		if v, ok := d.Get("prospect_pool_stage_id").(int); ok {
+			obj.ProspectPoolStageId = &v
+		}
+		if v, ok := d.Get("prospect_owner_id").(int); ok {
+			obj.ProspectOwnerId = &v
+		}
+		if v, ok := d.Get("prospective_department_id").(int); ok {
+			obj.ProspectiveDepartmentId = &v
+		}
+		if v, ok := d.Get("prospective_office_id").(int); ok {
+			obj.ProspectiveOfficeId = &v
+		}
+	} else {
+		if v, ok := d.Get("job_id").(int); ok {
+			obj.JobId = &v
+		}
+		if v, ok := d.Get("initial_stage_id").(int); ok {
+			obj.InitialStageId = &v
+		}
+		if v, ok := d.Get("attachments").([]interface{}); ok && len(v) > 0 {
+			attachObj, err := inflateAttachments(ctx, &v)
+			if err != nil {
+				return err
+			}
+			obj.Attachments = *attachObj
+		}
 	}
 	return resourceGreenhouseApplicationUpdate(ctx, d, meta)
 }
@@ -87,14 +106,27 @@ func resourceGreenhouseApplicationUpdate(ctx context.Context, d *schema.Resource
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	updateObj := greenhouse.Application{
-		SourceId:        IntPtr(d.Get("source_id").(int)),
-		Referrer:        d.Get("referrer").(*greenhouse.TypeTypeValue),
-		CustomFields:    d.Get("custom_fields").(map[string]string),
-		ProspectPoolId:  IntPtr(d.Get("prospect_pool_id").(int)),
-		ProspectStageId: IntPtr(d.Get("prospect_stage_id").(int)),
+	var obj greenhouse.Application
+	if v, ok := d.Get("source_id").(int); ok {
+		obj.SourceId = &v
 	}
-	err = greenhouse.UpdateApplication(meta.(*greenhouse.Client), ctx, id, &updateObj)
+	if v, ok := d.Get("referrer").(*greenhouse.TypeTypeValue); ok {
+		obj.Referrer = v
+	}
+	if v, ok := d.Get("custom_fields").(map[string]string); ok && len(v) > 0 {
+		obj.CustomFields = v
+	}
+	if v, ok := d.Get("prospect_pool_id").(int); ok && v != 0 {
+		obj.ProspectPoolId = &v
+	}
+	if v, ok := d.Get("prospect_stage_id").(int); ok && v != 0 {
+		obj.ProspectStageId = &v
+	}
+	diagErr := logJson(ctx, "resourceGreenhouseApplicationUpdate", obj)
+	if diagErr != nil {
+		return diagErr
+	}
+	err = greenhouse.UpdateApplication(meta.(*greenhouse.Client), ctx, id, &obj)
 	hire := d.Get("hire").(bool)
 	reject := d.Get("reject").(bool)
 	if hire == true && reject == true {
@@ -109,10 +141,15 @@ func resourceGreenhouseApplicationUpdate(ctx context.Context, d *schema.Resource
 	}
 	if d.HasChanges("hire") {
 		if hire == true {
-			hireObj := greenhouse.ApplicationHire{
-				CloseReasonId: IntPtr(d.Get("close_reason_id").(int)),
-				OpeningId:     IntPtr(d.Get("opening_id").(int)),
-				StartDate:     StringPtr(d.Get("start_date").(string)),
+			var hireObj greenhouse.ApplicationHire
+			if v, ok := d.Get("close_reason_id").(int); ok {
+				hireObj.CloseReasonId = &v
+			}
+			if v, ok := d.Get("opening_id").(int); ok {
+				hireObj.OpeningId = &v
+			}
+			if v, ok := d.Get("start_date").(string); ok && len(v) > 0 {
+				hireObj.StartDate = &v
 			}
 			err = greenhouse.HireApplication(meta.(*greenhouse.Client), ctx, id, &hireObj)
 			if err != nil {
@@ -123,15 +160,21 @@ func resourceGreenhouseApplicationUpdate(ctx context.Context, d *schema.Resource
 		}
 	}
 	if d.HasChanges("reject") {
-		if reject == true {
-			rejectionEmail := greenhouse.RejectionEmail{
-				EmailTemplateId: StringPtr(d.Get("email_template_id").(string)),
-				SendEmailAt:     StringPtr(d.Get("send_email_at").(string)),
+		if reject {
+			var rejectionEmail greenhouse.RejectionEmail
+			if v, ok := d.Get("email_template_id").(string); ok && len(v) > 0 {
+				rejectionEmail.EmailTemplateId = &v
 			}
-			rejectObj := greenhouse.ApplicationReject{
-				Notes:             StringPtr(d.Get("notes").(string)),
-				RejectionEmail:    &rejectionEmail,
-				RejectionReasonId: IntPtr(d.Get("rejection_reason_id").(int)),
+			if v, ok := d.Get("send_email_at").(string); ok && len(v) > 0 {
+				rejectionEmail.SendEmailAt = &v
+			}
+			var rejectObj greenhouse.ApplicationReject
+			if v, ok := d.Get("notes").(string); ok && len(v) > 0 {
+				rejectObj.Notes = &v
+			}
+			rejectObj.RejectionEmail = &rejectionEmail
+			if v, ok := d.Get("rejection_reason_id").(int); ok {
+				rejectObj.RejectionReasonId = &v
 			}
 			err = greenhouse.RejectApplication(meta.(*greenhouse.Client), ctx, id, &rejectObj)
 			if err != nil {
@@ -142,17 +185,21 @@ func resourceGreenhouseApplicationUpdate(ctx context.Context, d *schema.Resource
 		}
 	}
 	if d.HasChanges("rejection_reason") {
-		rejId := Int(d.Get("rejection_reason.0").(greenhouse.RejectionReason).Id)
-		err = greenhouse.UpdateRejectionReason(meta.(*greenhouse.Client), ctx, id, rejId)
-		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		if v, ok := d.Get("rejection_reason.0").(greenhouse.RejectionReason); ok {
+			rejId := *v.Id
+			err = greenhouse.UpdateRejectionReason(meta.(*greenhouse.Client), ctx, id, rejId)
+			if err != nil {
+				return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+			}
 		}
 	}
-	if d.Get("advance").(bool) == true {
-		from := Int(d.Get("current_stage.0").(greenhouse.TypeIdName).Id)
-		err = greenhouse.AdvanceApplication(meta.(*greenhouse.Client), ctx, id, from)
-		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	if v, ok := d.Get("advance").(bool); ok && v {
+		if v, ok := d.Get("current_stage.0").(greenhouse.TypeIdName); ok && v.Id != nil {
+			from := *v.Id
+			err = greenhouse.AdvanceApplication(meta.(*greenhouse.Client), ctx, id, from)
+			if err != nil {
+				return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+			}
 		}
 	}
 	if d.HasChanges("job_id") {

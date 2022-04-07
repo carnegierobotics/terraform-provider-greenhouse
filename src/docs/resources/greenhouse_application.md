@@ -17,7 +17,371 @@ description: |-
 
 ### Optional
 
+- **advance** (Boolean)
+- **credited_to** (Block List, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--credited_to))
+- **current_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--current_stage))
+- **custom_fields** (Map of String)
+- **hire** (Boolean)
 - **id** (String) The ID of this resource.
+- **initial_stage_id** (Number)
+- **job_id** (Number)
+- **job_ids** (List of Number)
+- **keyed_custom_fields** (Block List, Max: 1) (see [below for nested schema](#nestedblock--keyed_custom_fields))
+- **location** (Block List, Max: 1) The contents of a location question on a job post. (see [below for nested schema](#nestedblock--location))
+- **prospect** (Boolean) The candidate is a prospect and has not yet applied.
+- **prospect_detail** (Block List, Max: 1) (see [below for nested schema](#nestedblock--prospect_detail))
+- **prospect_owner_id** (Number)
+- **prospect_pool_id** (Number)
+- **prospect_pool_stage_id** (Number)
+- **prospect_stage_id** (Number)
+- **prospective_department_id** (Number)
+- **prospective_office_id** (Number)
+- **referrer** (Block List, Max: 1) (see [below for nested schema](#nestedblock--referrer))
+- **reject** (Boolean)
+- **rejection_reason** (Block List) (see [below for nested schema](#nestedblock--rejection_reason))
+- **source** (Block List) (see [below for nested schema](#nestedblock--source))
+- **source_id** (Number)
+
+### Read-Only
+
+- **answers** (List of Object) (see [below for nested schema](#nestedatt--answers))
+- **applied_at** (String) The date of the application.
+- **attachments** (Block List) (see [below for nested schema](#nestedblock--attachments))
+- **candidate_id** (Number) The ID of the candidate applying for this job.
+- **job_post_id** (Number)
+- **jobs** (List of Object) (see [below for nested schema](#nestedatt--jobs))
+- **last_activity_at** (String) The date of the application's last activity.
+- **prospective_department** (List of Object) (see [below for nested schema](#nestedatt--prospective_department))
+- **prospective_office** (List of Object) (see [below for nested schema](#nestedatt--prospective_office))
+- **rejected_at** (String) The date of the application's rejection.
+- **rejection_details** (List of Object) (see [below for nested schema](#nestedatt--rejection_details))
+- **status** (String)
+
+<a id="nestedblock--credited_to"></a>
+### Nested Schema for `credited_to`
+
+Required:
+
+- **first_name** (String)
+- **last_name** (String)
+
+Optional:
+
+- **employee_id** (String)
+
+Read-Only:
+
 - **name** (String)
+
+
+<a id="nestedblock--current_stage"></a>
+### Nested Schema for `current_stage`
+
+Optional:
+
+- **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
+
+<a id="nestedblock--keyed_custom_fields"></a>
+### Nested Schema for `keyed_custom_fields`
+
+Required:
+
+- **name** (String)
+- **type** (String)
+- **value** (String)
+
+
+<a id="nestedblock--location"></a>
+### Nested Schema for `location`
+
+Optional:
+
+- **address** (String)
+- **name** (String)
+
+
+<a id="nestedblock--prospect_detail"></a>
+### Nested Schema for `prospect_detail`
+
+Optional:
+
+- **prospect_owner** (Block List, Max: 1) (see [below for nested schema](#nestedblock--prospect_detail--prospect_owner))
+- **prospect_pool** (Block List, Max: 1) (see [below for nested schema](#nestedblock--prospect_detail--prospect_pool))
+- **prospect_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--prospect_detail--prospect_stage))
+
+<a id="nestedblock--prospect_detail--prospect_owner"></a>
+### Nested Schema for `prospect_detail.prospect_owner`
+
+Optional:
+
+- **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
+
+<a id="nestedblock--prospect_detail--prospect_pool"></a>
+### Nested Schema for `prospect_detail.prospect_pool`
+
+Optional:
+
+- **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
+
+<a id="nestedblock--prospect_detail--prospect_stage"></a>
+### Nested Schema for `prospect_detail.prospect_stage`
+
+Optional:
+
+- **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
+
+
+<a id="nestedblock--referrer"></a>
+### Nested Schema for `referrer`
+
+Required:
+
+- **type** (String)
+- **value** (String)
+
+
+<a id="nestedblock--rejection_reason"></a>
+### Nested Schema for `rejection_reason`
+
+Required:
+
+- **name** (String)
+
+Optional:
+
+- **include_defaults** (Boolean)
+- **per_page** (Number)
+
+Read-Only:
+
+- **type** (List of Object) (see [below for nested schema](#nestedatt--rejection_reason--type))
+
+<a id="nestedatt--rejection_reason--type"></a>
+### Nested Schema for `rejection_reason.type`
+
+Read-Only:
+
+- **id** (String)
+- **name** (String)
+
+
+
+<a id="nestedblock--source"></a>
+### Nested Schema for `source`
+
+Optional:
+
+- **type** (Block List, Max: 1) (see [below for nested schema](#nestedblock--source--type))
+
+Read-Only:
+
+- **name** (String)
+- **public_name** (String)
+
+<a id="nestedblock--source--type"></a>
+### Nested Schema for `source.type`
+
+Optional:
+
+- **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
+
+
+<a id="nestedatt--answers"></a>
+### Nested Schema for `answers`
+
+Read-Only:
+
+- **answer** (String)
+- **question** (String)
+
+
+<a id="nestedblock--attachments"></a>
+### Nested Schema for `attachments`
+
+Read-Only:
+
+- **content** (String)
+- **content_type** (String)
+- **filename** (String)
+- **type** (String)
+- **url** (String)
+- **visibility** (String)
+
+
+<a id="nestedatt--jobs"></a>
+### Nested Schema for `jobs`
+
+Read-Only:
+
+- **anywhere** (Boolean)
+- **closed_at** (String)
+- **confidential** (Boolean)
+- **copied_from_id** (Number)
+- **created_at** (String)
+- **custom_fields** (Map of String)
+- **department_id** (Number)
+- **departments** (List of Object) (see [below for nested schema](#nestedobjatt--jobs--departments))
+- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--jobs--hiring_team))
+- **how_to_sell_this_job** (String)
+- **is_template** (Boolean)
+- **job_name** (String)
+- **job_post_name** (String)
+- **notes** (String)
+- **number_of_openings** (Number)
+- **office_ids** (List of Number)
+- **offices** (List of Object) (see [below for nested schema](#nestedobjatt--jobs--offices))
+- **opened_at** (String)
+- **opening_ids** (List of Number)
+- **openings** (List of Object) (see [below for nested schema](#nestedobjatt--jobs--openings))
+- **requisition_id** (String)
+- **status** (String)
+- **team_and_responsibilities** (String)
+- **template_job_id** (Number)
+- **updated_at** (String)
+
+<a id="nestedobjatt--jobs--departments"></a>
+### Nested Schema for `jobs.departments`
+
+Read-Only:
+
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
+- **external_id** (String)
+- **name** (String)
+- **parent_department_external_id** (String)
+- **parent_id** (Number)
+
+
+<a id="nestedobjatt--jobs--hiring_team"></a>
+### Nested Schema for `jobs.hiring_team`
+
+Read-Only:
+
+- **members** (List of Object) (see [below for nested schema](#nestedobjatt--jobs--hiring_team--members))
+- **name** (String)
+
+<a id="nestedobjatt--jobs--hiring_team--members"></a>
+### Nested Schema for `jobs.hiring_team.members`
+
+Read-Only:
+
+- **employee_id** (String)
+- **first_name** (String)
+- **last_name** (String)
+- **name** (String)
+- **responsible** (Boolean)
+- **responsible_for_active_candidates** (Boolean)
+- **responsible_for_future_candidates** (Boolean)
+- **responsible_for_inactive_candidates** (Boolean)
+- **user_id** (Number)
+
+
+
+<a id="nestedobjatt--jobs--offices"></a>
+### Nested Schema for `jobs.offices`
+
+Read-Only:
+
+- **child_ids** (List of Number)
+- **location** (Map of String)
+- **location_name** (String)
+- **name** (String)
+- **parent_id** (Number)
+- **primary_contact_user_id** (Number)
+
+
+<a id="nestedobjatt--jobs--openings"></a>
+### Nested Schema for `jobs.openings`
+
+Read-Only:
+
+- **application_id** (Number)
+- **close_reason** (List of Object) (see [below for nested schema](#nestedobjatt--jobs--openings--close_reason))
+- **close_reason_id** (Number)
+- **closed_at** (String)
+- **custom_fields** (Map of String)
+- **job_id** (Number)
+- **opened_at** (String)
+- **opening_id** (String)
+- **status** (String)
+
+<a id="nestedobjatt--jobs--openings--close_reason"></a>
+### Nested Schema for `jobs.openings.close_reason`
+
+Read-Only:
+
+- **id** (String)
+- **name** (String)
+
+
+
+
+<a id="nestedatt--prospective_department"></a>
+### Nested Schema for `prospective_department`
+
+Read-Only:
+
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
+- **external_id** (String)
+- **name** (String)
+- **parent_department_external_id** (String)
+- **parent_id** (Number)
+
+
+<a id="nestedatt--prospective_office"></a>
+### Nested Schema for `prospective_office`
+
+Read-Only:
+
+- **child_ids** (List of Number)
+- **location** (Map of String)
+- **location_name** (String)
+- **name** (String)
+- **parent_id** (Number)
+- **primary_contact_user_id** (Number)
+
+
+<a id="nestedatt--rejection_details"></a>
+### Nested Schema for `rejection_details`
+
+Read-Only:
+
+- **custom_fields** (Map of String)
+- **keyed_custom_fields** (List of Object) (see [below for nested schema](#nestedobjatt--rejection_details--keyed_custom_fields))
+
+<a id="nestedobjatt--rejection_details--keyed_custom_fields"></a>
+### Nested Schema for `rejection_details.keyed_custom_fields`
+
+Read-Only:
+
+- **name** (String)
+- **type** (String)
+- **value** (String)
 
 

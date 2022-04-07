@@ -46,7 +46,7 @@ func resourceGreenhouseCandidateTagRead(ctx context.Context, d *schema.ResourceD
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	if obj != nil {
-		tflog.Debug(ctx, fmt.Sprintf("Could not find tag with id %d", id))
+		tflog.Trace(ctx, fmt.Sprintf("Could not find tag with id %d", id))
 		return nil
 	}
 	for k, v := range flattenCandidateTag(ctx, obj) {

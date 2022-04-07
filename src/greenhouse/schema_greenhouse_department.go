@@ -29,6 +29,7 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 		"external_id": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"name": {
 			Type:     schema.TypeString,
@@ -42,6 +43,7 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 		"parent_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
+			Computed: true,
 		},
 	}
 }
@@ -83,20 +85,20 @@ func inflateDepartment(ctx context.Context, source *map[string]interface{}) (*gr
 }
 
 func flattenDepartments(ctx context.Context, list *[]greenhouse.Department) []interface{} {
-	tflog.Debug(ctx, "Flattening department list", "deptlist", fmt.Sprintf("%+v", list))
+	tflog.Trace(ctx, "Flattening department list", "deptlist", fmt.Sprintf("%+v", list))
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenDepartment(ctx, &item)
 		}
-		tflog.Debug(ctx, "Flattened department list", "deptlist", fmt.Sprintf("%+v", flatList))
+		tflog.Trace(ctx, "Flattened department list", "deptlist", fmt.Sprintf("%+v", flatList))
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenDepartment(ctx context.Context, item *greenhouse.Department) map[string]interface{} {
-	tflog.Debug(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
+	tflog.Trace(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
 	dept := make(map[string]interface{})
 	if v := item.ChildDepartmentExternalIds; len(v) > 0 {
 		dept["child_department_external_ids"] = v
@@ -113,6 +115,6 @@ func flattenDepartment(ctx context.Context, item *greenhouse.Department) map[str
 	if v := item.ParentId; v != nil {
 		dept["parent_id"] = *v
 	}
-	tflog.Debug(ctx, "Flattened department", "department", fmt.Sprintf("%+v", dept))
+	tflog.Trace(ctx, "Flattened department", "department", fmt.Sprintf("%+v", dept))
 	return dept
 }

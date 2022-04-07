@@ -47,19 +47,19 @@ func inflateAnswer(ctx context.Context, source *map[string]interface{}) (*greenh
 
 func flattenAnswers(ctx context.Context, list *[]greenhouse.Answer) []interface{} {
 	if list != nil {
-		tflog.Debug(ctx, "Flattening answers.")
+		tflog.Trace(ctx, "Flattening answers.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenAnswer(ctx, &item)
 		}
-		tflog.Debug(ctx, "Finished flattening answers.")
+		tflog.Trace(ctx, "Finished flattening answers.")
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenAnswer(ctx context.Context, item *greenhouse.Answer) map[string]interface{} {
-	tflog.Debug(ctx, "Flattening one answer.")
+	tflog.Trace(ctx, "Flattening one answer.")
 	answer := make(map[string]interface{})
 	if v := item.Question; v != nil {
 		answer["question"] = *v
@@ -67,6 +67,6 @@ func flattenAnswer(ctx context.Context, item *greenhouse.Answer) map[string]inte
 	if v := item.Answer; v != nil {
 		answer["answer"] = *v
 	}
-	tflog.Debug(ctx, "Finished flattening answer.")
+	tflog.Trace(ctx, "Finished flattening answer.")
 	return answer
 }

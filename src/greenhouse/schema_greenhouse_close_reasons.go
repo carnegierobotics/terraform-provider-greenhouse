@@ -60,11 +60,11 @@ func flattenCloseReasons(ctx context.Context, list *[]greenhouse.CloseReason) []
 }
 
 func flattenCloseReason(ctx context.Context, item *greenhouse.CloseReason) map[string]interface{} {
-	tflog.Debug(ctx, "Flattening close reason", "reason", fmt.Sprintf("%+v", item))
+	tflog.Trace(ctx, "Flattening close reason", "reason", fmt.Sprintf("%+v", item))
 	flatItem := make(map[string]interface{})
 	if v := item.Name; v != nil {
 		flatItem["name"] = *v
 	}
-	tflog.Debug(ctx, "Flattened close reason", "reason", fmt.Sprintf("%+v", flatItem))
+	tflog.Trace(ctx, "Flattened close reason", "reason", fmt.Sprintf("%+v", flatItem))
 	return flatItem
 }

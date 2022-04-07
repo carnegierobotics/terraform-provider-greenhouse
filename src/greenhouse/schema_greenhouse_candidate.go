@@ -265,11 +265,11 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.Company = &v
 	}
 	if v, ok := (*source)["coordinator"].([]interface{}); ok && len(v) > 0 {
-		item, err := inflateUser(ctx, &(v[0]))
+		list, err := inflateUsers(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		obj.Coordinator = item
+		obj.Coordinator = &(*list)[0]
 	}
 	if v, ok := (*source)["created_at"].(string); ok && len(v) > 0 {
 		obj.CreatedAt = &v
@@ -325,11 +325,11 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.PhotoUrl = &v
 	}
 	if v, ok := (*source)["recruiter"].([]interface{}); ok && len(v) > 0 {
-		item, diagErr := inflateUser(ctx, &(v[0]))
+		list, diagErr := inflateUsers(ctx, &v)
 		if diagErr != nil {
 			return nil, diagErr
 		}
-		obj.Recruiter = item
+		obj.Recruiter = &(*list)[0] 
 	}
 	if v, ok := (*source)["social_media_addresses"].([]interface{}); ok && len(v) > 0 {
 		addresses, diagErr := inflateTypeTypeValues(ctx, &v)

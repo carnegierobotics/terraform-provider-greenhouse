@@ -10,6 +10,10 @@ import (
 
 func schemaGreenhouseTypeIdName() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 		"name": {
 			Type:     schema.TypeString,
 			Optional: true,

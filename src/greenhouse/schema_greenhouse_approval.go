@@ -101,12 +101,12 @@ func inflateApproval(ctx context.Context, source *map[string]interface{}) (*gree
 
 func flattenApprovals(ctx context.Context, list *[]greenhouse.Approval) []interface{} {
 	if list != nil {
-		tflog.Debug(ctx, "Flattening approvals.")
+		tflog.Trace(ctx, "Flattening approvals.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenApproval(ctx, &item)
 		}
-		tflog.Debug(ctx, "Finished flattening approvals.")
+		tflog.Trace(ctx, "Finished flattening approvals.")
 		return flatList
 	}
 	return make([]interface{}, 0, 0)

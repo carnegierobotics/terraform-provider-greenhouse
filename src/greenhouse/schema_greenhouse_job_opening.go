@@ -101,13 +101,13 @@ func inflateJobOpening(ctx context.Context, source *map[string]interface{}) (*gr
 }
 
 func flattenJobOpenings(ctx context.Context, list *[]greenhouse.JobOpening) []interface{} {
-	tflog.Debug(ctx, "Flattening job opening list", "opening list", fmt.Sprintf("%+v", list))
+	tflog.Trace(ctx, "Flattening job opening list", "opening list", fmt.Sprintf("%+v", list))
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenJobOpening(ctx, &item)
 		}
-		tflog.Debug(ctx, "Flattened job opening list", "opening list", fmt.Sprintf("%+v", flatList))
+		tflog.Trace(ctx, "Flattened job opening list", "opening list", fmt.Sprintf("%+v", flatList))
 		return flatList
 	}
 	return make([]interface{}, 0)
@@ -132,7 +132,7 @@ func flattenJobOpening(ctx context.Context, item *greenhouse.JobOpening) map[str
 	}
 	if v := item.CloseReason; v != nil {
 		convertedCloseReason := greenhouse.TypeIdName(*v)
-		tflog.Debug(ctx, "Converted close reason", "reason", fmt.Sprintf("%+v", convertedCloseReason))
+		tflog.Trace(ctx, "Converted close reason", "reason", fmt.Sprintf("%+v", convertedCloseReason))
 		opening["close_reason"] = flattenTypeIdName(ctx, &convertedCloseReason)
 	} else {
 		opening["close_reason"] = nil

@@ -80,31 +80,31 @@ func inflateEmail(ctx context.Context, source *map[string]interface{}) (*greenho
 		obj.To = &v
 	}
 	if v, ok := (*source)["user"].([]interface{}); ok && len(v) > 0 {
-		item, err := inflateUser(ctx, &(v[0]))
+		list, err := inflateUsers(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		obj.User = item
+		obj.User = &(*list)[0] 
 	}
 	return &obj, nil
 }
 
 func flattenEmails(ctx context.Context, list *[]greenhouse.Email) []interface{} {
 	if list != nil {
-		tflog.Debug(ctx, "Flattening emails.")
+		tflog.Trace(ctx, "Flattening emails.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, email := range *list {
 			email := flattenEmail(ctx, &email)
 			flatList[i] = email
 		}
-		tflog.Debug(ctx, "Finished flattening emails.")
+		tflog.Trace(ctx, "Finished flattening emails.")
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenEmail(ctx context.Context, item *greenhouse.Email) map[string]interface{} {
-	tflog.Debug(ctx, "Flattening one email.")
+	tflog.Trace(ctx, "Flattening one email.")
 	email := make(map[string]interface{})
 	if v := item.Body; v != nil {
 		email["body"] = *v
@@ -124,6 +124,6 @@ func flattenEmail(ctx context.Context, item *greenhouse.Email) map[string]interf
 	if v := item.User; v != nil {
 		email["user"] = flattenUsersBasics(ctx, &[]greenhouse.User{*item.User})
 	}
-	tflog.Debug(ctx, "Finished flattening email.")
+	tflog.Trace(ctx, "Finished flattening email.")
 	return email
 }

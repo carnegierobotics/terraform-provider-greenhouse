@@ -2,7 +2,6 @@ package greenhouse
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -34,8 +33,8 @@ func resourceGreenhouseCandidateExists(d *schema.ResourceData, meta interface{})
 }
 
 func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseCandidateCreate.")
-	tflog.Debug(ctx, fmt.Sprintf("FirstName: %s", d.Get("first_name").(string)))
+	tflog.Trace(ctx, "Started resourceGreenhouseCandidateCreate.")
+	tflog.Trace(ctx, fmt.Sprintf("FirstName: %s", d.Get("first_name").(string)))
 	var createObj greenhouse.Candidate
 	if v, ok := d.Get("activity_feed_notes").([]interface{}); ok && len(v) < 0 {
 		list, diagErr := inflateActivityFeeds(ctx, &v)
@@ -111,7 +110,7 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		}
 		createObj.WebsiteAddresses = *websiteAddresses
 	}
-	tflog.Debug(ctx, fmt.Sprintf("Initial candidate: %+v", createObj))
+	tflog.Trace(ctx, fmt.Sprintf("Initial candidate: %+v", createObj))
 	var err error
 	var id int
 	if d.Get("is_prospect").(bool) {
@@ -136,21 +135,20 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		if v, ok := d.Get("application").([]interface{}); ok && len(v) == 1 {
 			applicationObj, diagErr := inflateApplications(ctx, &v)
 			if diagErr != nil {
-				tflog.Debug(ctx, "Error occurred during application inflation.")
+				tflog.Trace(ctx, "Error occurred during application inflation.")
 				return diagErr
 			}
 			if applicationObj != nil && len(*applicationObj) > 0 {
-				tflog.Debug(ctx, "Setting application.")
+				tflog.Trace(ctx, "Setting application.")
 				app := (*applicationObj)[0]
 				createObj.Application = &app
 			}
 		}
-		tflog.Debug(ctx, fmt.Sprintf("Creating prospect: %+v", createObj))
-		jsonBody, err := json.Marshal(createObj)
-		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		tflog.Trace(ctx, fmt.Sprintf("Creating prospect: %+v", createObj))
+		diagErr := logJson(ctx, "resourceGreenhouseCandidateCreate", createObj)
+		if diagErr != nil {
+			return diagErr
 		}
-		tflog.Debug(ctx, fmt.Sprintf("JSON will be: %s", string(jsonBody)))
 		id, err = greenhouse.CreateProspect(meta.(*greenhouse.Client), ctx, &createObj)
 	} else {
 		if v, ok := d.Get("applications").([]interface{}); ok && len(v) > 0 {
@@ -160,7 +158,7 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 			}
 			createObj.Applications = *apps
 		}
-		tflog.Debug(ctx, fmt.Sprintf("Creating candidate: %+v", createObj))
+		tflog.Trace(ctx, fmt.Sprintf("Creating candidate: %+v", createObj))
 		id, err = greenhouse.CreateCandidate(meta.(*greenhouse.Client), ctx, &createObj)
 	}
 	if err != nil {
@@ -168,12 +166,12 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	tflog.Debug(ctx, "Kicking off resourceGreenhouseCandidateUpdate from resourceGreenhouseCandidateCreate.")
+	tflog.Trace(ctx, "Kicking off resourceGreenhouseCandidateUpdate from resourceGreenhouseCandidateCreate.")
 	return resourceGreenhouseCandidateUpdate(ctx, d, meta)
 }
 
 func resourceGreenhouseCandidateRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseCandidateRead.")
+	tflog.Trace(ctx, "Started resourceGreenhouseCandidateRead.")
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -185,12 +183,12 @@ func resourceGreenhouseCandidateRead(ctx context.Context, d *schema.ResourceData
 	for k, v := range flattenCandidate(ctx, obj) {
 		d.Set(k, v)
 	}
-	tflog.Debug(ctx, "Finished resourceGreenhouseCandidateRead.")
+	tflog.Trace(ctx, "Finished resourceGreenhouseCandidateRead.")
 	return nil
 }
 
 func resourceGreenhouseCandidateUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseCandidateUpdate.")
+	tflog.Trace(ctx, "Started resourceGreenhouseCandidateUpdate.")
 	/* TODO
 		if d.HasChanges("educations") {
 	    err := updateEducations(ctx, d, meta)
@@ -214,12 +212,12 @@ func resourceGreenhouseCandidateUpdate(ctx context.Context, d *schema.ResourceDa
 	    o, n := d.GetChange("tags")
 		}
 	*/
-	tflog.Debug(ctx, "Kicking off resourceGreenhouseCandidateRead from resourceGreenhouseCandidateUpdate.")
+	tflog.Trace(ctx, "Kicking off resourceGreenhouseCandidateRead from resourceGreenhouseCandidateUpdate.")
 	return resourceGreenhouseCandidateRead(ctx, d, meta)
 }
 
 func resourceGreenhouseCandidateDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseCandidateDelete.")
+	tflog.Trace(ctx, "Started resourceGreenhouseCandidateDelete.")
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -228,7 +226,7 @@ func resourceGreenhouseCandidateDelete(ctx context.Context, d *schema.ResourceDa
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	tflog.Debug(ctx, "Finished resourceGreenhouseCandidateDelete.")
+	tflog.Trace(ctx, "Finished resourceGreenhouseCandidateDelete.")
 	d.SetId("")
 	return nil
 }
@@ -279,9 +277,11 @@ func updateEducations(ctx context.Context, d *schema.ResourceData, meta interfac
 		}
 	}
 	for _, edu := range *del {
-		err = greenhouse.DeleteEducationFromCandidate(meta.(*greenhouse.Client), ctx, cId, Int(edu.Id))
-		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		if v := edu.Id; v != nil {
+			err = greenhouse.DeleteEducationFromCandidate(meta.(*greenhouse.Client), ctx, cId, *v)
+			if err != nil {
+				return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+			}
 		}
 	}
 	return nil

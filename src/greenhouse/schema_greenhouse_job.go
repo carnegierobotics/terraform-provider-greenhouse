@@ -20,6 +20,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		"confidential": {
 			Type:     schema.TypeBool,
 			Optional: true,
+			Computed: true,
 		},
 		"copied_from_id": {
 			Type:     schema.TypeInt,
@@ -32,6 +33,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		"custom_fields": {
 			Type:     schema.TypeMap,
 			Optional: true,
+			Computed: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -48,10 +50,10 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 			},
 		},
 		"hiring_team": {
-			Type:     schema.TypeList,
-			Optional: true,
+			Type:     schema.TypeSet,
+			Computed: true,
 			Elem: &schema.Resource{
-				Schema: schemaGreenhouseHiringTeam(),
+				Schema: schemaGreenhouseHiringSubTeam(),
 			},
 		},
 		"how_to_sell_this_job": {
@@ -65,7 +67,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		"job_name": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Default:  "",
+			Computed: true,
 		},
 		"job_post_name": {
 			Type:     schema.TypeString,
@@ -92,7 +94,8 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"number_of_openings": {
 			Type:     schema.TypeInt,
-			Required: true,
+			Optional: true,
+			Computed: true,
 		},
 		"office_ids": {
 			Type:     schema.TypeList,
@@ -121,7 +124,6 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		},
 		"openings": {
 			Type:     schema.TypeList,
-			Optional: true,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseJobOpening(),
@@ -130,7 +132,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		"requisition_id": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Default:  "",
+			Computed: true,
 		},
 		"status": {
 			Type:     schema.TypeString,
@@ -139,6 +141,7 @@ func schemaGreenhouseJob() map[string]*schema.Schema {
 		"team_and_responsibilities": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"template_job_id": {
 			Type:     schema.TypeInt,
@@ -194,14 +197,16 @@ func inflateJob(ctx context.Context, source *map[string]interface{}) (*greenhous
 		}
 		obj.Departments = *list
 	}
+  /*
 	if v, ok := (*source)["hiring_team"].([]interface{}); ok && len(v) > 0 {
 		team := v[0].(map[string]interface{})
-		teamMap, err := inflateHiringTeams(ctx, &team)
+		teamMap, err := inflateHiringSubteams(ctx, &team)
 		if err != nil {
 			return nil, err
 		}
 		obj.HiringTeam = *teamMap
 	}
+  */
 	if v, ok := (*source)["is_template"].(bool); ok {
 		obj.IsTemplate = &v
 	}
@@ -265,15 +270,9 @@ func flattenJob(ctx context.Context, item *greenhouse.Job) map[string]interface{
 	if v := item.CreatedAt; v != nil {
 		job["created_at"] = *v
 	}
-	if v := item.CustomFields; len(v) > 0 {
-		job["custom_fields"] = v
-	}
-	if v := item.Departments; len(v) > 0 {
-		job["departments"] = flattenDepartments(ctx, &v)
-	}
-	if v := item.HiringTeam; len(v) > 0 {
-		job["hiring_team"] = flattenHiringTeam(ctx, &v)
-	}
+	job["custom_fields"] = item.CustomFields
+	job["departments"] = flattenDepartments(ctx, &item.Departments)
+	job["hiring_team"] = flattenHiringSubteams(ctx, &item.HiringTeam)
 	if v := item.IsTemplate; v != nil {
 		job["is_template"] = *v
 	}
@@ -284,14 +283,16 @@ func flattenJob(ctx context.Context, item *greenhouse.Job) map[string]interface{
 	if v := item.Notes; v != nil {
 		job["notes"] = *v
 	}
-	if v := item.Offices; len(v) > 0 {
-		job["offices"] = flattenOffices(ctx, &v)
-	}
+	job["offices"] = flattenOffices(ctx, &item.Offices)
 	if v := item.OpenedAt; v != nil {
 		job["opened_at"] = *v
 	}
 	if v := item.Openings; len(v) > 0 {
+		job["number_of_openings"] = len(v)
 		job["openings"] = flattenJobOpenings(ctx, &v)
+	} else {
+		job["number_of_openings"] = 0
+		job["openings"] = emptyList()
 	}
 	if v := item.RequisitionId; v != nil {
 		job["requisition_id"] = *v

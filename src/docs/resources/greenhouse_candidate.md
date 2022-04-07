@@ -216,6 +216,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--application--keyed_custom_fields"></a>
 ### Nested Schema for `application.keyed_custom_fields`
@@ -252,6 +256,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--application--prospect_detail--prospect_pool"></a>
 ### Nested Schema for `application.prospect_detail.prospect_pool`
@@ -260,6 +268,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--application--prospect_detail--prospect_stage"></a>
 ### Nested Schema for `application.prospect_detail.prospect_stage`
@@ -267,6 +279,10 @@ Optional:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 
@@ -300,6 +316,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -322,6 +339,10 @@ Read-Only:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 
@@ -360,7 +381,7 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--departments))
-- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--hiring_team))
+- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--application--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
@@ -449,6 +470,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -568,6 +590,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--applications--keyed_custom_fields"></a>
 ### Nested Schema for `applications.keyed_custom_fields`
@@ -604,6 +630,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--applications--prospect_detail--prospect_pool"></a>
 ### Nested Schema for `applications.prospect_detail.prospect_pool`
@@ -612,6 +642,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--applications--prospect_detail--prospect_stage"></a>
 ### Nested Schema for `applications.prospect_detail.prospect_stage`
@@ -619,6 +653,10 @@ Optional:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 
@@ -652,6 +690,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -674,6 +713,10 @@ Read-Only:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 
@@ -712,7 +755,7 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--departments))
-- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
+- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
@@ -801,6 +844,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 

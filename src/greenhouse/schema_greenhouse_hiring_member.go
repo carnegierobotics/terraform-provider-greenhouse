@@ -56,7 +56,7 @@ func schemaGreenhouseHiringMember() map[string]*schema.Schema {
 	}
 }
 
-func inflateHiringTeamMember(ctx context.Context, source *map[string]interface{}) (*greenhouse.HiringMember, diag.Diagnostics) {
+func inflateHiringSubteamMember(ctx context.Context, source *map[string]interface{}) (*greenhouse.HiringMember, diag.Diagnostics) {
 	var obj greenhouse.HiringMember
 	if v, ok := (*source)["employee_id"].(string); ok && len(v) > 0 {
 		obj.EmployeeId = &v
@@ -73,14 +73,6 @@ func inflateHiringTeamMember(ctx context.Context, source *map[string]interface{}
 	if v, ok := (*source)["responsible"].(bool); ok {
 		obj.Responsible = &v
 	}
-	if v, ok := (*source)["user_id"].(int); ok {
-		obj.UserId = &v
-	}
-	return &obj, nil
-}
-
-func inflateHiringTeamMemberUpdateInfo(ctx context.Context, source *map[string]interface{}) (*greenhouse.HiringMemberUpdateInfo, diag.Diagnostics) {
-	var obj greenhouse.HiringMemberUpdateInfo
 	if v, ok := (*source)["responsible_for_future_candidates"].(bool); ok {
 		obj.ResponsibleForFutureCandidates = &v
 	}
@@ -96,9 +88,18 @@ func inflateHiringTeamMemberUpdateInfo(ctx context.Context, source *map[string]i
 	return &obj, nil
 }
 
-func flattenHiringTeamMember(ctx context.Context, item greenhouse.HiringMember) (map[string]interface{}, error) {
-	tflog.Debug(ctx, "User data", "user", fmt.Sprintf("%+v", item))
+func flattenHiringSubteamMember(ctx context.Context, item greenhouse.HiringMember) (map[string]interface{}, error) {
+	tflog.Trace(ctx, "User data", "user", fmt.Sprintf("%+v", item))
 	member := make(map[string]interface{})
+	/*
+	  member["user_id"] = *item.Id
+	  member["active"] = *item.Active
+	  member["first_name"] = *item.FirstName
+	  member["last_name"] = *item.LastName
+	  member["name"] = *item.Name
+	  member["responsible"] = *item.Responsible
+	  member["employee_id"] = *item.EmployeeId
+	*/
 	if v := item.Id; v != nil {
 		member["user_id"] = *v
 	}

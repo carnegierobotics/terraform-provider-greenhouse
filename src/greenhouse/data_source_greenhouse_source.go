@@ -2,6 +2,7 @@ package greenhouse
 
 import (
 	"context"
+	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -27,10 +28,10 @@ func dataSourceGreenhouseSourceRead(ctx context.Context, d *schema.ResourceData,
 	}
 	name := d.Get("name").(string)
 	for _, source := range *list {
-		if *source.Name == name {
-			d.SetId(strconv.Itoa(*source.Id))
+		if *(source.Name) == name {
+			d.SetId(strconv.Itoa(*(source.Id)))
 			return nil
 		}
 	}
-	return nil
+	return diag.Diagnostics{{Severity: diag.Error, Summary: fmt.Sprintf("source %s not found.", name)}}
 }

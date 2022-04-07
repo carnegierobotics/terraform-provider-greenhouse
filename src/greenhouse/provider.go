@@ -47,6 +47,7 @@ func Provider() *schema.Provider {
 			"greenhouse_custom_field":          resourceGreenhouseCustomField(),
 			"greenhouse_department":            resourceGreenhouseDepartment(),
 			"greenhouse_future_job_permission": resourceGreenhouseFutureJobPermission(),
+			"greenhouse_hiring_team":           resourceGreenhouseHiringTeam(),
 			"greenhouse_job":                   resourceGreenhouseJob(),
 			"greenhouse_job_opening":           resourceGreenhouseJobOpening(),
 			"greenhouse_job_permission":        resourceGreenhouseJobPermission(),
