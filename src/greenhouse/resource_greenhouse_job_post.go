@@ -57,7 +57,7 @@ func resourceGreenhouseJobPostUpdate(ctx context.Context, d *schema.ResourceData
 	}
 	if d.HasChanges("live") {
 		status := "offline"
-		if d.Get("live").(bool) {
+		if v, ok := d.Get("live").(bool); ok && v {
 			status = "live"
 		}
 		err := greenhouse.UpdateJobPostStatus(meta.(*greenhouse.Client), ctx, id, status)
@@ -66,9 +66,15 @@ func resourceGreenhouseJobPostUpdate(ctx context.Context, d *schema.ResourceData
 		}
 	}
 	var obj greenhouse.JobPost
-	obj.Location = StringPtr(d.Get("location").(string))
-	obj.Title = StringPtr(d.Get("title").(string))
-	obj.Content = StringPtr(d.Get("content").(string))
+	if v, ok := d.Get("location").(string); ok && len(v) > 0 {
+		obj.Location = &v
+	}
+	if v, ok := d.Get("title").(string); ok && len(v) > 0 {
+		obj.Title = &v
+	}
+	if v, ok := d.Get("content").(string); ok && len(v) > 0 {
+		obj.Content = &v
+	}
 	err = greenhouse.UpdateJobPost(meta.(*greenhouse.Client), ctx, id, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}

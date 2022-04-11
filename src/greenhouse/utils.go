@@ -34,6 +34,41 @@ func emptyList() []interface{} {
 	return make([]interface{}, 0)
 }
 
+func findAddDelete(ctx context.Context, o interface{}, n interface{}) (*[]interface{}, *[]interface{}, diag.Diagnostics) {
+	v, ok1 := o.([]interface{})
+	w, ok2 := n.([]interface{})
+	if !ok1 || !ok2 {
+		return nil, nil, diag.Diagnostics{{Severity: diag.Error, Summary: "Failed to convert to []interface{}"}}
+	}
+	add := make([]interface{}, 0)
+	del := make([]interface{}, 0)
+	for _, i1 := range v {
+		match := false
+		for _, i2 := range w {
+			if i1.(map[string]interface{})["id"] == i2.(map[string]interface{})["id"] {
+				match = true
+				break
+			}
+		}
+		if !match {
+			del = append(del, i1)
+		}
+	}
+	for _, i1 := range w {
+		match := false
+		for _, i2 := range v {
+			if i1.(map[string]interface{})["id"] == i2.(map[string]interface{})["id"] {
+				match = true
+				break
+			}
+		}
+		if !match {
+			add = append(add, i1)
+		}
+	}
+	return &add, &del, nil
+}
+
 type readFunc func(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 
 func importByRead(ctx context.Context, d *schema.ResourceData, meta interface{}, fn readFunc) ([]*schema.ResourceData, error) {

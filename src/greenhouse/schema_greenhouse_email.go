@@ -84,7 +84,7 @@ func inflateEmail(ctx context.Context, source *map[string]interface{}) (*greenho
 		if err != nil {
 			return nil, err
 		}
-		obj.User = &(*list)[0] 
+		obj.User = &(*list)[0]
 	}
 	return &obj, nil
 }

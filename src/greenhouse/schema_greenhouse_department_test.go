@@ -28,7 +28,7 @@ func init() {
 		map[string]interface{}{
 			"child_department_external_ids": []string{"idA", "idB"},
 			"child_ids":                     []int{123, 456},
-			"external_id":                   "test",
+			//"external_id":                   "test",
 			"name":                          "test",
 			"parent_department_external_id": "parentExtId",
 			"parent_id":                     1,

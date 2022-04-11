@@ -25,6 +25,7 @@ description: |-
 
 - **activity_feed_notes** (Block List) The candidate's activity feed. (see [below for nested schema](#nestedblock--activity_feed_notes))
 - **addresses** (Block List) The candidate's address(es). (see [below for nested schema](#nestedblock--addresses))
+- **anonymize** (List of String)
 - **application** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application))
 - **application_ids** (List of Number)
 - **applications** (Block List) Applications the candidate has submitted. (see [below for nested schema](#nestedblock--applications))
@@ -36,11 +37,11 @@ description: |-
 - **employments** (Block List) The candidate's employment background. (see [below for nested schema](#nestedblock--employments))
 - **id** (String) The ID of this resource.
 - **is_private** (Boolean) This candidate is private.
+- **merge** (Number)
 - **phone_numbers** (Block List) The candidate's phone number(s). (see [below for nested schema](#nestedblock--phone_numbers))
 - **photo_url** (String)
 - **recruiter** (Block List, Max: 1) The candidate's recruiter. (see [below for nested schema](#nestedblock--recruiter))
 - **social_media_addresses** (Block List) The candidate's social media address(es). (see [below for nested schema](#nestedblock--social_media_addresses))
-- **tags** (List of String) Tags for this candidate.
 - **title** (String) The candidate's title.
 - **website_addresses** (Block List) The candidate's website(s). (see [below for nested schema](#nestedblock--website_addresses))
 
@@ -52,6 +53,7 @@ description: |-
 - **created_by** (String)
 - **last_activity** (String)
 - **linked_user_ids** (List of Number)
+- **tags** (List of String) Tags for this candidate.
 - **updated_at** (String)
 
 <a id="nestedblock--activity_feed_notes"></a>

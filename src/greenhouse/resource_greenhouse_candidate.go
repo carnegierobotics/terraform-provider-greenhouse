@@ -189,29 +189,66 @@ func resourceGreenhouseCandidateRead(ctx context.Context, d *schema.ResourceData
 
 func resourceGreenhouseCandidateUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	tflog.Trace(ctx, "Started resourceGreenhouseCandidateUpdate.")
-	/* TODO
-		if d.HasChanges("educations") {
-	    err := updateEducations(ctx, d, meta)
-	    if err != nil {
-	      return err
-	    }
-	  }
-	 	if d.HasChanges("employments") {
-	    o, n := d.GetChange("employments")
+	id, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	if d.HasChanges("educations") {
+		err := updateEducations(ctx, d, meta)
+		if err != nil {
+			return err
 		}
-		if d.HasChanges("attachments") {
-	    o, n := d.GetChange("attachments")
+	}
+	if d.HasChanges("employments") {
+		err := updateEmployments(ctx, d, meta)
+		if err != nil {
+			return err
 		}
-		if d.HasChanges("notes") {
-	    o, n := d.GetChange("notes")
+	}
+	if d.HasChanges("attachments") {
+		err := updateAttachments(ctx, d, meta)
+		if err != nil {
+			return err
 		}
-		if d.HasChanges("email_notes") {
-	    o, n := d.GetChange("email_notes")
+	}
+	if d.HasChanges("notes") {
+		err := updateNotes(ctx, d, meta)
+		if err != nil {
+			return err
 		}
-		if d.HasChanges("tags") {
-	    o, n := d.GetChange("tags")
+	}
+	if d.HasChanges("email_notes") {
+		err := updateEmailNotes(ctx, d, meta)
+		if err != nil {
+			return err
 		}
-	*/
+	}
+	if d.HasChanges("tags") {
+		err := updateTags(ctx, d, meta)
+		if err != nil {
+			return err
+		}
+	}
+	if d.HasChanges("anonymize") {
+		if v, ok := d.Get("anonymize").([]string); ok && len(v) > 0 {
+			_, err := greenhouse.AnonymizeCandidate(meta.(*greenhouse.Client), ctx, id, v)
+			if err != nil {
+				return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+			}
+		}
+	}
+	if d.HasChanges("merge") {
+		v, ok := d.Get("merge").(int)
+		if !ok {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: "Could not get ID to merge to."}}
+		}
+		err := greenhouse.MergeCandidates(meta.(*greenhouse.Client), ctx, v, id)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		}
+		d.SetId("")
+		return nil
+	}
 	tflog.Trace(ctx, "Kicking off resourceGreenhouseCandidateRead from resourceGreenhouseCandidateUpdate.")
 	return resourceGreenhouseCandidateRead(ctx, d, meta)
 }
@@ -244,40 +281,26 @@ func updateEducations(ctx context.Context, d *schema.ResourceData, meta interfac
 	var del *[]greenhouse.Education
 	var diagErr diag.Diagnostics
 	o, n := d.GetChange("educations")
-	v, ok1 := o.([]interface{})
-	w, ok2 := n.([]interface{})
-	if !ok1 || !ok2 {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: "Failed to convert to []interface{}"}}
+	addI, delI, diagErr := findAddDelete(ctx, o, n)
+	if diagErr != nil {
+		return diagErr
 	}
-	if len(v) == 0 {
-		add, diagErr = inflateEducations(ctx, &w)
-		if diagErr != nil {
-			return diagErr
-		}
-	} else if len(w) == 0 {
-		del, diagErr = inflateEducations(ctx, &v)
-		if diagErr != nil {
-			return diagErr
-		}
-	} else {
-		inflatedv, diagErr := inflateEducations(ctx, &v)
-		if diagErr != nil {
-			return diagErr
-		}
-		inflatedw, diagErr := inflateEducations(ctx, &w)
-		if diagErr != nil {
-			return diagErr
-		}
-		add, del = findAddDelete(inflatedv, inflatedw)
+	add, diagErr = inflateEducations(ctx, addI)
+	if diagErr != nil {
+		return diagErr
 	}
-	for _, edu := range *add {
-		err = greenhouse.AddEducationToCandidate(meta.(*greenhouse.Client), ctx, cId, &edu)
+	del, diagErr = inflateEducations(ctx, delI)
+	if diagErr != nil {
+		return diagErr
+	}
+	for _, obj := range *add {
+		err = greenhouse.AddEducationToCandidate(meta.(*greenhouse.Client), ctx, cId, &obj)
 		if err != nil {
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 	}
-	for _, edu := range *del {
-		if v := edu.Id; v != nil {
+	for _, obj := range *del {
+		if v := obj.Id; v != nil {
 			err = greenhouse.DeleteEducationFromCandidate(meta.(*greenhouse.Client), ctx, cId, *v)
 			if err != nil {
 				return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -287,32 +310,179 @@ func updateEducations(ctx context.Context, d *schema.ResourceData, meta interfac
 	return nil
 }
 
-func findAddDelete(v *[]greenhouse.Education, w *[]greenhouse.Education) (*[]greenhouse.Education, *[]greenhouse.Education) {
-	add := make([]greenhouse.Education, 0)
-	del := make([]greenhouse.Education, 0)
-	for _, i1 := range *v {
+func updateEmployments(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	cId, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	var add *[]greenhouse.Employment
+	var del *[]greenhouse.Employment
+	var diagErr diag.Diagnostics
+	o, n := d.GetChange("employments")
+	addI, delI, diagErr := findAddDelete(ctx, o, n)
+	if diagErr != nil {
+		return diagErr
+	}
+	add, diagErr = inflateEmployments(ctx, addI)
+	if diagErr != nil {
+		return diagErr
+	}
+	del, diagErr = inflateEmployments(ctx, delI)
+	if diagErr != nil {
+		return diagErr
+	}
+	for _, obj := range *add {
+		err = greenhouse.AddEmploymentToCandidate(meta.(*greenhouse.Client), ctx, cId, &obj)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		}
+	}
+	for _, obj := range *del {
+		if v := obj.Id; v != nil {
+			err = greenhouse.DeleteEmploymentFromCandidate(meta.(*greenhouse.Client), ctx, cId, *v)
+			if err != nil {
+				return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+			}
+		}
+	}
+	return nil
+}
+
+func updateAttachments(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	cId, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	var add *[]greenhouse.Attachment
+	var diagErr diag.Diagnostics
+	o, n := d.GetChange("attachments")
+	addI, _, diagErr := findAddDelete(ctx, o, n)
+	if diagErr != nil {
+		return diagErr
+	}
+	add, diagErr = inflateAttachments(ctx, addI)
+	if diagErr != nil {
+		return diagErr
+	}
+	for _, obj := range *add {
+		err = greenhouse.AddAttachmentToCandidate(meta.(*greenhouse.Client), ctx, cId, &obj)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		}
+	}
+	return nil
+}
+
+func updateNotes(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	cId, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	var add *[]greenhouse.Note
+	var diagErr diag.Diagnostics
+	o, n := d.GetChange("notes")
+	addI, _, diagErr := findAddDelete(ctx, o, n)
+	if diagErr != nil {
+		return diagErr
+	}
+	add, diagErr = inflateNotes(ctx, addI)
+	if diagErr != nil {
+		return diagErr
+	}
+	for _, obj := range *add {
+		err = greenhouse.AddNoteToCandidate(meta.(*greenhouse.Client), ctx, cId, &obj)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		}
+	}
+	return nil
+}
+
+func updateEmailNotes(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	cId, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	var add *[]greenhouse.Email
+	var diagErr diag.Diagnostics
+	o, n := d.GetChange("email_notes")
+	addI, _, diagErr := findAddDelete(ctx, o, n)
+	if diagErr != nil {
+		return diagErr
+	}
+	add, diagErr = inflateEmails(ctx, addI)
+	if diagErr != nil {
+		return diagErr
+	}
+	for _, obj := range *add {
+		err = greenhouse.AddEmailNoteToCandidate(meta.(*greenhouse.Client), ctx, cId, &obj)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+		}
+	}
+	return nil
+}
+
+func updateTags(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	cId, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	var add []string
+	var del []string
+	oi, ni := d.GetChange("tags")
+	o, ok1 := oi.([]interface{})
+	n, ok2 := ni.([]interface{})
+	if !ok1 || !ok2 {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: "Failed to convert to []interface{}"}}
+	}
+	for _, v := range o {
 		match := false
-		for _, i2 := range *w {
-			if i1.Id == i2.Id {
+		for _, w := range n {
+			if v.(string) == w.(string) {
 				match = true
 				break
 			}
 		}
 		if !match {
-			del = append(del, i1)
+			del = append(del, v.(string))
 		}
 	}
-	for _, i1 := range *w {
+	for _, v := range n {
 		match := false
-		for _, i2 := range *v {
-			if i1.Id == i2.Id {
+		for _, w := range o {
+			if v.(string) == w.(string) {
 				match = true
 				break
 			}
 		}
 		if !match {
-			add = append(add, i1)
+			add = append(add, v.(string))
 		}
 	}
-	return &add, &del
+	allTags, err := greenhouse.GetAllCandidateTags(meta.(*greenhouse.Client), ctx)
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
+	for _, name := range add {
+		for _, tag := range *allTags {
+			if *tag.Name == name {
+				err = greenhouse.CreateTagForCandidate(meta.(*greenhouse.Client), ctx, cId, *tag.Id)
+				if err != nil {
+					return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+				}
+			}
+		}
+	}
+	for _, name := range del {
+		for _, tag := range *allTags {
+			if *tag.Name == name {
+				err = greenhouse.DeleteTagFromCandidate(meta.(*greenhouse.Client), ctx, cId, *tag.Id)
+				if err != nil {
+					return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+				}
+			}
+		}
+	}
+	return nil
 }

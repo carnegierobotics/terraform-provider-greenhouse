@@ -197,16 +197,16 @@ func inflateJob(ctx context.Context, source *map[string]interface{}) (*greenhous
 		}
 		obj.Departments = *list
 	}
-  /*
-	if v, ok := (*source)["hiring_team"].([]interface{}); ok && len(v) > 0 {
-		team := v[0].(map[string]interface{})
-		teamMap, err := inflateHiringSubteams(ctx, &team)
-		if err != nil {
-			return nil, err
+	/*
+		if v, ok := (*source)["hiring_team"].([]interface{}); ok && len(v) > 0 {
+			team := v[0].(map[string]interface{})
+			teamMap, err := inflateHiringSubteams(ctx, &team)
+			if err != nil {
+				return nil, err
+			}
+			obj.HiringTeam = *teamMap
 		}
-		obj.HiringTeam = *teamMap
-	}
-  */
+	*/
 	if v, ok := (*source)["is_template"].(bool); ok {
 		obj.IsTemplate = &v
 	}

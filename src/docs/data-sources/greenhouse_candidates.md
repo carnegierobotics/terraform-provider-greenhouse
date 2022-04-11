@@ -38,6 +38,7 @@ Read-Only:
 
 - **activity_feed_notes** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--activity_feed_notes))
 - **addresses** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--addresses))
+- **anonymize** (List of String)
 - **application** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application))
 - **application_ids** (List of Number)
 - **applications** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications))
@@ -57,6 +58,7 @@ Read-Only:
 - **last_activity** (String)
 - **last_name** (String)
 - **linked_user_ids** (List of Number)
+- **merge** (Number)
 - **phone_numbers** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--phone_numbers))
 - **photo_url** (String)
 - **recruiter** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--recruiter))

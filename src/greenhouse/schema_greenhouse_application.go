@@ -271,7 +271,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		if err != nil {
 			return nil, err
 		}
-		app.CreditedTo = &(*list)[0] 
+		app.CreditedTo = &(*list)[0]
 	}
 	if v, ok := (*item)["current_stage"].([]interface{}); ok && len(v) > 0 {
 		tflog.Trace(ctx, "Inflating current stage.")
@@ -400,14 +400,14 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.RejectionReason = &(*list)[0]
 	}
 	if v, ok := (*item)["source"].([]interface{}); ok && len(v) > 0 {
-    source, ok := v[0].(map[string]interface{})
-    if ok {
-      obj, err := inflateSource(ctx, &source)
-      if err != nil {
-        return nil, err
-      }
-		  app.Source = obj
-    }
+		source, ok := v[0].(map[string]interface{})
+		if ok {
+			obj, err := inflateSource(ctx, &source)
+			if err != nil {
+				return nil, err
+			}
+			app.Source = obj
+		}
 	}
 	if v, ok := (*item)["source_id"].(int); ok {
 		app.SourceId = &v

@@ -36,7 +36,7 @@ func resourceGreenhouseHiringTeamExists(d *schema.ResourceData, meta interface{}
 }
 
 func resourceGreenhouseHiringTeamCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-  tflog.Trace(ctx, "resourceGreenhouseHiringTeamCreate")
+	tflog.Trace(ctx, "resourceGreenhouseHiringTeamCreate")
 	var obj map[string][]greenhouse.HiringMember
 	var err error
 	jobId := d.Get("job_id").(int)
@@ -46,10 +46,10 @@ func resourceGreenhouseHiringTeamCreate(ctx context.Context, d *schema.ResourceD
 			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 	}
-  diagErr := logJson(ctx, "resourceGreenhouseHiringTeamCreate", obj)
-  if diagErr != nil {
-    return diagErr
-  }
+	diagErr := logJson(ctx, "resourceGreenhouseHiringTeamCreate", obj)
+	if diagErr != nil {
+		return diagErr
+	}
 	err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), ctx, jobId, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -63,9 +63,9 @@ func resourceGreenhouseHiringTeamRead(ctx context.Context, d *schema.ResourceDat
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-  tflog.Trace(ctx, "Getting hiring team.")
+	tflog.Trace(ctx, "Getting hiring team.")
 	obj, err := greenhouse.GetJobHiringTeam(meta.(*greenhouse.Client), ctx, id)
-  tflog.Trace(ctx, "Got hiring team.")
+	tflog.Trace(ctx, "Got hiring team.")
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -74,7 +74,7 @@ func resourceGreenhouseHiringTeamRead(ctx context.Context, d *schema.ResourceDat
 }
 
 func resourceGreenhouseHiringTeamUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-  tflog.Trace(ctx, "resourceGreenhouseHiringTeamUpdate")
+	tflog.Trace(ctx, "resourceGreenhouseHiringTeamUpdate")
 	return resourceGreenhouseHiringTeamCreate(ctx, d, meta)
 }
 
@@ -88,24 +88,24 @@ func transformHiringTeam(ctx context.Context, hiringTeam *[]interface{}) (map[st
 		teamItem := team.(map[string]interface{})
 		teamName := teamItem["name"].(string)
 		members := teamItem["members"].([]interface{})
-    if len(members) > 0 {
-		  update[teamName] = make([]greenhouse.HiringMember, len(members), len(members))
-		  for j, member := range members {
-			  var obj greenhouse.HiringMember
-			  marshaled, err := json.Marshal(member)
-			  if err != nil {
-				  return nil, err
-			  }
-			  err = json.Unmarshal(marshaled, &obj)
-			  if err != nil {
-				  return nil, err
-			  }
-			  update[teamName][j] = obj
-		  }
-	  } else {
-      update[teamName] = make([]greenhouse.HiringMember, 0)
-    }
-  }
+		if len(members) > 0 {
+			update[teamName] = make([]greenhouse.HiringMember, len(members), len(members))
+			for j, member := range members {
+				var obj greenhouse.HiringMember
+				marshaled, err := json.Marshal(member)
+				if err != nil {
+					return nil, err
+				}
+				err = json.Unmarshal(marshaled, &obj)
+				if err != nil {
+					return nil, err
+				}
+				update[teamName][j] = obj
+			}
+		} else {
+			update[teamName] = make([]greenhouse.HiringMember, 0)
+		}
+	}
 	tflog.Trace(ctx, "Updating hiring team", "updateObj", fmt.Sprintf("%+v", update))
 	return update, nil
 }

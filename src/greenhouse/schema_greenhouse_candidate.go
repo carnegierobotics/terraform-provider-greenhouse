@@ -25,6 +25,13 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 				Schema: schemaGreenhouseTypeTypeValue(),
 			},
 		},
+		"anonymize": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
 		"application": {
 			Type:     schema.TypeList,
 			MaxItems: 1,
@@ -148,6 +155,10 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 				Type: schema.TypeInt,
 			},
 		},
+		"merge": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
 		"phone_numbers": {
 			Type:        schema.TypeList,
 			Description: "The candidate's phone number(s).",
@@ -180,7 +191,7 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 		"tags": {
 			Type:        schema.TypeList,
 			Description: "Tags for this candidate.",
-			Optional:    true,
+			Computed:    true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -329,7 +340,7 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		if diagErr != nil {
 			return nil, diagErr
 		}
-		obj.Recruiter = &(*list)[0] 
+		obj.Recruiter = &(*list)[0]
 	}
 	if v, ok := (*source)["social_media_addresses"].([]interface{}); ok && len(v) > 0 {
 		addresses, diagErr := inflateTypeTypeValues(ctx, &v)

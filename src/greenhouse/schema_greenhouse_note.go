@@ -71,7 +71,7 @@ func inflateNote(ctx context.Context, source *map[string]interface{}) (*greenhou
 		if err != nil {
 			return nil, err
 		}
-		obj.User = &(*list)[0] 
+		obj.User = &(*list)[0]
 	}
 	if v, ok := (*source)["user_id"].(int); ok {
 		obj.UserId = &v

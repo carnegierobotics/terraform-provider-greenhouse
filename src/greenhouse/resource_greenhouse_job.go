@@ -26,21 +26,32 @@ func resourceGreenhouseJob() *schema.Resource {
 
 func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	tflog.Trace(ctx, "Started resourceGreenhouseJobCreate")
-	createObject := greenhouse.JobCreateInfo{
-		TemplateJobId:  IntPtr(d.Get("template_job_id").(int)),
-		NumberOpenings: IntPtr(d.Get("number_of_openings").(int)),
-		JobPostName:    StringPtr(d.Get("job_post_name").(string)),
-		JobName:        StringPtr(d.Get("job_name").(string)),
-		DepartmentId:   IntPtr(d.Get("department_id").(int)),
-		RequisitionId:  StringPtr(d.Get("requisition_id").(string)),
+	var obj greenhouse.JobCreateInfo
+	if v, ok := d.Get("template_job_id").(int); ok {
+		obj.TemplateJobId = &v
+	}
+	if v, ok := d.Get("number_of_openings").(int); ok {
+		obj.NumberOpenings = &v
+	}
+	if v, ok := d.Get("job_post_name").(string); ok && len(v) > 0 {
+		obj.JobPostName = &v
+	}
+	if v, ok := d.Get("job_name").(string); ok && len(v) > 0 {
+		obj.JobName = &v
+	}
+	if v, ok := d.Get("department_id").(int); ok {
+		obj.DepartmentId = &v
+	}
+	if v, ok := d.Get("requisition_id").(string); ok {
+		obj.RequisitionId = &v
 	}
 	if v, ok := d.Get("office_ids").([]interface{}); ok && len(v) > 0 {
-		createObject.OfficeIds = *sliceItoSliceD(&v)
+		obj.OfficeIds = *sliceItoSliceD(&v)
 	}
 	if v, ok := d.Get("opening_ids").([]interface{}); ok && len(v) > 0 {
-		createObject.OpeningIds = *sliceItoSliceA(&v)
+		obj.OpeningIds = *sliceItoSliceA(&v)
 	}
-	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), ctx, &createObject)
+	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), ctx, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
@@ -80,19 +91,32 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 			return diagErr
 		}
 	}
-	updateObject := greenhouse.JobUpdateInfo{
-		Name:                    StringPtr(d.Get("job_name").(string)),
-		Notes:                   StringPtr(d.Get("notes").(string)),
-		Anywhere:                BoolPtr(d.Get("anywhere").(bool)),
-		RequisitionId:           StringPtr(d.Get("requisition_id").(string)),
-		TeamandResponsibilities: StringPtr(d.Get("team_and_responsibilities").(string)),
-		HowToSellThisJob:        StringPtr(d.Get("how_to_sell_this_job").(string)),
-		DepartmentId:            IntPtr(d.Get("department_id").(int)),
+	var obj greenhouse.JobUpdateInfo
+	if v, ok := d.Get("name").(string); ok && len(v) > 0 {
+		obj.Name = &v
+	}
+	if v, ok := d.Get("notes").(string); ok && len(v) > 0 {
+		obj.Notes = &v
+	}
+	if v, ok := d.Get("anywhere").(bool); ok {
+		obj.Anywhere = &v
+	}
+	if v, ok := d.Get("requisition_id").(string); ok && len(v) > 0 {
+		obj.RequisitionId = &v
+	}
+	if v, ok := d.Get("team_and_responsibilities").(string); ok && len(v) > 0 {
+		obj.TeamandResponsibilities = &v
+	}
+	if v, ok := d.Get("how_to_sell_this_job").(string); ok && len(v) > 0 {
+		obj.HowToSellThisJob = &v
+	}
+	if v, ok := d.Get("department_id").(int); ok {
+		obj.DepartmentId = &v
 	}
 	if v, ok := d.Get("office_ids").([]interface{}); ok && len(v) > 0 {
-		updateObject.OfficeIds = *sliceItoSliceD(&v)
+		obj.OfficeIds = *sliceItoSliceD(&v)
 	}
-	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), ctx, id, &updateObject)
+	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), ctx, id, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}

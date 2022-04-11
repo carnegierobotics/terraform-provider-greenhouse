@@ -75,53 +75,53 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 
 func inflateUsers(ctx context.Context, source *[]interface{}) (*[]greenhouse.User, diag.Diagnostics) {
 	tflog.Trace(ctx, fmt.Sprintf("Inflating users: %+v", source))
-  list := make([]greenhouse.User, len(*source), len(*source))
-  for i, item := range *source {
-    itemMap := item.(map[string]interface{})
-    obj, err := inflateUser(ctx, &itemMap)
+	list := make([]greenhouse.User, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateUser(ctx, &itemMap)
 		if err != nil {
 			return nil, err
 		}
-	 list[i] = *obj
+		list[i] = *obj
 	}
 	return &list, nil
 }
 
 func inflateUser(ctx context.Context, item *map[string]interface{}) (*greenhouse.User, diag.Diagnostics) {
 	var obj greenhouse.User
-  if v, ok := (*item)["created_at"].(string); ok && len(v) > 0 {
-    obj.CreatedAt = &v
-  }
-  if v, ok := (*item)["disabled"].(bool); ok {
-    obj.Disabled = &v
-  }
-  if v, ok := (*item)["emails"].([]string); ok && len(v) > 0 {
-    obj.Emails = v
-  }
-  if v, ok := (*item)["employee_id"].(string); ok && len(v) > 0 {
-    obj.EmployeeId = &v
-  }
-  if v, ok := (*item)["first_name"].(string); ok && len(v) > 0 {
-    obj.FirstName = &v
-  }
-  if v, ok := (*item)["last_name"].(string); ok && len(v) > 0 {
-    obj.LastName = &v
-  }
-  if v, ok := (*item)["linked_candidate_ids"].([]int); ok && len(v) > 0 {
-    obj.LinkedCandidateIds = v
-  }
-  if v, ok := (*item)["name"].(string); ok && len(v) > 0 {
-    obj.Name = &v
-  }
-  if v, ok := (*item)["primary_email_address"].(string); ok && len(v) > 0 {
-    obj.PrimaryEmail = &v
-  }
-  if v, ok := (*item)["site_admin"].(bool); ok {
-    obj.SiteAdmin = &v
-  }
-  if v, ok := (*item)["updated_at"].(string); ok {
-    obj.UpdatedAt = &v
-  }
+	if v, ok := (*item)["created_at"].(string); ok && len(v) > 0 {
+		obj.CreatedAt = &v
+	}
+	if v, ok := (*item)["disabled"].(bool); ok {
+		obj.Disabled = &v
+	}
+	if v, ok := (*item)["emails"].([]string); ok && len(v) > 0 {
+		obj.Emails = v
+	}
+	if v, ok := (*item)["employee_id"].(string); ok && len(v) > 0 {
+		obj.EmployeeId = &v
+	}
+	if v, ok := (*item)["first_name"].(string); ok && len(v) > 0 {
+		obj.FirstName = &v
+	}
+	if v, ok := (*item)["last_name"].(string); ok && len(v) > 0 {
+		obj.LastName = &v
+	}
+	if v, ok := (*item)["linked_candidate_ids"].([]int); ok && len(v) > 0 {
+		obj.LinkedCandidateIds = v
+	}
+	if v, ok := (*item)["name"].(string); ok && len(v) > 0 {
+		obj.Name = &v
+	}
+	if v, ok := (*item)["primary_email_address"].(string); ok && len(v) > 0 {
+		obj.PrimaryEmail = &v
+	}
+	if v, ok := (*item)["site_admin"].(bool); ok {
+		obj.SiteAdmin = &v
+	}
+	if v, ok := (*item)["updated_at"].(string); ok {
+		obj.UpdatedAt = &v
+	}
 	return &obj, nil
 }
 
