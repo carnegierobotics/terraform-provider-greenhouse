@@ -63,6 +63,7 @@ Read-Only:
 - **photo_url** (String)
 - **recruiter** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--recruiter))
 - **social_media_addresses** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--social_media_addresses))
+- **tag_ids** (List of Number)
 - **tags** (List of String)
 - **title** (String)
 - **updated_at** (String)

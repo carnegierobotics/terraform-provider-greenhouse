@@ -18,6 +18,7 @@ description: |-
 ### Optional
 
 - **advance** (Boolean)
+- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **credited_to** (Block List, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--credited_to))
 - **current_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--current_stage))
 - **custom_fields** (Map of String)
@@ -47,7 +48,6 @@ description: |-
 - **answers** (List of Object) (see [below for nested schema](#nestedatt--answers))
 - **applied_at** (String) The date of the application.
 - **attachments** (Block List) (see [below for nested schema](#nestedblock--attachments))
-- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **job_post_id** (Number)
 - **jobs** (List of Object) (see [below for nested schema](#nestedatt--jobs))
 - **last_activity_at** (String) The date of the application's last activity.

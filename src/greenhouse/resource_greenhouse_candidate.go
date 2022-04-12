@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -223,7 +238,7 @@ func resourceGreenhouseCandidateUpdate(ctx context.Context, d *schema.ResourceDa
 			return err
 		}
 	}
-	if d.HasChanges("tags") {
+	if d.HasChanges("tag_ids") {
 		err := updateTags(ctx, d, meta)
 		if err != nil {
 			return err
@@ -428,9 +443,9 @@ func updateTags(ctx context.Context, d *schema.ResourceData, meta interface{}) d
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	var add []string
-	var del []string
-	oi, ni := d.GetChange("tags")
+	var add []int
+	var del []int
+	oi, ni := d.GetChange("tag_ids")
 	o, ok1 := oi.([]interface{})
 	n, ok2 := ni.([]interface{})
 	if !ok1 || !ok2 {
@@ -439,49 +454,37 @@ func updateTags(ctx context.Context, d *schema.ResourceData, meta interface{}) d
 	for _, v := range o {
 		match := false
 		for _, w := range n {
-			if v.(string) == w.(string) {
+			if v.(int) == w.(int) {
 				match = true
 				break
 			}
 		}
 		if !match {
-			del = append(del, v.(string))
+			del = append(del, v.(int))
 		}
 	}
 	for _, v := range n {
 		match := false
 		for _, w := range o {
-			if v.(string) == w.(string) {
+			if v.(int) == w.(int) {
 				match = true
 				break
 			}
 		}
 		if !match {
-			add = append(add, v.(string))
+			add = append(add, v.(int))
 		}
 	}
-	allTags, err := greenhouse.GetAllCandidateTags(meta.(*greenhouse.Client), ctx)
-	if err != nil {
-		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-	}
-	for _, name := range add {
-		for _, tag := range *allTags {
-			if *tag.Name == name {
-				err = greenhouse.CreateTagForCandidate(meta.(*greenhouse.Client), ctx, cId, *tag.Id)
-				if err != nil {
-					return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-				}
-			}
+	for _, tagId := range add {
+		err = greenhouse.CreateTagForCandidate(meta.(*greenhouse.Client), ctx, cId, tagId)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 	}
-	for _, name := range del {
-		for _, tag := range *allTags {
-			if *tag.Name == name {
-				err = greenhouse.DeleteTagFromCandidate(meta.(*greenhouse.Client), ctx, cId, *tag.Id)
-				if err != nil {
-					return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-				}
-			}
+	for _, tagId := range del {
+		err = greenhouse.DeleteTagFromCandidate(meta.(*greenhouse.Client), ctx, cId, tagId)
+		if err != nil {
+			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 		}
 	}
 	return nil

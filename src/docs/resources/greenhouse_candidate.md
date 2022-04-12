@@ -42,6 +42,7 @@ description: |-
 - **photo_url** (String)
 - **recruiter** (Block List, Max: 1) The candidate's recruiter. (see [below for nested schema](#nestedblock--recruiter))
 - **social_media_addresses** (Block List) The candidate's social media address(es). (see [below for nested schema](#nestedblock--social_media_addresses))
+- **tag_ids** (List of Number)
 - **title** (String) The candidate's title.
 - **website_addresses** (Block List) The candidate's website(s). (see [below for nested schema](#nestedblock--website_addresses))
 
@@ -156,6 +157,7 @@ Required:
 Optional:
 
 - **advance** (Boolean)
+- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **credited_to** (Block List, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--application--credited_to))
 - **current_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--current_stage))
 - **custom_fields** (Map of String)
@@ -184,7 +186,6 @@ Read-Only:
 - **answers** (List of Object) (see [below for nested schema](#nestedatt--application--answers))
 - **applied_at** (String) The date of the application.
 - **attachments** (Block List) (see [below for nested schema](#nestedblock--application--attachments))
-- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **job_post_id** (Number)
 - **jobs** (List of Object) (see [below for nested schema](#nestedatt--application--jobs))
 - **last_activity_at** (String) The date of the application's last activity.
@@ -530,6 +531,7 @@ Read-Only:
 Optional:
 
 - **advance** (Boolean)
+- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **credited_to** (Block List, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--applications--credited_to))
 - **current_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--current_stage))
 - **custom_fields** (Map of String)
@@ -558,7 +560,6 @@ Read-Only:
 - **answers** (List of Object) (see [below for nested schema](#nestedatt--applications--answers))
 - **applied_at** (String) The date of the application.
 - **attachments** (Block List) (see [below for nested schema](#nestedblock--applications--attachments))
-- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **job_post_id** (Number)
 - **jobs** (List of Object) (see [below for nested schema](#nestedatt--applications--jobs))
 - **last_activity_at** (String) The date of the application's last activity.
