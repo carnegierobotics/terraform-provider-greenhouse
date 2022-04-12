@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -37,6 +52,7 @@ func schemaGreenhouseApplication() map[string]*schema.Schema {
 		"candidate_id": {
 			Type:        schema.TypeInt,
 			Description: "The ID of the candidate applying for this job.",
+			Optional:    true,
 			Computed:    true,
 		},
 		"credited_to": {
@@ -243,7 +259,7 @@ func inflateApplications(ctx context.Context, source *[]interface{}) (*[]greenho
 
 func inflateApplication(ctx context.Context, item *map[string]interface{}) (*greenhouse.Application, diag.Diagnostics) {
 	var app greenhouse.Application
-	tflog.Debug(ctx, "Inflating application.")
+	tflog.Trace(ctx, "Inflating application.")
 	if v, ok := (*item)["answers"].([]interface{}); ok && len(v) > 0 {
 		list, err := inflateAnswers(ctx, &v)
 		if err != nil {
@@ -255,7 +271,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.AppliedAt = &v
 	}
 	if v, ok := (*item)["attachments"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating attachments.")
+		tflog.Trace(ctx, "Inflating attachments.")
 		list, err := inflateAttachments(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -266,17 +282,15 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.CandidateId = &v
 	}
 	if v, ok := (*item)["credited_to"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating credited to.")
-		inflatedCreditedTo, err := inflateUser(ctx, &v[0])
+		tflog.Trace(ctx, "Inflating credited to.")
+		list, err := inflateUsers(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		if inflatedCreditedTo != nil {
-			app.CreditedTo = inflatedCreditedTo
-		}
+		app.CreditedTo = &(*list)[0]
 	}
 	if v, ok := (*item)["current_stage"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating current stage.")
+		tflog.Trace(ctx, "Inflating current stage.")
 		inflatedStage, err := inflateTypesIdName(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -301,7 +315,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.JobIds = *sliceItoSliceD(jobIds)
 	}
 	if v, ok := (*item)["jobs"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating jobs.")
+		tflog.Trace(ctx, "Inflating jobs.")
 		list, err := inflateJobs(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -312,7 +326,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.JobPostId = &v
 	}
 	if v, ok := (*item)["keyed_custom_fields"].(map[string]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating keyed custom fields.")
+		tflog.Trace(ctx, "Inflating keyed custom fields.")
 		fields, err := inflateKeyedCustomFields(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -323,7 +337,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.LastActivityAt = &v
 	}
 	if v, ok := (*item)["location"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating location.")
+		tflog.Trace(ctx, "Inflating location.")
 		list, err := inflateLocations(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -334,7 +348,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.Prospect = &v
 	}
 	if v, ok := (*item)["prospect_detail"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating prospect detail.")
+		tflog.Trace(ctx, "Inflating prospect detail.")
 		list, err := inflateProspectDetails(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -354,7 +368,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.ProspectStageId = &v
 	}
 	if v, ok := (*item)["prospective_department"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating department.")
+		tflog.Trace(ctx, "Inflating department.")
 		list, err := inflateDepartments(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -365,7 +379,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.ProspectiveDepartmentId = &v
 	}
 	if v, ok := (*item)["prospective_office"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating office.")
+		tflog.Trace(ctx, "Inflating office.")
 		list, err := inflateOffices(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -376,7 +390,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.ProspectiveOfficeId = &v
 	}
 	if v, ok := (*item)["referrer"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating referrer.")
+		tflog.Trace(ctx, "Inflating referrer.")
 		inflatedReferrer, err := inflateTypeTypeValues(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -387,7 +401,7 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.RejectedAt = &v
 	}
 	if v, ok := (*item)["rejection_details"].([]interface{}); ok && len(v) > 0 {
-		tflog.Debug(ctx, "Inflating rejection details.")
+		tflog.Trace(ctx, "Inflating rejection details.")
 		list, err := inflateRejectionDetailsList(ctx, &v)
 		if err != nil {
 			return nil, err
@@ -402,7 +416,14 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 		app.RejectionReason = &(*list)[0]
 	}
 	if v, ok := (*item)["source"].([]interface{}); ok && len(v) > 0 {
-		app.Source = inflateSource(ctx, v)
+		source, ok := v[0].(map[string]interface{})
+		if ok {
+			obj, err := inflateSource(ctx, &source)
+			if err != nil {
+				return nil, err
+			}
+			app.Source = obj
+		}
 	}
 	if v, ok := (*item)["source_id"].(int); ok {
 		app.SourceId = &v
@@ -410,90 +431,94 @@ func inflateApplication(ctx context.Context, item *map[string]interface{}) (*gre
 	if v, ok := (*item)["status"].(string); ok && len(v) > 0 {
 		app.Status = &v
 	}
-	tflog.Debug(ctx, "Done inflating application.")
+	tflog.Trace(ctx, "Done inflating application.")
 	return &app, nil
 }
 
 func flattenApplications(ctx context.Context, list *[]greenhouse.Application) []interface{} {
 	if list != nil {
-		tflog.Debug(ctx, "Flattening applications.")
+		tflog.Trace(ctx, "Flattening applications.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenApplication(ctx, &item)
 		}
-		tflog.Debug(ctx, "Finished flattening applications.")
+		tflog.Trace(ctx, "Finished flattening applications.")
 		return flatList
 	}
 	return make([]interface{}, 0, 0)
 }
 
 func flattenApplication(ctx context.Context, item *greenhouse.Application) map[string]interface{} {
-	tflog.Debug(ctx, "Flattening one application.")
+	tflog.Trace(ctx, "Flattening one application.")
 	app := make(map[string]interface{})
-	if v := item.Answers; v != nil {
-		app["answers"] = flattenAnswers(ctx, &v)
-	}
+	app["answers"] = flattenAnswers(ctx, &item.Answers)
 	if v := item.AppliedAt; v != nil {
 		app["applied_at"] = *v
 	}
-	if v := item.Attachments; len(v) > 0 {
-		app["attachments"] = flattenAttachments(ctx, &v)
-	}
+	app["attachments"] = flattenAttachments(ctx, &item.Attachments)
 	if v := item.CandidateId; v != nil {
 		app["candidate_id"] = *v
 	}
 	if v := item.CreditedTo; v != nil {
 		app["credited_to"] = flattenUser(ctx, v)
+	} else {
+		app["credited_to"] = emptyList()
 	}
 	if v := item.CurrentStage; v != nil {
 		convertedStage := greenhouse.TypeIdName(*v)
-		app["current_stage"] = flattenTypeIdName(ctx, &convertedStage)
+		app["current_stage"] = []map[string]interface{}{flattenTypeIdName(ctx, &convertedStage)}
+	} else {
+		app["credited_to"] = emptyList()
 	}
-	if v := item.CustomFields; len(v) > 0 {
-		app["custom_fields"] = v
-	}
-	if v := item.Jobs; len(v) > 0 {
-		app["jobs"] = flattenJobs(ctx, &v)
-	}
+	app["custom_fields"] = item.CustomFields
+	app["jobs"] = flattenJobs(ctx, &item.Jobs)
 	if v := item.JobPostId; v != nil {
 		app["job_post_id"] = *v
 	}
-	if v := item.KeyedCustomFields; len(v) > 0 {
-		app["keyed_custom_fields"] = v
-	}
+	//app["keyed_custom_fields"] = item.KeyedCustomFields
 	if v := item.LastActivityAt; v != nil {
 		app["last_activity_at"] = *v
 	}
 	if v := item.Location; v != nil {
 		app["location"] = flattenLocation(ctx, v)
+	} else {
+		app["location"] = emptyList()
 	}
 	if v := item.Prospect; v != nil {
 		app["prospect"] = *v
 	}
 	if v := item.ProspectDetail; v != nil {
-		app["prospect_detail"] = flattenProspectDetail(ctx, v)
+		app["prospect_detail"] = []map[string]interface{}{flattenProspectDetail(ctx, v)}
+	} else {
+		app["prospect_detail"] = emptyList()
 	}
 	if v := item.ProspectiveDepartment; v != nil {
 		app["prospective_department"] = flattenDepartment(ctx, v)
+	} else {
+		app["prospective_department"] = emptyList()
 	}
 	if v := item.ProspectiveOffice; v != nil {
 		app["prospective_office"] = flattenOffice(ctx, v)
+	} else {
+		app["prospective_office"] = emptyList()
 	}
 	if v := item.RejectedAt; v != nil {
 		app["rejected_at"] = *v
 	}
 	if v := item.RejectionDetails; v != nil {
 		app["rejection_details"] = flattenRejectionDetails(ctx, v)
+	} else {
+		app["rejection_details"] = emptyList()
 	}
 	if v := item.RejectionReason; v != nil {
 		app["rejection_reason"] = flattenRejectionReason(ctx, v)
 	}
 	if v := item.Source; v != nil {
-		app["source"] = flattenSource(ctx, v)
+		app["source"] = []map[string]interface{}{flattenSource(ctx, v)}
 	}
 	if v := item.Status; v != nil {
 		app["status"] = *v
 	}
-	tflog.Debug(ctx, "Finished flattening application.")
+	tflog.Trace(ctx, "Finished flattening application.")
 	return app
 }

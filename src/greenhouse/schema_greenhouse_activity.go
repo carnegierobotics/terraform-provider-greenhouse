@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -57,31 +72,31 @@ func inflateActivity(ctx context.Context, source *map[string]interface{}) (*gree
 		obj.Subject = &v
 	}
 	if v, ok := (*source)["user"].([]interface{}); ok && len(v) > 0 {
-		user, diagErr := inflateUser(ctx, &(v[0]))
-		if diagErr != nil {
-			return nil, diagErr
+		list, err := inflateUsers(ctx, &v)
+		if err != nil {
+			return nil, err
 		}
-		obj.User = user
+		obj.User = &(*list)[0]
 	}
 	return &obj, nil
 }
 
 func flattenActivities(ctx context.Context, list *[]greenhouse.Activity) []interface{} {
 	if list != nil {
-		tflog.Debug(ctx, "Flattening activities.")
+		tflog.Trace(ctx, "Flattening activities.")
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, activity := range *list {
 			activity := flattenActivity(ctx, &activity)
 			flatList[i] = activity
 		}
-		tflog.Debug(ctx, "Finished flattening activities.")
+		tflog.Trace(ctx, "Finished flattening activities.")
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenActivity(ctx context.Context, item *greenhouse.Activity) map[string]interface{} {
-	tflog.Debug(ctx, "Flattening one activity.")
+	tflog.Trace(ctx, "Flattening one activity.")
 	activity := make(map[string]interface{})
 	if v := item.Body; v != nil {
 		activity["body"] = *v
@@ -95,6 +110,6 @@ func flattenActivity(ctx context.Context, item *greenhouse.Activity) map[string]
 	if v := item.User; v != nil {
 		activity["user"] = flattenUsersBasics(ctx, &[]greenhouse.User{*v})
 	}
-	tflog.Debug(ctx, "Finished flattening activity.")
+	tflog.Trace(ctx, "Finished flattening activity.")
 	return activity
 }

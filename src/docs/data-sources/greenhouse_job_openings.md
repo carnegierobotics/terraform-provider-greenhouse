@@ -48,6 +48,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 

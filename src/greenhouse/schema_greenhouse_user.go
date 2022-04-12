@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -33,6 +48,7 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 		"employee_id": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"first_name": {
 			Type:     schema.TypeString,
@@ -73,29 +89,59 @@ func schemaGreenhouseUser() map[string]*schema.Schema {
 }
 
 func inflateUsers(ctx context.Context, source *[]interface{}) (*[]greenhouse.User, diag.Diagnostics) {
-	tflog.Debug(ctx, fmt.Sprintf("Inflating users: %+v", source))
-	if source != nil && len(*source) > 0 {
-		var list []greenhouse.User
-		err := convertType(ctx, *source, list)
+	tflog.Trace(ctx, fmt.Sprintf("Inflating users: %+v", source))
+	list := make([]greenhouse.User, len(*source), len(*source))
+	for i, item := range *source {
+		itemMap := item.(map[string]interface{})
+		obj, err := inflateUser(ctx, &itemMap)
 		if err != nil {
 			return nil, err
 		}
-		return &list, nil
+		list[i] = *obj
 	}
-	return nil, nil
+	return &list, nil
 }
 
-func inflateUser(ctx context.Context, source interface{}) (*greenhouse.User, diag.Diagnostics) {
-	var item greenhouse.User
-	err := convertType(ctx, source, item)
-	if err != nil {
-		return nil, err
+func inflateUser(ctx context.Context, item *map[string]interface{}) (*greenhouse.User, diag.Diagnostics) {
+	var obj greenhouse.User
+	if v, ok := (*item)["created_at"].(string); ok && len(v) > 0 {
+		obj.CreatedAt = &v
 	}
-	return &item, nil
+	if v, ok := (*item)["disabled"].(bool); ok {
+		obj.Disabled = &v
+	}
+	if v, ok := (*item)["emails"].([]string); ok && len(v) > 0 {
+		obj.Emails = v
+	}
+	if v, ok := (*item)["employee_id"].(string); ok && len(v) > 0 {
+		obj.EmployeeId = &v
+	}
+	if v, ok := (*item)["first_name"].(string); ok && len(v) > 0 {
+		obj.FirstName = &v
+	}
+	if v, ok := (*item)["last_name"].(string); ok && len(v) > 0 {
+		obj.LastName = &v
+	}
+	if v, ok := (*item)["linked_candidate_ids"].([]int); ok && len(v) > 0 {
+		obj.LinkedCandidateIds = v
+	}
+	if v, ok := (*item)["name"].(string); ok && len(v) > 0 {
+		obj.Name = &v
+	}
+	if v, ok := (*item)["primary_email_address"].(string); ok && len(v) > 0 {
+		obj.PrimaryEmail = &v
+	}
+	if v, ok := (*item)["site_admin"].(bool); ok {
+		obj.SiteAdmin = &v
+	}
+	if v, ok := (*item)["updated_at"].(string); ok {
+		obj.UpdatedAt = &v
+	}
+	return &obj, nil
 }
 
 func flattenUser(ctx context.Context, item *greenhouse.User) map[string]interface{} {
-	tflog.Debug(ctx, "User item:", fmt.Sprintf("%+v\n", *item))
+	tflog.Trace(ctx, "User item:", fmt.Sprintf("%+v\n", *item))
 	user := make(map[string]interface{})
 	if v := item.CreatedAt; v != nil {
 		user["created_at"] = *v
@@ -103,9 +149,7 @@ func flattenUser(ctx context.Context, item *greenhouse.User) map[string]interfac
 	if v := item.Disabled; v != nil {
 		user["disabled"] = *v
 	}
-	if v := item.Emails; len(v) > 0 {
-		user["emails"] = item.Emails
-	}
+	user["emails"] = item.Emails
 	if v := item.EmployeeId; v != nil {
 		user["employee_id"] = *v
 	}
@@ -115,20 +159,18 @@ func flattenUser(ctx context.Context, item *greenhouse.User) map[string]interfac
 	if v := item.LastName; v != nil {
 		user["last_name"] = *v
 	}
-	if v := item.LinkedCandidateIds; len(v) > 0 {
-		user["linked_candidate_ids"] = item.LinkedCandidateIds
-	}
+	user["linked_candidate_ids"] = item.LinkedCandidateIds
 	if v := item.Name; v != nil {
 		user["name"] = item.Name
 	}
 	if v := item.PrimaryEmail; v != nil {
-		user["primary_email_address"] = item.PrimaryEmail
+		user["primary_email_address"] = *v
 	}
 	if v := item.SiteAdmin; v != nil {
-		user["site_admin"] = item.SiteAdmin
+		user["site_admin"] = *v
 	}
 	if v := item.UpdatedAt; v != nil {
-		user["updated_at"] = item.UpdatedAt
+		user["updated_at"] = *v
 	}
 	return user
 }

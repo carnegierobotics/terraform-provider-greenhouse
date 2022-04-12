@@ -38,6 +38,7 @@ Read-Only:
 
 - **activity_feed_notes** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--activity_feed_notes))
 - **addresses** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--addresses))
+- **anonymize** (List of String)
 - **application** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application))
 - **application_ids** (List of Number)
 - **applications** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications))
@@ -57,10 +58,12 @@ Read-Only:
 - **last_activity** (String)
 - **last_name** (String)
 - **linked_user_ids** (List of Number)
+- **merge** (Number)
 - **phone_numbers** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--phone_numbers))
 - **photo_url** (String)
 - **recruiter** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--recruiter))
 - **social_media_addresses** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--social_media_addresses))
+- **tag_ids** (List of Number)
 - **tags** (List of String)
 - **title** (String)
 - **updated_at** (String)
@@ -236,6 +239,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -252,7 +256,7 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--jobs--departments))
-- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--application--jobs--hiring_team))
+- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--application--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
@@ -341,6 +345,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -379,6 +384,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -387,6 +393,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -395,6 +402,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -468,6 +476,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -486,6 +495,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -570,6 +580,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -586,7 +597,7 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--jobs--departments))
-- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--jobs--hiring_team))
+- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--candidates--applications--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
@@ -675,6 +686,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -713,6 +725,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -721,6 +734,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -729,6 +743,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -802,6 +817,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -820,6 +836,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 

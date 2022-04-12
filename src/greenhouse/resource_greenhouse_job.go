@@ -1,8 +1,22 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -26,33 +40,44 @@ func resourceGreenhouseJob() *schema.Resource {
 }
 
 func resourceGreenhouseJobCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseJobCreate")
-	createObject := greenhouse.JobCreateInfo{
-		TemplateJobId:  IntPtr(d.Get("template_job_id").(int)),
-		NumberOpenings: IntPtr(d.Get("number_of_openings").(int)),
-		JobPostName:    StringPtr(d.Get("job_post_name").(string)),
-		JobName:        StringPtr(d.Get("job_name").(string)),
-		DepartmentId:   IntPtr(d.Get("department_id").(int)),
-		RequisitionId:  StringPtr(d.Get("requisition_id").(string)),
+	tflog.Trace(ctx, "Started resourceGreenhouseJobCreate")
+	var obj greenhouse.JobCreateInfo
+	if v, ok := d.Get("template_job_id").(int); ok {
+		obj.TemplateJobId = &v
+	}
+	if v, ok := d.Get("number_of_openings").(int); ok {
+		obj.NumberOpenings = &v
+	}
+	if v, ok := d.Get("job_post_name").(string); ok && len(v) > 0 {
+		obj.JobPostName = &v
+	}
+	if v, ok := d.Get("job_name").(string); ok && len(v) > 0 {
+		obj.JobName = &v
+	}
+	if v, ok := d.Get("department_id").(int); ok {
+		obj.DepartmentId = &v
+	}
+	if v, ok := d.Get("requisition_id").(string); ok {
+		obj.RequisitionId = &v
 	}
 	if v, ok := d.Get("office_ids").([]interface{}); ok && len(v) > 0 {
-		createObject.OfficeIds = *sliceItoSliceD(&v)
+		obj.OfficeIds = *sliceItoSliceD(&v)
 	}
 	if v, ok := d.Get("opening_ids").([]interface{}); ok && len(v) > 0 {
-		createObject.OpeningIds = *sliceItoSliceA(&v)
+		obj.OpeningIds = *sliceItoSliceA(&v)
 	}
-	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), ctx, &createObject)
+	id, err := greenhouse.CreateJob(meta.(*greenhouse.Client), ctx, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
 	strId := strconv.Itoa(id)
 	d.SetId(strId)
-	tflog.Debug(ctx, "Kicking off resourceGreenhouseJobUpdate from resourceGreenhouseJobCreate")
+	tflog.Trace(ctx, "Kicking off resourceGreenhouseJobUpdate from resourceGreenhouseJobCreate")
 	return resourceGreenhouseJobUpdate(ctx, d, meta)
 }
 
 func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseJobRead")
+	tflog.Trace(ctx, "Started resourceGreenhouseJobRead")
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -61,16 +86,16 @@ func resourceGreenhouseJobRead(ctx context.Context, d *schema.ResourceData, meta
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	tflog.Debug(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
+	tflog.Trace(ctx, "Debugging job", "job", fmt.Sprintf("%+v", obj))
 	for k, v := range flattenJob(ctx, obj) {
 		d.Set(k, v)
 	}
-	tflog.Debug(ctx, "Finished resourceGreenhouseJobRead")
+	tflog.Trace(ctx, "Finished resourceGreenhouseJobRead")
 	return nil
 }
 
 func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	tflog.Debug(ctx, "Started resourceGreenhouseJobUpdate")
+	tflog.Trace(ctx, "Started resourceGreenhouseJobUpdate")
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
@@ -81,58 +106,37 @@ func resourceGreenhouseJobUpdate(ctx context.Context, d *schema.ResourceData, me
 			return diagErr
 		}
 	}
-	if d.HasChange("hiring_team") {
-		teamUpdateObject, err := transformHiringTeam(ctx, d.Get("hiring_team"))
-		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-		}
-		err = greenhouse.UpdateJobHiringTeam(meta.(*greenhouse.Client), ctx, id, &teamUpdateObject)
-		if err != nil {
-			return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
-		}
+	var obj greenhouse.JobUpdateInfo
+	if v, ok := d.Get("name").(string); ok && len(v) > 0 {
+		obj.Name = &v
 	}
-	updateObject := greenhouse.JobUpdateInfo{
-		Name:                    StringPtr(d.Get("job_name").(string)),
-		Notes:                   StringPtr(d.Get("notes").(string)),
-		Anywhere:                BoolPtr(d.Get("anywhere").(bool)),
-		RequisitionId:           StringPtr(d.Get("requisition_id").(string)),
-		TeamandResponsibilities: StringPtr(d.Get("team_and_responsibilities").(string)),
-		HowToSellThisJob:        StringPtr(d.Get("how_to_sell_this_job").(string)),
-		DepartmentId:            IntPtr(d.Get("department_id").(int)),
+	if v, ok := d.Get("notes").(string); ok && len(v) > 0 {
+		obj.Notes = &v
+	}
+	if v, ok := d.Get("anywhere").(bool); ok {
+		obj.Anywhere = &v
+	}
+	if v, ok := d.Get("requisition_id").(string); ok && len(v) > 0 {
+		obj.RequisitionId = &v
+	}
+	if v, ok := d.Get("team_and_responsibilities").(string); ok && len(v) > 0 {
+		obj.TeamandResponsibilities = &v
+	}
+	if v, ok := d.Get("how_to_sell_this_job").(string); ok && len(v) > 0 {
+		obj.HowToSellThisJob = &v
+	}
+	if v, ok := d.Get("department_id").(int); ok {
+		obj.DepartmentId = &v
 	}
 	if v, ok := d.Get("office_ids").([]interface{}); ok && len(v) > 0 {
-		updateObject.OfficeIds = *sliceItoSliceD(&v)
+		obj.OfficeIds = *sliceItoSliceD(&v)
 	}
-	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), ctx, id, &updateObject)
+	err = greenhouse.UpdateJob(meta.(*greenhouse.Client), ctx, id, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	tflog.Debug(ctx, "Kicking off resourceGreenhouseJobRead from resourceGreenhouseJobUpdate")
+	tflog.Trace(ctx, "Kicking off resourceGreenhouseJobRead from resourceGreenhouseJobUpdate")
 	return resourceGreenhouseJobRead(ctx, d, meta)
-}
-
-func transformHiringTeam(ctx context.Context, hiringTeam interface{}) (map[string][]greenhouse.HiringMemberUpdateInfo, error) {
-	update := make(map[string][]greenhouse.HiringMemberUpdateInfo)
-	for _, team := range hiringTeam.([]interface{}) {
-		teamItem := team.(map[string]interface{})
-		teamName := teamItem["name"].(string)
-		members := teamItem["members"].([]interface{})
-		update[teamName] = make([]greenhouse.HiringMemberUpdateInfo, len(members), len(members))
-		for j, member := range members {
-			var obj greenhouse.HiringMemberUpdateInfo
-			marshaled, err := json.Marshal(member)
-			if err != nil {
-				return nil, err
-			}
-			err = json.Unmarshal(marshaled, &obj)
-			if err != nil {
-				return nil, err
-			}
-			update[teamName][j] = obj
-		}
-	}
-	tflog.Debug(ctx, "Updating hiring team", "updateObj", fmt.Sprintf("%+v", update))
-	return update, nil
 }
 
 func resourceGreenhouseJobDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

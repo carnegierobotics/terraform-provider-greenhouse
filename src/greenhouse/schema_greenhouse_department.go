@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -29,6 +44,7 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 		"external_id": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"name": {
 			Type:     schema.TypeString,
@@ -42,6 +58,7 @@ func schemaGreenhouseDepartment() map[string]*schema.Schema {
 		"parent_id": {
 			Type:     schema.TypeInt,
 			Optional: true,
+			Computed: true,
 		},
 	}
 }
@@ -83,20 +100,20 @@ func inflateDepartment(ctx context.Context, source *map[string]interface{}) (*gr
 }
 
 func flattenDepartments(ctx context.Context, list *[]greenhouse.Department) []interface{} {
-	tflog.Debug(ctx, "Flattening department list", "deptlist", fmt.Sprintf("%+v", list))
+	tflog.Trace(ctx, "Flattening department list", "deptlist", fmt.Sprintf("%+v", list))
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenDepartment(ctx, &item)
 		}
-		tflog.Debug(ctx, "Flattened department list", "deptlist", fmt.Sprintf("%+v", flatList))
+		tflog.Trace(ctx, "Flattened department list", "deptlist", fmt.Sprintf("%+v", flatList))
 		return flatList
 	}
 	return make([]interface{}, 0)
 }
 
 func flattenDepartment(ctx context.Context, item *greenhouse.Department) map[string]interface{} {
-	tflog.Debug(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
+	tflog.Trace(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
 	dept := make(map[string]interface{})
 	if v := item.ChildDepartmentExternalIds; len(v) > 0 {
 		dept["child_department_external_ids"] = v
@@ -113,6 +130,6 @@ func flattenDepartment(ctx context.Context, item *greenhouse.Department) map[str
 	if v := item.ParentId; v != nil {
 		dept["parent_id"] = *v
 	}
-	tflog.Debug(ctx, "Flattened department", "department", fmt.Sprintf("%+v", dept))
+	tflog.Trace(ctx, "Flattened department", "department", fmt.Sprintf("%+v", dept))
 	return dept
 }

@@ -107,6 +107,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -123,7 +124,7 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--departments))
-- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
+- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
@@ -212,6 +213,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -250,6 +252,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -258,6 +261,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -266,6 +270,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -339,6 +344,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -357,6 +363,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 

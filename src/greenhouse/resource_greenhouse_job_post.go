@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -57,7 +72,7 @@ func resourceGreenhouseJobPostUpdate(ctx context.Context, d *schema.ResourceData
 	}
 	if d.HasChanges("live") {
 		status := "offline"
-		if d.Get("live").(bool) {
+		if v, ok := d.Get("live").(bool); ok && v {
 			status = "live"
 		}
 		err := greenhouse.UpdateJobPostStatus(meta.(*greenhouse.Client), ctx, id, status)
@@ -66,9 +81,15 @@ func resourceGreenhouseJobPostUpdate(ctx context.Context, d *schema.ResourceData
 		}
 	}
 	var obj greenhouse.JobPost
-	obj.Location = StringPtr(d.Get("location").(string))
-	obj.Title = StringPtr(d.Get("title").(string))
-	obj.Content = StringPtr(d.Get("content").(string))
+	if v, ok := d.Get("location").(string); ok && len(v) > 0 {
+		obj.Location = &v
+	}
+	if v, ok := d.Get("title").(string); ok && len(v) > 0 {
+		obj.Title = &v
+	}
+	if v, ok := d.Get("content").(string); ok && len(v) > 0 {
+		obj.Content = &v
+	}
 	err = greenhouse.UpdateJobPost(meta.(*greenhouse.Client), ctx, id, &obj)
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}

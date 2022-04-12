@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -10,6 +25,22 @@ import (
 )
 
 func schemaGreenhouseHiringTeam() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"job_id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
+		"teams": {
+			Type:     schema.TypeList,
+			Required: true,
+			Elem: &schema.Resource{
+				Schema: schemaGreenhouseHiringSubTeam(),
+			},
+		},
+	}
+}
+
+func schemaGreenhouseHiringSubTeam() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"name": {
 			Type:     schema.TypeString,
@@ -25,11 +56,11 @@ func schemaGreenhouseHiringTeam() map[string]*schema.Schema {
 	}
 }
 
-func inflateHiringTeams(ctx context.Context, source *map[string]interface{}) (*map[string][]greenhouse.HiringMember, diag.Diagnostics) {
+func inflateHiringSubteams(ctx context.Context, source *map[string]interface{}) (*map[string][]greenhouse.HiringMember, diag.Diagnostics) {
 	newMap := make(map[string][]greenhouse.HiringMember)
 	for k, v := range *source {
 		team := v.([]interface{})
-		inflatedTeam, err := inflateHiringTeam(ctx, &team)
+		inflatedTeam, err := inflateHiringSubteam(ctx, &team)
 		if err != nil {
 			return nil, err
 		}
@@ -38,11 +69,11 @@ func inflateHiringTeams(ctx context.Context, source *map[string]interface{}) (*m
 	return &newMap, nil
 }
 
-func inflateHiringTeam(ctx context.Context, source *[]interface{}) (*[]greenhouse.HiringMember, diag.Diagnostics) {
+func inflateHiringSubteam(ctx context.Context, source *[]interface{}) (*[]greenhouse.HiringMember, diag.Diagnostics) {
 	list := make([]greenhouse.HiringMember, len(*source), len(*source))
 	for i, item := range *source {
 		n := item.(map[string]interface{})
-		member, err := inflateHiringTeamMember(ctx, &n)
+		member, err := inflateHiringSubteamMember(ctx, &n)
 		if err != nil {
 			return nil, err
 		}
@@ -72,18 +103,18 @@ Hiring team is map[string][]HiringMember
   ]
 }
 */
-func flattenHiringTeam(ctx context.Context, list *map[string][]greenhouse.HiringMember) []interface{} {
+func flattenHiringSubteams(ctx context.Context, list *map[string][]greenhouse.HiringMember) []interface{} {
 	if list != nil {
-		flatMap := make([]interface{}, len(*list), len(*list))
-		teamCount := 0
+		flatMap := make([]interface{}, 0, 0)
 		for k, team := range *list {
 			flatTeam := make(map[string]interface{})
-			flatTeam["name"] = k
-			flatTeam["members"] = flattenOneTeam(ctx, team)
-			flatMap[teamCount] = flatTeam
-			teamCount++
+			if v := flattenOneTeam(ctx, team); len(v) > 0 {
+				flatTeam["name"] = k
+				flatTeam["members"] = flattenOneTeam(ctx, team)
+				flatMap = append(flatMap, flatTeam)
+			}
 		}
-		tflog.Debug(ctx, "Flattened hiring team", fmt.Sprintf("%+v", flatMap))
+		tflog.Trace(ctx, "Flattened hiring team", fmt.Sprintf("%+v", flatMap))
 		return flatMap
 	}
 	return make([]interface{}, 0)
@@ -93,10 +124,10 @@ func flattenOneTeam(ctx context.Context, team []greenhouse.HiringMember) []inter
 	if team != nil {
 		flatMap := make([]interface{}, len(team), len(team))
 		for i, member := range team {
-			member, _ := flattenHiringTeamMember(ctx, member)
+			member, _ := flattenHiringSubteamMember(ctx, member)
 			flatMap[i] = member
 		}
-		tflog.Debug(ctx, "Flattened team", "team", fmt.Sprintf("%+v", flatMap))
+		tflog.Trace(ctx, "Flattened team", "team", fmt.Sprintf("%+v", flatMap))
 		return flatMap
 	}
 	return make([]interface{}, 0)

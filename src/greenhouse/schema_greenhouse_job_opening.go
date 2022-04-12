@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -101,13 +116,13 @@ func inflateJobOpening(ctx context.Context, source *map[string]interface{}) (*gr
 }
 
 func flattenJobOpenings(ctx context.Context, list *[]greenhouse.JobOpening) []interface{} {
-	tflog.Debug(ctx, "Flattening job opening list", "opening list", fmt.Sprintf("%+v", list))
+	tflog.Trace(ctx, "Flattening job opening list", "opening list", fmt.Sprintf("%+v", list))
 	if list != nil {
 		flatList := make([]interface{}, len(*list), len(*list))
 		for i, item := range *list {
 			flatList[i] = flattenJobOpening(ctx, &item)
 		}
-		tflog.Debug(ctx, "Flattened job opening list", "opening list", fmt.Sprintf("%+v", flatList))
+		tflog.Trace(ctx, "Flattened job opening list", "opening list", fmt.Sprintf("%+v", flatList))
 		return flatList
 	}
 	return make([]interface{}, 0)
@@ -132,7 +147,7 @@ func flattenJobOpening(ctx context.Context, item *greenhouse.JobOpening) map[str
 	}
 	if v := item.CloseReason; v != nil {
 		convertedCloseReason := greenhouse.TypeIdName(*v)
-		tflog.Debug(ctx, "Converted close reason", "reason", fmt.Sprintf("%+v", convertedCloseReason))
+		tflog.Trace(ctx, "Converted close reason", "reason", fmt.Sprintf("%+v", convertedCloseReason))
 		opening["close_reason"] = flattenTypeIdName(ctx, &convertedCloseReason)
 	} else {
 		opening["close_reason"] = nil

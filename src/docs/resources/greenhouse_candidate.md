@@ -25,6 +25,7 @@ description: |-
 
 - **activity_feed_notes** (Block List) The candidate's activity feed. (see [below for nested schema](#nestedblock--activity_feed_notes))
 - **addresses** (Block List) The candidate's address(es). (see [below for nested schema](#nestedblock--addresses))
+- **anonymize** (List of String)
 - **application** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application))
 - **application_ids** (List of Number)
 - **applications** (Block List) Applications the candidate has submitted. (see [below for nested schema](#nestedblock--applications))
@@ -36,11 +37,12 @@ description: |-
 - **employments** (Block List) The candidate's employment background. (see [below for nested schema](#nestedblock--employments))
 - **id** (String) The ID of this resource.
 - **is_private** (Boolean) This candidate is private.
+- **merge** (Number)
 - **phone_numbers** (Block List) The candidate's phone number(s). (see [below for nested schema](#nestedblock--phone_numbers))
 - **photo_url** (String)
 - **recruiter** (Block List, Max: 1) The candidate's recruiter. (see [below for nested schema](#nestedblock--recruiter))
 - **social_media_addresses** (Block List) The candidate's social media address(es). (see [below for nested schema](#nestedblock--social_media_addresses))
-- **tags** (List of String) Tags for this candidate.
+- **tag_ids** (List of Number)
 - **title** (String) The candidate's title.
 - **website_addresses** (Block List) The candidate's website(s). (see [below for nested schema](#nestedblock--website_addresses))
 
@@ -52,6 +54,7 @@ description: |-
 - **created_by** (String)
 - **last_activity** (String)
 - **linked_user_ids** (List of Number)
+- **tags** (List of String) Tags for this candidate.
 - **updated_at** (String)
 
 <a id="nestedblock--activity_feed_notes"></a>
@@ -154,6 +157,7 @@ Required:
 Optional:
 
 - **advance** (Boolean)
+- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **credited_to** (Block List, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--application--credited_to))
 - **current_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--application--current_stage))
 - **custom_fields** (Map of String)
@@ -182,7 +186,6 @@ Read-Only:
 - **answers** (List of Object) (see [below for nested schema](#nestedatt--application--answers))
 - **applied_at** (String) The date of the application.
 - **attachments** (Block List) (see [below for nested schema](#nestedblock--application--attachments))
-- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **job_post_id** (Number)
 - **jobs** (List of Object) (see [below for nested schema](#nestedatt--application--jobs))
 - **last_activity_at** (String) The date of the application's last activity.
@@ -215,6 +218,10 @@ Read-Only:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 <a id="nestedblock--application--keyed_custom_fields"></a>
@@ -252,6 +259,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--application--prospect_detail--prospect_pool"></a>
 ### Nested Schema for `application.prospect_detail.prospect_pool`
@@ -260,6 +271,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--application--prospect_detail--prospect_stage"></a>
 ### Nested Schema for `application.prospect_detail.prospect_stage`
@@ -267,6 +282,10 @@ Optional:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 
@@ -300,6 +319,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -322,6 +342,10 @@ Read-Only:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 
@@ -360,7 +384,7 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--departments))
-- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--application--jobs--hiring_team))
+- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--application--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
@@ -449,6 +473,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -506,6 +531,7 @@ Read-Only:
 Optional:
 
 - **advance** (Boolean)
+- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **credited_to** (Block List, Max: 1) The user who will receive credit for this application. (see [below for nested schema](#nestedblock--applications--credited_to))
 - **current_stage** (Block List, Max: 1) (see [below for nested schema](#nestedblock--applications--current_stage))
 - **custom_fields** (Map of String)
@@ -534,7 +560,6 @@ Read-Only:
 - **answers** (List of Object) (see [below for nested schema](#nestedatt--applications--answers))
 - **applied_at** (String) The date of the application.
 - **attachments** (Block List) (see [below for nested schema](#nestedblock--applications--attachments))
-- **candidate_id** (Number) The ID of the candidate applying for this job.
 - **job_post_id** (Number)
 - **jobs** (List of Object) (see [below for nested schema](#nestedatt--applications--jobs))
 - **last_activity_at** (String) The date of the application's last activity.
@@ -567,6 +592,10 @@ Read-Only:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 <a id="nestedblock--applications--keyed_custom_fields"></a>
@@ -604,6 +633,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--applications--prospect_detail--prospect_pool"></a>
 ### Nested Schema for `applications.prospect_detail.prospect_pool`
@@ -612,6 +645,10 @@ Optional:
 
 - **name** (String)
 
+Read-Only:
+
+- **id** (String) The ID of this resource.
+
 
 <a id="nestedblock--applications--prospect_detail--prospect_stage"></a>
 ### Nested Schema for `applications.prospect_detail.prospect_stage`
@@ -619,6 +656,10 @@ Optional:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 
@@ -652,6 +693,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 
@@ -674,6 +716,10 @@ Read-Only:
 Optional:
 
 - **name** (String)
+
+Read-Only:
+
+- **id** (String) The ID of this resource.
 
 
 
@@ -712,7 +758,7 @@ Read-Only:
 - **custom_fields** (Map of String)
 - **department_id** (Number)
 - **departments** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--departments))
-- **hiring_team** (List of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
+- **hiring_team** (Set of Object) (see [below for nested schema](#nestedobjatt--applications--jobs--hiring_team))
 - **how_to_sell_this_job** (String)
 - **is_template** (Boolean)
 - **job_name** (String)
@@ -801,6 +847,7 @@ Read-Only:
 
 Read-Only:
 
+- **id** (String)
 - **name** (String)
 
 

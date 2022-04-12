@@ -1,3 +1,18 @@
+/*
+Copyright 2021-2022
+Carnegie Robotics, LLC
+4501 Hatfield Street, Pittsburgh, PA 15201
+https://www.carnegierobotics.com
+All rights reserved.
+
+This file is part of terraform-provider-greenhouse.
+
+terraform-provider-greenhouse is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+terraform-provider-greenhouse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with terraform-provider-greenhouse. If not, see <https://www.gnu.org/licenses/>.
+*/
 package greenhouse
 
 import (
@@ -23,6 +38,13 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Optional:    true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeTypeValue(),
+			},
+		},
+		"anonymize": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
 			},
 		},
 		"application": {
@@ -148,6 +170,10 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 				Type: schema.TypeInt,
 			},
 		},
+		"merge": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
 		"phone_numbers": {
 			Type:        schema.TypeList,
 			Description: "The candidate's phone number(s).",
@@ -177,10 +203,17 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 				Schema: schemaGreenhouseTypeTypeValue(),
 			},
 		},
+		"tag_ids": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeInt,
+			},
+		},
 		"tags": {
 			Type:        schema.TypeList,
 			Description: "Tags for this candidate.",
-			Optional:    true,
+			Computed:    true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -265,11 +298,11 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.Company = &v
 	}
 	if v, ok := (*source)["coordinator"].([]interface{}); ok && len(v) > 0 {
-		item, err := inflateUser(ctx, &(v[0]))
+		list, err := inflateUsers(ctx, &v)
 		if err != nil {
 			return nil, err
 		}
-		obj.Coordinator = item
+		obj.Coordinator = &(*list)[0]
 	}
 	if v, ok := (*source)["created_at"].(string); ok && len(v) > 0 {
 		obj.CreatedAt = &v
@@ -325,11 +358,11 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		obj.PhotoUrl = &v
 	}
 	if v, ok := (*source)["recruiter"].([]interface{}); ok && len(v) > 0 {
-		item, diagErr := inflateUser(ctx, &(v[0]))
+		list, diagErr := inflateUsers(ctx, &v)
 		if diagErr != nil {
 			return nil, diagErr
 		}
-		obj.Recruiter = item
+		obj.Recruiter = &(*list)[0]
 	}
 	if v, ok := (*source)["social_media_addresses"].([]interface{}); ok && len(v) > 0 {
 		addresses, diagErr := inflateTypeTypeValues(ctx, &v)
