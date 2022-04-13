@@ -24,11 +24,17 @@ import (
 func Provider() *schema.Provider {
 	p := &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"on_behalf_of": {
+			"harvest_token": {
 				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_ON_BEHALF_OF", nil),
-				Description: "This is the user on whose behalf all actions will be audited.",
+				DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_HARVEST_TOKEN", nil),
+				Description: "The token to use for the Greenhouse Harvest API.",
+			},
+			"harvest_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_HARVEST_URL", "https://harvest.greenhouse.io"),
+				Description: "The URL for Greenhouse's Harvest API.",
 			},
 			"jobs_token": {
 				Type:        schema.TypeString,
@@ -36,23 +42,32 @@ func Provider() *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_JOBS_TOKEN", nil),
 				Description: "The token to use for the Greenhouse Jobs API.",
 			},
-			"harvest_token": {
-				Type:        schema.TypeString,
-				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_HARVEST_TOKEN", nil),
-				Description: "The token to use for the Greenhouse Harvest API.",
-			},
 			"jobs_url": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_JOBS_URL", "https://boards-api.greenhouse.io"),
 				Description: "The URL for Greenhouse Job Boards API.",
 			},
-			"harvest_url": {
+			"on_behalf_of": {
 				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_HARVEST_URL", "https://harvest.greenhouse.io"),
-				Description: "The URL for Greenhouse's Harvest API.",
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("GREENHOUSE_ON_BEHALF_OF", nil),
+				Description: "This is the user on whose behalf all actions will be audited.",
+			},
+			"retry_count": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
+			"retry_wait": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
+			"retry_max_wait": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  30,
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
@@ -130,7 +145,20 @@ func providerConfigure(p *schema.Provider) schema.ConfigureFunc {
 		if err != nil {
 			return nil, err
 		}
-		client := greenhouse.Client{BaseUrl: harvest_url, Token: harvest_token, OnBehalfOf: on_behalf_of}
+		client := greenhouse.Client{
+			BaseUrl:    harvest_url,
+			Token:      harvest_token,
+			OnBehalfOf: on_behalf_of,
+		}
+		if v, ok := d.Get("retry_count").(int); ok {
+			client.RetryCount = v
+		}
+		if v, ok := d.Get("retry_wait").(int); ok {
+			client.RetryCount = v
+		}
+		if v, ok := d.Get("retry_max_wait").(int); ok {
+			client.RetryCount = v
+		}
 		err = client.BuildResty()
 		if err != nil {
 			return nil, err
