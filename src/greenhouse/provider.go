@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License along with ter
 package greenhouse
 
 import (
-  "context"
+	"context"
 	"github.com/carnegierobotics/greenhouse-client-go/greenhouse"
-  "github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 )
@@ -141,7 +141,7 @@ func Provider() *schema.Provider {
 
 func providerConfigure(p *schema.Provider) schema.ConfigureFunc {
 	return func(d *schema.ResourceData) (interface{}, error) {
-    ctx = context.TODO()
+		ctx = context.TODO()
 		harvest_url := d.Get("harvest_url").(string)
 		harvest_token := d.Get("harvest_token").(string)
 		on_behalf_of, err := strconv.Atoi(d.Get("on_behalf_of").(string))
@@ -156,18 +156,18 @@ func providerConfigure(p *schema.Provider) schema.ConfigureFunc {
 		if v, ok := d.Get("retry_count").(int); ok && v != 0 {
 			client.RetryCount = v
 		} else {
-      tflog.Warn(ctx, "Not setting retry count.")
-    }
+			tflog.Warn(ctx, "Not setting retry count.")
+		}
 		if v, ok := d.Get("retry_wait").(int64); ok && v != 0 {
 			client.RetryWait = v
 		} else {
-      tflog.Warn(ctx, "Not setting retry wait.")
-    }
+			tflog.Warn(ctx, "Not setting retry wait.")
+		}
 		if v, ok := d.Get("retry_max_wait").(int64); ok && v != 0 {
 			client.RetryMaxWait = v
 		} else {
-      tflog.Warn(ctx, "Not setting retry max wait.")
-    }
+			tflog.Warn(ctx, "Not setting retry max wait.")
+		}
 		err = client.BuildResty()
 		if err != nil {
 			return nil, err
