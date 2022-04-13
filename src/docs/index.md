@@ -25,3 +25,6 @@ description: |-
 
 - **harvest_url** (String) The URL for Greenhouse's Harvest API.
 - **jobs_url** (String) The URL for Greenhouse Job Boards API.
+- **retry_count** (Number)
+- **retry_max_wait** (Number)
+- **retry_wait** (Number)
