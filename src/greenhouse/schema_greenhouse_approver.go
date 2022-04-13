@@ -82,9 +82,7 @@ func flattenApprovers(ctx context.Context, list *[]greenhouse.Approver) []interf
 
 func flattenApprover(ctx context.Context, item *greenhouse.Approver) map[string]interface{} {
 	approver := make(map[string]interface{})
-	if v := item.EmailAddresses; len(v) > 0 {
-		approver["email_addresses"] = v
-	}
+	approver["email_addresses"] = item.EmailAddresses
 	if v := item.EmployeeId; v != nil {
 		approver["employee_id"] = *v
 	}

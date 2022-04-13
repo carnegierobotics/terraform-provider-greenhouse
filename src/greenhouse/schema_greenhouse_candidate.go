@@ -274,8 +274,9 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		}
 		obj.Application = &(*item)[0]
 	}
-	if v, ok := (*source)["application_ids"].([]int); ok && len(v) > 0 {
-		obj.ApplicationIds = v
+	if v, ok := (*source)["application_ids"].([]interface{}); ok && len(v) > 0 {
+		ids := *sliceItoSliceD(&v)
+		obj.ApplicationIds = ids
 	}
 	if v, ok := (*source)["applications"].([]interface{}); ok && len(v) > 0 {
 		list, diagErr := inflateApplications(ctx, &v)
@@ -371,8 +372,9 @@ func inflateCandidate(ctx context.Context, source *map[string]interface{}) (*gre
 		}
 		obj.Addresses = *addresses
 	}
-	if v, ok := (*source)["tags"].([]string); ok && len(v) > 0 {
-		obj.Tags = v
+	if v, ok := (*source)["tags"].([]interface{}); ok && len(v) > 0 {
+		tags := *sliceItoSliceA(&v)
+		obj.Tags = tags
 	}
 	if v, ok := (*source)["title"].(string); ok && len(v) > 0 {
 		obj.Title = &v
@@ -434,9 +436,7 @@ func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[strin
 	if v := item.LastName; v != nil {
 		candidate["last_name"] = *v
 	}
-	if v := item.LinkedUserIds; len(v) > 0 {
-		candidate["linked_user_ids"] = v
-	}
+	candidate["linked_user_ids"] = item.LinkedUserIds
 	if v := item.PhoneNumbers; len(v) > 0 {
 		convertedPhoneNumbers := []greenhouse.TypeTypeValue(v)
 		candidate["phone_numbers"] = flattenTypeTypeValues(ctx, &convertedPhoneNumbers)
@@ -444,9 +444,7 @@ func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[strin
 	if v := item.PhotoUrl; v != nil {
 		candidate["photo_url"] = *v
 	}
-	if v := item.Tags; len(v) > 0 {
-		candidate["tags"] = v
-	}
+	candidate["tags"] = item.Tags
 	if v := item.Title; v != nil {
 		candidate["title"] = *v
 	}

@@ -112,7 +112,7 @@ func resourceGreenhouseCandidateCreate(ctx context.Context, d *schema.ResourceDa
 		}
 		createObj.SocialMediaAddresses = *socialMediaAddresses
 	}
-	if v, ok := d.Get("tags").([]interface{}); ok && len(v) > 0 {
+	if v, ok := d.Get("tag_ids").([]interface{}); ok && len(v) > 0 {
 		createObj.Tags = *sliceItoSliceA(&v)
 	}
 	if v, ok := d.Get("title").(string); ok && len(v) > 0 {
