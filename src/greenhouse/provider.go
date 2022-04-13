@@ -153,11 +153,11 @@ func providerConfigure(p *schema.Provider) schema.ConfigureFunc {
 		if v, ok := d.Get("retry_count").(int); ok {
 			client.RetryCount = v
 		}
-		if v, ok := d.Get("retry_wait").(int); ok {
-			client.RetryCount = v
+		if v, ok := d.Get("retry_wait").(int64); ok {
+			client.RetryWait = v
 		}
-		if v, ok := d.Get("retry_max_wait").(int); ok {
-			client.RetryCount = v
+		if v, ok := d.Get("retry_max_wait").(int64); ok {
+			client.RetryMaxWait = v
 		}
 		err = client.BuildResty()
 		if err != nil {
