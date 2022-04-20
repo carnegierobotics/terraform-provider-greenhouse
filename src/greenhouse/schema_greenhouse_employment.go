@@ -72,3 +72,31 @@ func inflateEmployment(ctx context.Context, source *map[string]interface{}) (*gr
 	}
 	return &obj, nil
 }
+
+func flattenEmployments(ctx context.Context, list *[]greenhouse.Employment) []interface{} {
+  if list != nil {
+    flatList := make([]interface{}, len(*list), len(*list))
+    for i, item := range *list {
+      flatList[i] = flattenEmployment(ctx, &item)
+    }
+    return flatList
+  }
+  return make([]interface{}, 0, 0)
+}
+
+func flattenEmployment(ctx context.Context, item *greenhouse.Employment) map[string]interface{} {
+  employment := make(map[string]interface{})
+  if v := item.CompanyName; v != nil {
+    employment["company_name"] = *v
+  }
+  if v := item.EndDate; v != nil {
+    employment["end_date"] = *v
+  }
+  if v := item.StartDate; v != nil {
+    employment["start_date"] = *v
+  }
+  if v := item.Title; v != nil {
+    employment["title"] = *v
+  }
+  return employment
+}

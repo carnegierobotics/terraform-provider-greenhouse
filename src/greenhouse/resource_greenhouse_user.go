@@ -47,11 +47,18 @@ func resourceGreenhouseUserExists(d *schema.ResourceData, meta interface{}) (boo
 }
 
 func resourceGreenhouseUserCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	createObject := greenhouse.UserCreateInfo{
-		FirstName: StringPtr(d.Get("first_name").(string)),
-		LastName:  StringPtr(d.Get("last_name").(string)),
-		Email:     StringPtr(d.Get("primary_email_address").(string)),
-		SendEmail: BoolPtr(d.Get("send_email").(bool)),
+	var createObject greenhouse.UserCreateInfo
+	if v, ok := d.Get("first_name").(string); ok && len(v) > 0 {
+		createObject.FirstName = &v
+	}
+	if v, ok := d.Get("last_name").(string); ok && len(v) > 0 {
+		createObject.LastName = &v
+	}
+	if v, ok := d.Get("primary_email_address").(string); ok && len(v) > 0 {
+		createObject.Email = &v
+	}
+	if v, ok := d.Get("send_email").(bool); ok {
+		createObject.SendEmail = &v
 	}
 	id, err := greenhouse.CreateUser(meta.(*greenhouse.Client), ctx, &createObject)
 	if err != nil {

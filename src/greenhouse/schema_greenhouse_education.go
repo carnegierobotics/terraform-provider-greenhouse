@@ -128,3 +128,34 @@ func inflateEducation(ctx context.Context, source *map[string]interface{}) (*gre
 	}
 	return &obj, nil
 }
+
+func flattenEducations(ctx context.Context, list *[]greenhouse.Education) []interface{} {
+  if list != nil {
+    flatList := make([]interface{}, len(*list), len(*list))
+    for i, item := range *list {
+      flatList[i] = flattenEducation(ctx, &item)
+    }
+    return flatList
+  }
+  return make([]interface{}, 0, 0)
+}
+
+func flattenEducation(ctx context.Context, item *greenhouse.Education) map[string]interface{} {
+  education := make(map[string]interface{})
+  if v := item.Degree; v != nil {
+    education["degree"] = *v
+  }
+  if v := item.Discipline; v != nil {
+    education["discipline"] = *v
+  }
+  if v := item.EndDate; v != nil {
+    education["end_date"] = *v
+  }
+  if v := item.SchoolName; v != nil {
+    education["school_name"] = *v
+  }
+  if v := item.StartDate; v != nil {
+    education["start_date"] = *v
+  }
+  return education
+}

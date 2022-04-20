@@ -185,12 +185,14 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 		"photo_url": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"recruiter": {
 			Type:        schema.TypeList,
 			Description: "The candidate's recruiter.",
 			MaxItems:    1,
 			Optional:    true,
+			Computed:    true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseRecruiter(),
 			},
@@ -199,6 +201,7 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Type:        schema.TypeList,
 			Description: "The candidate's social media address(es).",
 			Optional:    true,
+			Computed:    true,
 			Elem: &schema.Resource{
 				Schema: schemaGreenhouseTypeTypeValue(),
 			},
@@ -222,6 +225,7 @@ func schemaGreenhouseCandidate() map[string]*schema.Schema {
 			Type:        schema.TypeString,
 			Description: "The candidate's title.",
 			Optional:    true,
+			Computed:    true,
 		},
 		"updated_at": {
 			Type:     schema.TypeString,
@@ -406,30 +410,52 @@ func flattenCandidates(ctx context.Context, list *[]greenhouse.Candidate) []inte
 func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[string]interface{} {
 	candidate := make(map[string]interface{})
 	if v := item.Addresses; len(v) > 0 {
-		convertedAddresses := []greenhouse.TypeTypeValue(v)
-		candidate["addresses"] = flattenTypeTypeValues(ctx, &convertedAddresses)
-	}
-	if v := item.ApplicationIds; len(v) > 0 {
-		candidate["application_ids"] = v
-	}
-	if v := item.Attachments; len(v) > 0 {
-		candidate["attachments"] = flattenAttachments(ctx, &v)
-	}
+		converted := []greenhouse.TypeTypeValue(v)
+		candidate["addresses"] = flattenTypeTypeValues(ctx, &converted)
+	} else {
+    candidate["addresses"] = emptyList()
+  }
+	candidate["application_ids"] = item.ApplicationIds
+	candidate["attachments"] = flattenAttachments(ctx, &item.Attachments)
 	if v := item.CanEmail; v != nil {
 		candidate["can_email"] = *v
 	}
 	if v := item.Company; v != nil {
 		candidate["company"] = *v
 	}
+
+  if v := item.Coordinator; v != nil {
+    candidate["coordinator"] = []map[string]interface{}{flattenUser(ctx, v)}
+  } else {
+    candidate["coordinator"] = emptyList()
+  }
 	if v := item.CreatedAt; v != nil {
 		candidate["created_at"] = *v
 	}
+  /* TODO
+  if v := item.CustomFields; len(v) > 0 {
+
+  }
+  */
+  candidate["educations"] = flattenEducations(ctx, &item.Educations)
+  if v := item.EmailAddresses; len(v) > 0 {
+    converted := []greenhouse.TypeTypeValue(v)
+    candidate["email_addresses"] = flattenTypeTypeValues(ctx, &converted)
+  } else {
+    candidate["email_addresses"] = emptyList()
+  }
+  candidate["employments"] = flattenEmployments(ctx, &item.Employments)
 	if v := item.FirstName; v != nil {
 		candidate["first_name"] = *v
 	}
 	if v := item.IsPrivate; v != nil {
 		candidate["is_private"] = *v
 	}
+  /* TODO
+  if v := item.KeyedCustomFields; len(v) > 0 {
+
+  }
+  */
 	if v := item.LastActivity; v != nil {
 		candidate["last_activity"] = *v
 	}
@@ -438,12 +464,25 @@ func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[strin
 	}
 	candidate["linked_user_ids"] = item.LinkedUserIds
 	if v := item.PhoneNumbers; len(v) > 0 {
-		convertedPhoneNumbers := []greenhouse.TypeTypeValue(v)
-		candidate["phone_numbers"] = flattenTypeTypeValues(ctx, &convertedPhoneNumbers)
-	}
+		converted := []greenhouse.TypeTypeValue(v)
+		candidate["phone_numbers"] = flattenTypeTypeValues(ctx, &converted)
+	} else {
+    candidate["phone_numbers"] = emptyList()
+  }
 	if v := item.PhotoUrl; v != nil {
 		candidate["photo_url"] = *v
 	}
+	if v := item.Recruiter; v != nil {
+		candidate["recruiter"] = []map[string]interface{}{flattenUser(ctx, v)}
+	} else {
+		candidate["recruiter"] = emptyList()
+	}
+  if v := item.SocialMediaAddresses; v != nil {
+    converted := []greenhouse.TypeTypeValue(v)
+    candidate["social_media_addresses"] = flattenTypeTypeValues(ctx, &converted)
+  } else {
+    candidate["social_media_addresses"] = emptyList()
+  }
 	candidate["tags"] = item.Tags
 	if v := item.Title; v != nil {
 		candidate["title"] = *v
@@ -451,5 +490,11 @@ func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[strin
 	if v := item.UpdatedAt; v != nil {
 		candidate["updated_at"] = *v
 	}
+  if v := item.WebsiteAddresses; len(v) > 0 {
+    converted := []greenhouse.TypeTypeValue(v)
+    candidate["website_addresses"] = flattenTypeTypeValues(ctx, &converted)
+  } else {
+    candidate["website_addresses"] = emptyList()
+  }
 	return candidate
 }

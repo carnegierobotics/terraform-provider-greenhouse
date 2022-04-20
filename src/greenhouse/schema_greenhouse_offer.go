@@ -99,9 +99,7 @@ func flattenOffer(ctx context.Context, item *greenhouse.Offer) map[string]interf
 	if v := item.CreatedAt; v != nil {
 		offer["created_at"] = *v
 	}
-	if v := item.CustomFields; v != nil {
-		offer["custom_fields"] = v
-	}
+	offer["custom_fields"] = item.CustomFields 
 	if v := item.JobId; v != nil {
 		offer["job_id"] = *v
 	}

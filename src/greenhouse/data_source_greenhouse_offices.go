@@ -26,11 +26,11 @@ func dataSourceGreenhouseOffices() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceGreenhouseOfficesRead,
 		Schema: map[string]*schema.Schema{
-			"names": {
+			"list": {
 				Type:     schema.TypeList,
 				Computed: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+				Elem: &schema.Resource{
+					Schema: schemaGreenhouseOffice(),
 				},
 			},
 		},
@@ -42,11 +42,8 @@ func dataSourceGreenhouseOfficesRead(ctx context.Context, d *schema.ResourceData
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	offices := make([]string, len(*list), len(*list))
-	for i, office := range *list {
-		offices[i] = *office.Name
-	}
+	offices := flattenOffices(ctx, list)
 	d.SetId("all")
-	d.Set("names", offices)
+	d.Set("list", offices)
 	return nil
 }

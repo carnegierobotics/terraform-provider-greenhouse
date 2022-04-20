@@ -26,11 +26,11 @@ func dataSourceGreenhouseDepartments() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceGreenhouseDepartmentsRead,
 		Schema: map[string]*schema.Schema{
-			"names": {
+			"list": {
 				Type:     schema.TypeList,
 				Computed: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+				Elem: &schema.Resource{
+					Schema: schemaGreenhouseDepartment(),
 				},
 			},
 		},
@@ -42,11 +42,8 @@ func dataSourceGreenhouseDepartmentsRead(ctx context.Context, d *schema.Resource
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
-	departments := make([]string, len(*list), len(*list))
-	for i, department := range *list {
-		departments[i] = *department.Name
-	}
+	departments := flattenDepartments(ctx, list)
 	d.SetId("all")
-	d.Set("names", departments)
+	d.Set("list", departments)
 	return nil
 }
