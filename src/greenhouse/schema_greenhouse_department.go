@@ -115,12 +115,8 @@ func flattenDepartments(ctx context.Context, list *[]greenhouse.Department) []in
 func flattenDepartment(ctx context.Context, item *greenhouse.Department) map[string]interface{} {
 	tflog.Trace(ctx, "Flattening department", "department", fmt.Sprintf("%+v", item))
 	dept := make(map[string]interface{})
-	if v := item.ChildDepartmentExternalIds; len(v) > 0 {
-		dept["child_department_external_ids"] = v
-	}
-	if v := item.ChildIds; len(v) > 0 {
-		dept["child_ids"] = v
-	}
+	dept["child_department_external_ids"] = item.ChildDepartmentExternalIds
+	dept["child_ids"] = item.ChildIds
 	if v := item.Name; v != nil {
 		dept["name"] = *v
 	}

@@ -151,6 +151,9 @@ func resourceGreenhouseApplicationUpdate(ctx context.Context, d *schema.Resource
 		return diagErr
 	}
 	err = greenhouse.UpdateApplication(meta.(*greenhouse.Client), ctx, id, &obj)
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
 	hire := d.Get("hire").(bool)
 	reject := d.Get("reject").(bool)
 	if hire == true && reject == true {

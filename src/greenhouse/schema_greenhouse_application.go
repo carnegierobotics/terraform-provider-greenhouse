@@ -460,7 +460,7 @@ func flattenApplication(ctx context.Context, item *greenhouse.Application) map[s
 		app["candidate_id"] = *v
 	}
 	if v := item.CreditedTo; v != nil {
-		app["credited_to"] = flattenUser(ctx, v)
+		app["credited_to"] = []map[string]interface{}{flattenUser(ctx, v)}
 	} else {
 		app["credited_to"] = emptyList()
 	}
@@ -468,7 +468,7 @@ func flattenApplication(ctx context.Context, item *greenhouse.Application) map[s
 		convertedStage := greenhouse.TypeIdName(*v)
 		app["current_stage"] = []map[string]interface{}{flattenTypeIdName(ctx, &convertedStage)}
 	} else {
-		app["credited_to"] = emptyList()
+		app["current_stage"] = emptyList()
 	}
 	app["custom_fields"] = item.CustomFields
 	app["jobs"] = flattenJobs(ctx, &item.Jobs)
@@ -493,12 +493,12 @@ func flattenApplication(ctx context.Context, item *greenhouse.Application) map[s
 		app["prospect_detail"] = emptyList()
 	}
 	if v := item.ProspectiveDepartment; v != nil {
-		app["prospective_department"] = flattenDepartment(ctx, v)
+		app["prospective_department"] = []map[string]interface{}{flattenDepartment(ctx, v)}
 	} else {
 		app["prospective_department"] = emptyList()
 	}
 	if v := item.ProspectiveOffice; v != nil {
-		app["prospective_office"] = flattenOffice(ctx, v)
+		app["prospective_office"] = []map[string]interface{}{flattenOffice(ctx, v)}
 	} else {
 		app["prospective_office"] = emptyList()
 	}
@@ -506,15 +506,19 @@ func flattenApplication(ctx context.Context, item *greenhouse.Application) map[s
 		app["rejected_at"] = *v
 	}
 	if v := item.RejectionDetails; v != nil {
-		app["rejection_details"] = flattenRejectionDetails(ctx, v)
+		app["rejection_details"] = []map[string]interface{}{flattenRejectionDetails(ctx, v)}
 	} else {
 		app["rejection_details"] = emptyList()
 	}
 	if v := item.RejectionReason; v != nil {
-		app["rejection_reason"] = flattenRejectionReason(ctx, v)
+		app["rejection_reason"] = []map[string]interface{}{flattenRejectionReason(ctx, v)}
+	} else {
+		app["rejection_reason"] = emptyList()
 	}
 	if v := item.Source; v != nil {
 		app["source"] = []map[string]interface{}{flattenSource(ctx, v)}
+	} else {
+		app["source"] = emptyList()
 	}
 	if v := item.Status; v != nil {
 		app["status"] = *v

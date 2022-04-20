@@ -1,13 +1,5 @@
 # terraform-provider-greenhouse
 
-## Building the provider
-***Note:*** since we now have a CI pipeline to build for us, this shouldn't really be required. But for posterity, I'm leaving it here.
-Remember to set GOPROXY (so Go will look at Artifactory) and GOPRIVATE (so it won't look for checksums for internal packages).
-```
-GOPROXY=https://<user>:<token>@crl.jfrog.io/artifactory/api/go/go
-GOPRIVATE=github.com/carnegierobotics/*
-```
-
 ## Using the provider
 Generated docs can be found at [src/docs](https://github.com/carnegierobotics/terraform-provider-greenhouse/tree/main/src/docs), but they're not super-readable in GitHub markdown. Below is a summary of how to manage each resource type.
 ### Provider setup

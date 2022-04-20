@@ -208,6 +208,61 @@ func resourceGreenhouseCandidateUpdate(ctx context.Context, d *schema.ResourceDa
 	if err != nil {
 		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
 	}
+	var obj greenhouse.Candidate
+	if v, ok := d.Get("first_name").(string); ok && len(v) > 0 {
+		obj.FirstName = &v
+	}
+	if v, ok := d.Get("last_name").(string); ok && len(v) > 0 {
+		obj.LastName = &v
+	}
+	if v, ok := d.Get("company").(string); ok && len(v) > 0 {
+		obj.Company = &v
+	}
+	if v, ok := d.Get("title").(string); ok && len(v) > 0 {
+		obj.Title = &v
+	}
+	if v, ok := d.Get("is_private").(bool); ok {
+		obj.IsPrivate = &v
+	}
+  if v, ok := d.Get("phone_numbers").([]interface{}); ok && d.HasChanges("phone_numbers") {
+    list, err := inflateTypeTypeValues(ctx, &v)
+    if err != nil {
+      return err
+    }
+    obj.PhoneNumbers = *list
+  }
+	if v, ok := d.Get("addresses").([]interface{}); ok && d.HasChanges("addresses") {
+    list, err := inflateTypeTypeValues(ctx, &v)
+    if err != nil {
+      return err
+    }
+    obj.Addresses = *list
+  }
+	if v, ok := d.Get("email_addresses").([]interface{}); ok && d.HasChanges("email_addresses") {
+    list, err := inflateTypeTypeValues(ctx, &v)
+    if err != nil {
+      return err
+    }
+    obj.EmailAddresses = *list
+  }
+	if v, ok := d.Get("website_addresses").([]interface{}); ok && d.HasChanges("website_addresses") {
+    list, err := inflateTypeTypeValues(ctx, &v)
+    if err != nil {
+      return err
+    }
+    obj.WebsiteAddresses = *list
+  }
+	if v, ok := d.Get("social_media_addresses").([]interface{}); ok && d.HasChanges("social_media_addresses") {
+    list, err := inflateTypeTypeValues(ctx, &v)
+    if err != nil {
+      return err
+    }
+    obj.SocialMediaAddresses = *list
+  }
+  err = greenhouse.UpdateCandidate(meta.(*greenhouse.Client), ctx, id, &obj)
+	if err != nil {
+		return diag.Diagnostics{{Severity: diag.Error, Summary: err.Error()}}
+	}
 	if d.HasChanges("educations") {
 		err := updateEducations(ctx, d, meta)
 		if err != nil {

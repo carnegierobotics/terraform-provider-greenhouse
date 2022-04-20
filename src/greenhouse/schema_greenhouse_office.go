@@ -143,9 +143,7 @@ func flattenOffice(ctx context.Context, item *greenhouse.Office) map[string]inte
 	if v := item.ParentId; v != nil {
 		office["parent_id"] = *v
 	}
-	if v := item.ChildIds; len(v) > 0 {
-		office["child_ids"] = v
-	}
+	office["child_ids"] = item.ChildIds
 	tflog.Trace(ctx, "Flattened office", "office", fmt.Sprintf("%+v", office))
 	return office
 }
