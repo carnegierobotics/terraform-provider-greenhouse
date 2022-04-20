@@ -157,4 +157,5 @@ func flattenEducation(ctx context.Context, item *greenhouse.Education) map[strin
   if v := item.StartDate; v != nil {
     education["start_date"] = *v
   }
+  return education
 }

@@ -415,8 +415,8 @@ func flattenCandidate(ctx context.Context, item *greenhouse.Candidate) map[strin
 	} else {
     candidate["addresses"] = emptyList()
   }
-	candidate["application_ids"] = v
-	candidate["attachments"] = flattenAttachments(ctx, &v)
+	candidate["application_ids"] = item.ApplicationIds
+	candidate["attachments"] = flattenAttachments(ctx, &item.Attachments)
 	if v := item.CanEmail; v != nil {
 		candidate["can_email"] = *v
 	}
