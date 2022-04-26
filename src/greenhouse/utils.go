@@ -23,6 +23,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+  "strings"
 )
 
 func mapAItoMapAA(ctx context.Context, mapAI map[string]interface{}) *map[string]string {
@@ -113,6 +114,14 @@ func logJson(ctx context.Context, vertex string, obj interface{}) diag.Diagnosti
 	}
 	tflog.Trace(ctx, vertex, fmt.Sprintf("JSON will be: %s", string(jsonBody)))
 	return nil
+}
+
+func parseName(name string) (*string, *string, error) {
+  elems := strings.SplitN(name, " ", 2)
+  if len(elems) != 2 {
+    return nil, nil, fmt.Errorf("Unable to parse name: %s", name)
+  }
+  return &elems[0], &elems[1], nil
 }
 
 func String(ptr *string) string {

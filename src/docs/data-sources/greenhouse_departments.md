@@ -21,6 +21,18 @@ description: |-
 
 ### Read-Only
 
-- **names** (List of String)
+- **list** (List of Object) (see [below for nested schema](#nestedatt--list))
+
+<a id="nestedatt--list"></a>
+### Nested Schema for `list`
+
+Read-Only:
+
+- **child_department_external_ids** (List of String)
+- **child_ids** (List of Number)
+- **external_id** (String)
+- **name** (String)
+- **parent_department_external_id** (String)
+- **parent_id** (Number)
 
 

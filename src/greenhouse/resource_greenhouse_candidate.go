@@ -339,7 +339,21 @@ func resourceGreenhouseCandidateDelete(ctx context.Context, d *schema.ResourceDa
 }
 
 func resourceGreenhouseCandidateImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-	return importByRead(ctx, d, meta, resourceGreenhouseCandidateRead)
+  if _, err := strconv.Atoi(d.Id()); err != nil {
+    firstName, lastName, err := parseName(d.Id())
+    if err != nil {
+      return nil, err
+    }
+    candidate, err := greenhouse.GetCandidateByName(meta.(*greenhouse.Client), ctx, *firstName, *lastName)
+    if err != nil {
+      return nil, err
+    }
+    if candidate == nil {
+      return nil, fmt.Errorf("Candidate not found.")
+    }
+    d.SetId(strconv.Itoa(*candidate.Id))
+  }
+  return importByRead(ctx, d, meta, resourceGreenhouseCandidateRead)
 }
 
 func updateEducations(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
