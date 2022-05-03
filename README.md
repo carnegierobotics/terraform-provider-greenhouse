@@ -1,7 +1,7 @@
 # terraform-provider-greenhouse
 
 ## Using the provider
-Generated docs can be found at [src/docs](https://github.com/carnegierobotics/terraform-provider-greenhouse/tree/main/src/docs), but they're not super-readable in GitHub markdown. Below is a summary of how to manage each resource type.
+Generated docs can be found at [src/docs](https://github.com/carnegierobotics/terraform-provider-greenhouse/tree/main/src/docs), but they're not super-readable in GitHub markdown. Below is a summary of how to manage some resource types.
 ### Provider setup
 ***Note:*** this is not necessary if you're using the pipeline to run Terraform.
 
